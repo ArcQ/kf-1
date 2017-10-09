@@ -1,28 +1,41 @@
-import 'p2';
-import Phaser from 'phaser';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { compose, lifecycle, withHandlers } from 'recompose';
+import { neverUpdate } from 'core/shared/recompose-utils';
+import config from 'config.json';
 
-import BootState from './example/states/Boot';
-import SplashState from './example/states/Splash';
-import GameState from './example/states/Game';
+import engine from './engine';
+import sceneManager from './scenes/manager';
 
-import config from './config';
-
-class Game extends Phaser.Game {
-  constructor() {
-    const docElement = document.documentElement;
-    const width =
-      docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth;
-    const height =
-      docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight;
-
-    super(width, height, Phaser.CANVAS, 'game', null);
-
-    this.state.add('Boot', BootState, false);
-    this.state.add('Splash', SplashState, false);
-    this.state.add('Game', GameState, false);
-
-    this.state.start('Boot');
-  }
+function MainGameView(props) {
+  return <div ref={props.setRef} />;
 }
 
-export default Game;
+MainGameView.propTypes = {
+  setRef: PropTypes.func,
+};
+
+function initPixi(mainGameViewRef) {
+  const app = engine.start();
+  mainGameViewRef.appendChild(app.view);
+  sceneManager.start(config.game);
+}
+
+// React should give off all control of rendering of this to pixi
+const initPixiOnMount = lifecycle({
+  componentDidMount() {
+    this.props.initPixi();
+  },
+});
+
+export default compose(
+  withHandlers(() => {
+    let mainGameViewRef;
+    return {
+      setRef: () => (ref) => { mainGameViewRef = ref; },
+      initPixi: () => () => initPixi(mainGameViewRef),
+    };
+  }),
+  neverUpdate,
+  initPixiOnMount,
+)(MainGameView);

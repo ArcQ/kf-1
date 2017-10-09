@@ -31,7 +31,7 @@ module.exports = {
     }
   },
   'rules': {
-    'jsx-quotes': [2, 'prefer-single'],
+    'jsx-quotes': [2, 'prefer-double'],
     'max-len': [1, 100, 2],
     'import/no-named-as-default': 0,
     'react/jsx-filename-extension': 0,
@@ -44,5 +44,6 @@ module.exports = {
     'import/no-extraneous-dependencies':0,
     // exception for class methods for phaser api
     'class-methods-use-this':0,
+    'react/require-default-props':0,
   },
 }
