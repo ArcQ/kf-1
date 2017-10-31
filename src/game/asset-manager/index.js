@@ -18,6 +18,7 @@ export function load(dictName) {
 }
 
 export function getSprite(dictName, key) {
+  console.log(arguments);
   return new PIXI.Sprite(
     PIXI.loader.resources[`${dictName}_${key}`].texture,
   );

@@ -16,10 +16,10 @@ function wrapInSceneHelpers(sceneObj) {
         engine.app.ticker.add(wrappedScene.onTick);
       });
     },
-    onFinishLoad() {
+    onFinishLoad(stage) {
       console.log(`finished loading ${sceneObj.name}`);
-      sceneObj.onFinishLoad();
-    }
+      sceneObj.onFinishLoad(stage);
+    },
   });
   return wrappedScene;
 }
@@ -30,7 +30,7 @@ const sceneManager = {
   },
   pushScene(sceneKey) {
     const scene = wrapInSceneHelpers(sceneDict[sceneKey]);
-    scene.start();
+    scene.start(engine.app.stage);
   },
 };
 
