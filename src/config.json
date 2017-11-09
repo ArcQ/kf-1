@@ -1,5 +1,10 @@
 {
   "game": {
-    "defaultScene": "main"
+    "defaultScene": "main",
+    "aspectRatio": {
+      "x": 9,
+      "y": 16
+    },
+    "disableResponsive": false
   }
 }

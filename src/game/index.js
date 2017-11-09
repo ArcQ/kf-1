@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { neverUpdate } from 'core/shared/recompose-utils';
-import config from 'config.json';
+import { neverUpdate } from 'core/utils/recompose';
+import { getWWidth, getWHeight } from 'core/utils/global';
 
+import config from 'config.json';
 import engine from './engine';
 import sceneManager from './scenes/manager';
 
 function MainGameView(props) {
-  return <div ref={props.setRef} />;
+  return (<div
+    id="mainGameContainer"
+    className="relative"
+    ref={props.setRef}
+  />);
 }
 
 MainGameView.propTypes = {
@@ -16,8 +21,7 @@ MainGameView.propTypes = {
 };
 
 function initPixi(mainGameViewRef) {
-  const app = engine.start();
-  mainGameViewRef.appendChild(app.view);
+  engine.start(config.game, mainGameViewRef);
   sceneManager.start(config.game);
 }
 
