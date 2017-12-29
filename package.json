@@ -16,6 +16,8 @@
     "tachyons": "^4.9.0"
   },
   "devDependencies": {
+    "node-sass-chokidar": "^0.0.3",
+    "npm-run-all": "^4.1.2",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-import-resolver-node": "^0.3.0",
@@ -30,10 +32,14 @@
     "tachyons-cli": "^1.2.0"
   },
   "scripts": {
-    "start": "NODE_PATH=./src react-scripts start",
+    "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
+    "start-js": "NODE_PATH=./src react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
     "lint": ".eslint/node_modules/.bin/eslint src",
     "lint:fix": ".eslint/node_modules/.bin/eslint src --fix",
-    "build": "NODE_PATH=src react-scripts build",
+    "build-js": "NODE_PATH=src react-scripts build",
+    "build": "npm-run-all build-css build-js",
     "test": "NODE_PATH=src react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
