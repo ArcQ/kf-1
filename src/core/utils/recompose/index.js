@@ -1,6 +1,6 @@
 import { lifecycle } from 'recompose';
 
-export function neverUpdate(component) {
+export function shouldNeverUpdate(component) {
   return lifecycle({
     shouldComponentUpdate() { return false; },
   })(component);

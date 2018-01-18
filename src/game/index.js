@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { neverUpdate } from 'core/utils/recompose';
-import { getWWidth, getWHeight } from 'core/utils/global';
+import { shouldNeverUpdate } from 'core/utils/recompose';
 
 import config from 'config.json';
 import engine from './engine';
@@ -40,6 +39,6 @@ export default compose(
       initPixi: () => () => initPixi(mainGameViewRef),
     };
   }),
-  neverUpdate,
+  shouldNeverUpdate,
   initPixiOnMount,
 )(MainGameView);
