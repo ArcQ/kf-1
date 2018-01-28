@@ -19,8 +19,8 @@ MainGameView.propTypes = {
   setRef: PropTypes.func,
 };
 
-function initPixi(mainGameViewRef) {
-  engine.start(config.game, mainGameViewRef);
+function initPixi(mainGameViewRef, store) {
+  engine.start(config.game, mainGameViewRef, store);
   sceneManager.start(config.game);
 }
 
@@ -32,11 +32,11 @@ const initPixiOnMount = lifecycle({
 });
 
 export default compose(
-  withHandlers(() => {
+  withHandlers((props) => {
     let mainGameViewRef;
     return {
       setRef: () => (ref) => { mainGameViewRef = ref; },
-      initPixi: () => () => initPixi(mainGameViewRef),
+      initPixi: () => () => initPixi(mainGameViewRef, props.store),
     };
   }),
   shouldNeverUpdate,

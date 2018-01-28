@@ -19,7 +19,6 @@ function getDimensions(aspectRatio, _getWindow) {
 }
 
 function resizeContainers(app, mainGameViewRef, engine) {
-  // resizeToWindow(mainGameViewRef, getWindow);
   const scale = scaleToWindowPixi(
     {
       containerSel: '.app',
@@ -33,9 +32,19 @@ function resizeContainers(app, mainGameViewRef, engine) {
 
 const engine = {
   app: null,
+  store: null,
   bounds: null,
   scale: null,
-  start(gameConfig, mainGameViewRef) {
+  redux: {
+    dispatch(action) {
+      this.store.dispatch(action);
+    },
+    select(key) {
+      return engine.app.store[key];
+    },
+  },
+  start(gameConfig, mainGameViewRef, store) {
+    engine.store = store;
     const options = { antialias: false, transparent: false, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
       gameConfig.aspectRatio.y / gameConfig.aspectRatio.x,
