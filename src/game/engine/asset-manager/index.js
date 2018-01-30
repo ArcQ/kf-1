@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import dicts from './dicts';
+import dicts from 'assets';
 
 const assetUrl = process.env.REACT_APP_ASSET_URL;
 

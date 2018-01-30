@@ -12,3 +12,32 @@ body,
   height: 100%;
   position: relative;
 }
+
+.app {
+  text-align: center;
+}
+
+.app-logo {
+  animation: app-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.main-menu {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  background-opacity: 0.1;
+  background-color: rgba(100, 100, 100, 0.7);
+  height: 100%;
+  padding: 20px;
+  color: white;
+}
+
+.app-intro {
+  font-size: large;
+}
+
+@keyframes app-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

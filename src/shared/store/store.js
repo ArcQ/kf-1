@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 // import { actions as appActions } from 'containers/App/ducks';
-import { getWindow } from 'core/utils/global';
+import { getWindow } from 'utils/global';
 
 import createReducer from './reducers';
 

@@ -1,5 +1,5 @@
 // vendor
-import createHelpers from 'core/utils/reduxHelpers';
+import createHelpers from 'utils/reduxHelpers';
 
 const namespace = 'app/auth';
 const { createConstantsAndActions } = createHelpers(namespace);

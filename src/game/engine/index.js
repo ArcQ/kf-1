@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { getWindow, getDocument, devicePixelRatio } from 'core/utils/global';
+import { getWindow, getDocument, devicePixelRatio } from 'utils/global';
 import scaleToWindowPixi from 'scale-to-window-pixi';
 
 function getDimensions(aspectRatio, _getWindow) {

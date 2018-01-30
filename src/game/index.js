@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, lifecycle, withHandlers } from 'recompose';
-import { shouldNeverUpdate } from 'core/utils/recompose';
+import { shouldNeverUpdate } from 'utils/recompose';
+import sceneManager from 'game/engine/scene-manager';
 
 import config from 'config.json';
 import engine from './engine';
-import sceneManager from './scenes/manager';
 
 function MainGameView(props) {
   return (<div

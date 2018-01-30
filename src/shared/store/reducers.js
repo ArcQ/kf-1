@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import loading from 'core/shared/store/loading/ducks';
+import loading from 'shared/store/loading/ducks';
 
 const routeInitialState = {
   locationBeforeTransitions: null,

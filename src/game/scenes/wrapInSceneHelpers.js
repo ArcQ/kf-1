@@ -1,4 +1,4 @@
-import { load } from './asset-manager';
+import { load } from '../engine/asset-manager';
 
 function loadAssets(sceneObj) {
   return Promise.all(

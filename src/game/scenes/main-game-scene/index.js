@@ -1,4 +1,4 @@
-import { getSprite } from 'game/asset-manager';
+import { getSprite } from 'game/engine/asset-manager';
 
 export default {
   name: 'mainGameScene',

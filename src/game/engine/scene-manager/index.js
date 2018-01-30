@@ -1,6 +1,6 @@
 import engine from 'game/engine';
-import { load } from 'game/asset-manager';
-import sceneDict from '../templates';
+import { load } from 'game/engine/asset-manager';
+import sceneDict from 'game/scenes';
 
 function loadAssets(sceneObj) {
   return Promise.all(
