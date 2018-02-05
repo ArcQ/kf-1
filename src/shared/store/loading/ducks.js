@@ -18,7 +18,9 @@ export const { constants, actions } = createConstantsAndActions(constArr);
  * Selectors
  */
 
-export const selectors = {};
+export const selectors = {
+  loadingPercentage: name => state => state.loading[name],
+};
 
 /**
  * Reducer
@@ -33,8 +35,7 @@ const c = constants;
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
     case c.SET_LOAD_PERCENTAGE:
-      return initialState
-        .setIn([action.payload.key], action.payload.percentage);
+      return { ...state, [action.payload.name]: action.payload.percentage };
     default:
       return state;
   }

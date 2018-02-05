@@ -35,9 +35,9 @@ const engine = {
   store: null,
   bounds: null,
   scale: null,
-  redux: {
+  ui: {
     dispatch(action) {
-      this.store.dispatch(action);
+      engine.store.dispatch(action);
     },
     select(key) {
       return engine.app.store[key];

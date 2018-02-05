@@ -2,7 +2,11 @@ import { getSprite } from 'game/engine/asset-manager';
 
 export default {
   name: 'mainGameScene',
+  loading: 'mainLoadingScene',
+  uiRoute: 'main',
   assets: ['main'],
+  onTick() {
+  },
   onFinishLoad(stage) {
     const mushroom = getSprite('main', 'mushroom');
     mushroom.x = 0;

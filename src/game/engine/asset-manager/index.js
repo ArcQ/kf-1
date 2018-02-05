@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js';
+import { Observable } from 'rxjs';
+
 import dicts from 'assets';
 
 const assetUrl = process.env.REACT_APP_ASSET_URL;
@@ -14,28 +16,16 @@ function combineDicts(requiredDicts) {
   return combinedDict;
 }
 
-function onFinishLoad(resources, resolve) {
-  resolve(true);
-}
 
-function loadProgressHandler(loader, resource) {
-
-  // Display the file `url` currently being loaded
-  console.log("loading: " + resource.url);
-
-  // Display the percentage of files currently loaded
-  console.log("progress: " + loader.progress + "%");
-}
-
-export function load(assetsList) {
-  return new Promise((resolve) => {
-    const combinedDicts = combineDicts([assetsList]);
+export function load({ assets, name }) {
+  return Observable.create((observer) => {
+    const combinedDicts = combineDicts(assets);
     combinedDicts
       .reduce((loader, { dictName, key, assetName }) =>
         loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`), PIXI.loader,
       )
-      .on('progress', loadProgressHandler)
-      .load((loader, resources) => onFinishLoad(resources, resolve));
+      .on('progress', (loader, resource) => observer.next({ name, loader, resource }))
+      .load(() => observer.complete());
   });
 }
 

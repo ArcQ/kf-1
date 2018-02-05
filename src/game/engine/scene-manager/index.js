@@ -2,23 +2,32 @@ import engine from 'game/engine';
 import { load } from 'game/engine/asset-manager';
 import sceneDict from 'game/scenes';
 
-function loadAssets(sceneObj) {
-  return Promise.all(
-    sceneObj.assets.map(dictKey => load(dictKey)),
-  );
-}
+import { actions as loadingActions } from 'shared/store/loading/ducks';
 
 function wrapInSceneHelpers(sceneObj) {
   const wrappedScene = Object.assign({}, sceneObj, {
     start() {
-      loadAssets(sceneObj).then(() => {
-        wrappedScene.onFinishLoad(engine.app.stage);
-        engine.app.ticker.add(wrappedScene.onTick);
-      });
+      load(sceneObj).subscribe(
+        ({ name, loader, resource }) => {
+          console.log(`loading ${resource.name}`); //eslint-disable-line
+          engine.ui.dispatch(
+            loadingActions.setLoadPercentage({ name, percentage: loader.progress }),
+          );
+          if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
+          engine.app.ticker.add(wrappedScene.onTick);
+        },
+        (e) => {
+          if (wrappedScene.onLoadError) wrappedScene.onLoadError(e);
+        },
+        () => {
+          wrappedScene.onFinishLoad();
+          engine.app.ticker.add(wrappedScene.onTick);
+        },
+      );
     },
-    onFinishLoad(stage) {
-      console.log(`finished loading ${sceneObj.name}`);
-      sceneObj.onFinishLoad(stage);
+    onFinishLoad() {
+      console.log(`finished loading ${sceneObj.name}`); //eslint-disable-line
+      sceneObj.onFinishLoad(engine.app.stage);
     },
   });
   return wrappedScene;

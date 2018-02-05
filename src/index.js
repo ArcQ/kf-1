@@ -13,7 +13,7 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 const history = createBrowserHistory();
-const store = configureStore(history);
+const store = configureStore({}, history);
 
 export default function App(props) {
   return (
