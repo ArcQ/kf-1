@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js';
-import { getWindow, getDocument, devicePixelRatio } from 'utils/global';
+import { push } from 'react-router-redux';
 import scaleToWindowPixi from 'scale-to-window-pixi';
+
+import { getWindow, getDocument, devicePixelRatio } from 'utils/global';
 
 function getDimensions(aspectRatio, _getWindow) {
   const wWidth = _getWindow().screen.width;
@@ -61,6 +63,7 @@ const engine = {
       };
     }
     engine.app = app;
+    engine.ui.dispatch(push('/'));
     return engine.app;
   },
 };

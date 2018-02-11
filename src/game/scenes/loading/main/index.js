@@ -1,13 +1,12 @@
 import { getSprite } from 'game/engine/asset-manager';
 
 export default {
-  name: 'mainGameScene',
-  uiRoute: 'main',
-  assets: ['main'],
-  onTick() {
-  },
+  name: 'mainLoadingScene',
+  uiRoute: '/loading/main',
+  assets: ['mainLoading'],
+  onTick() {},
   onFinishLoad(stage) {
-    const mushroom = getSprite('main', 'mushroom');
+    const mushroom = getSprite('mainLoading', 'loading-animation');
     mushroom.x = 0;
     mushroom.y = 0;
     mushroom.width = 90;

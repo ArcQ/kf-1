@@ -5,6 +5,8 @@ import dicts from 'assets';
 
 const assetUrl = process.env.REACT_APP_ASSET_URL;
 
+let loadedDicts = [];
+
 function combineDicts(requiredDicts) {
   const combinedDict = requiredDicts.reduce((_combinedDict, dictName) => {
     const curDict = Object.keys(
@@ -24,12 +26,17 @@ export function load({ assets, name }) {
       .reduce((loader, { dictName, key, assetName }) =>
         loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`), PIXI.loader,
       )
-      .on('progress', (loader, resource) => observer.next({ name, loader, resource }))
-      .load(() => observer.complete());
+      .on('progress', (loader, resource) => console.log('load') || observer.next({ name, loader, resource }))
+      .load(() => {
+        console.log('complete');
+        loadedDicts = loadedDicts.concat(assets);
+        observer.complete();
+      });
   });
 }
 
 export function getSprite(dictName, key) {
+  console.log('resources', PIXI.loader.resources);
   return new PIXI.Sprite(
     PIXI.loader.resources[`${dictName}_${key}`].texture,
   );

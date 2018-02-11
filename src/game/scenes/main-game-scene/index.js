@@ -1,8 +1,9 @@
 import { getSprite } from 'game/engine/asset-manager';
+import mainLoadingScene from '../loading/main';
 
 export default {
   name: 'mainGameScene',
-  loading: 'mainLoadingScene',
+  loading: mainLoadingScene,
   uiRoute: 'main',
   assets: ['main'],
   onTick() {

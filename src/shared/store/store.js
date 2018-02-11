@@ -17,22 +17,10 @@ const composeEnhancers = getWindow() &&
 
 export default function configureStore(initialState, history) {
   // 2. routerMiddleware: Syncs the location/URL path to the state
-  const middlewares = [
-    routerMiddleware(history),
-  ];
-
-  // if (process.env.NODE_ENV !== 'production') {
-  //   middlewares.push(perflogger);
-  // }
-
-  const enhancers = [
-    applyMiddleware(...middlewares),
-  ];
 
   const store = createStore(
     createReducer(),
-    initialState,
-    composeEnhancers(...enhancers),
+    applyMiddleware(routerMiddleware(history)),
   );
 
   // Extensions
