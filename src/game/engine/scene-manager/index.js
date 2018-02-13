@@ -14,18 +14,22 @@ function loadScene(sceneObj, wrappedScene) {
   const loadSceneAssets$ = load(sceneObj);
 
   loadLoadingAssets$
-    .do(null, null, () => engine.ui.dispatch(push(loadingSceneObj.uiRoute)))
+    .do(null, null, () =>
+      engine.ui.dispatch(push({
+        pathname: loadingSceneObj.uiRoute,
+        state: { loadingScene: true },
+      })),
+    )
     .concat(loadSceneAssets$)
+    .map(({ percentage }) => {
+      engine.ui.dispatch(
+        loadingActions.setLoadPercentage({ percentage }),
+      );
+      if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
+    })
     .delay(5000)
     .subscribe(
-      ({ name, loader, resource }) => {
-        console.log(`loading ${resource.name}`); //eslint-disable-line
-        engine.ui.dispatch(
-          loadingActions.setLoadPercentage({ name, percentage: loader.progress }),
-        );
-        if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
-        engine.app.ticker.add(wrappedScene.onTick);
-      },
+      undefined,
       (e) => {
         if (wrappedScene.onLoadError) wrappedScene.onLoadError(e);
       },

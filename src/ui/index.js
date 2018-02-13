@@ -14,7 +14,7 @@ export default function UI(props) {
     <div className="ui-layer full-screen">
       <ConnectedRouter history={props.history}>
         <Switch>
-          <Route exact path="/" component={() => console.log('/') || <div />} />
+          <Route exact path="/" component={() => <div />} />
           <Route exact path="/loading/main" component={MainLoadingPage} />
         </Switch>
       </ConnectedRouter>
@@ -23,5 +23,5 @@ export default function UI(props) {
 }
 
 UI.propTypes = {
-  history: PropTypes.string,
+  history: PropTypes.shape({}),
 };

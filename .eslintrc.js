@@ -45,5 +45,6 @@ module.exports = {
     // exception for class methods for phaser api
     'class-methods-use-this':0,
     'react/require-default-props':0,
+    'array-callback-return':0,
   },
 }

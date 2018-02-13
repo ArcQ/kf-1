@@ -17,7 +17,6 @@ const history = createBrowserHistory();
 const store = configureStore({}, history);
 
 function App(props) {
-  console.log(props.history);
   return (
     <div className="app">
       <Ui history={props.history} />

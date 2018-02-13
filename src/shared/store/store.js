@@ -16,11 +16,16 @@ const composeEnhancers = getWindow() &&
   ? getWindow().__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
 
 export default function configureStore(initialState, history) {
-  // 2. routerMiddleware: Syncs the location/URL path to the state
+  const enhancers = [
+    applyMiddleware(
+      routerMiddleware(history),
+    ),
+  ];
 
   const store = createStore(
     createReducer(),
-    applyMiddleware(routerMiddleware(history)),
+    initialState,
+    composeEnhancers(...enhancers),
   );
 
   // Extensions

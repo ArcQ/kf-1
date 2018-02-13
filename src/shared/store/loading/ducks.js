@@ -1,5 +1,6 @@
 // vendor
 import createHelpers from 'utils/reduxHelpers';
+import { LOCATION_CHANGE } from 'react-router-redux';
 
 const namespace = 'app/auth';
 const { createConstantsAndActions } = createHelpers(namespace);
@@ -19,7 +20,7 @@ export const { constants, actions } = createConstantsAndActions(constArr);
  */
 
 export const selectors = {
-  loadingPercentage: name => state => state.loading[name],
+  loadingPercentage: state => state.loading.percentage,
 };
 
 /**
@@ -27,7 +28,11 @@ export const selectors = {
  */
 
 // The initial application state
-const initialState = {};
+const initialState = {
+  // pixi.loader's percentage does not reset to 0 after every load, so need to keep track of this
+  percentage: 0,
+  timesLoaded: 0,
+};
 
 const c = constants;
 
@@ -35,7 +40,14 @@ const c = constants;
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
     case c.SET_LOAD_PERCENTAGE:
-      return { ...state, [action.payload.name]: action.payload.percentage };
+      return {
+        ...state,
+        percentage: action.payload.percentage / (state.timesLoaded + 1),
+      };
+    case LOCATION_CHANGE:
+      return (action.payload.state && action.payload.state.loadingScene)
+        ? { ...state, timesLoaded: state.percentage / 100 }
+        : state;
     default:
       return state;
   }

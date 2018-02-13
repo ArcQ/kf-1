@@ -18,17 +18,17 @@ function combineDicts(requiredDicts) {
   return combinedDict;
 }
 
-
-export function load({ assets, name }) {
+export function load({ assets }) {
   return Observable.create((observer) => {
     const combinedDicts = combineDicts(assets);
     combinedDicts
       .reduce((loader, { dictName, key, assetName }) =>
         loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`), PIXI.loader,
       )
-      .on('progress', (loader, resource) => console.log('load') || observer.next({ name, loader, resource }))
+      .on('progress', loader =>
+        observer.next({ percentage: parseInt(loader.progress, 10) }),
+      )
       .load(() => {
-        console.log('complete');
         loadedDicts = loadedDicts.concat(assets);
         observer.complete();
       });
@@ -36,7 +36,6 @@ export function load({ assets, name }) {
 }
 
 export function getSprite(dictName, key) {
-  console.log('resources', PIXI.loader.resources);
   return new PIXI.Sprite(
     PIXI.loader.resources[`${dictName}_${key}`].texture,
   );
