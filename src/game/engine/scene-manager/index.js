@@ -27,7 +27,6 @@ function loadScene(sceneObj, wrappedScene) {
       );
       if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
     })
-    .delay(5000)
     .subscribe(
       undefined,
       (e) => {

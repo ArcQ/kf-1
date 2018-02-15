@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
-import _MainMenu from './routes/main-menu';
-import _MainLoadingPage from './routes/main-loading-page';
-
-export const MainMenu = _MainMenu;
-export const MainLoadingPage = _MainLoadingPage;
+import MainMenu from './routes/main-menu';
+import MainLoadingPage from './routes/main-loading-page';
 
 export default function UI(props) {
   return (
@@ -15,6 +12,7 @@ export default function UI(props) {
       <ConnectedRouter history={props.history}>
         <Switch>
           <Route exact path="/" component={() => <div />} />
+          <Route exact path="/main" component={MainMenu} />
           <Route exact path="/loading/main" component={MainLoadingPage} />
         </Switch>
       </ConnectedRouter>

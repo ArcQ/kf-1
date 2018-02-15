@@ -22,12 +22,10 @@ body,
   height: 80px;
 }
 
-.main-menu {
+.ui-layer {
   position: absolute;
   z-index: 100;
   width: 100%;
-  background-opacity: 0.1;
-  background-color: rgba(100, 100, 100, 0.7);
   height: 100%;
   padding: 20px;
   color: white;

@@ -4,7 +4,7 @@ import mainLoadingScene from '../loading/main';
 export default {
   name: 'mainGameScene',
   loading: mainLoadingScene,
-  uiRoute: 'main',
+  uiRoute: '/main',
   assets: ['main'],
   onTick() {
   },
