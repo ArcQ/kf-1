@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Observable } from 'rxjs';
+import difference from 'lodash/difference'
 
 import dicts from 'assets';
 
@@ -20,10 +21,18 @@ function combineDicts(requiredDicts) {
 
 export function load({ assets }) {
   return Observable.create((observer) => {
-    const combinedDicts = combineDicts(assets);
+    const notAddedDicts = difference(assets, loadedDicts);
+    if (notAddedDicts.length === 0) {
+      observer.complete();
+      return;
+    }
+    const combinedDicts = combineDicts(notAddedDicts);
     combinedDicts
       .reduce((loader, { dictName, key, assetName }) =>
-        loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`), PIXI.loader,
+        ((loadedDicts.indexOf(dictName) === -1)
+          ? loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`)
+          : loader),
+        PIXI.loader,
       )
       .on('progress', loader =>
         observer.next({ percentage: parseInt(loader.progress, 10) }),

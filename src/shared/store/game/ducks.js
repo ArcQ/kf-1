@@ -6,7 +6,7 @@ const namespace = 'app/auth';
 const { createConstantsAndActions } = createHelpers(namespace);
 
 const constArr = [
-  'SET_LOAD_PERCENTAGE',
+  'SET_PAUSED',
 ];
 
 /**
@@ -20,7 +20,7 @@ export const { constants, actions } = createConstantsAndActions(constArr);
  */
 
 export const selectors = {
-  loadingPercentage: state => state.loading.percentage,
+  isPaused: state => state.game.isPaused,
 };
 
 /**
@@ -28,23 +28,20 @@ export const selectors = {
  */
 
 const initialState = {
-  percentage: 0,
-  timesLoaded: 0,
+  isPaused: false,
 };
 
 const c = constants;
 
-export default function loadingReducer(state = initialState, action) {
+export default function gameReducer(state = initialState, action) {
   switch (action.type) {
-    case c.SET_LOAD_PERCENTAGE:
+    case c.SET_PAUSED:
+      return { state, isPaused: action.payload.isPaused };
+    case LOCATION_CHANGE:
       return {
         ...state,
-        percentage: action.payload.percentage / (state.timesLoaded + 1),
+        isPaused: action.payload.state && action.payload.state.isPaused,
       };
-    case LOCATION_CHANGE:
-      return (action.payload.state && action.payload.state.loadingScene)
-        ? { ...state, timesLoaded: state.percentage / 100 }
-        : state;
     default:
       return state;
   }

@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import 'sanitize.css/sanitize.css';
 
 import configureStore from 'shared/store/store';
+import './tachyons.css';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -27,6 +28,7 @@ function App(props) {
 
 App.propTypes = {
   store: PropTypes.shape({}),
+  history: PropTypes.shape({}),
 };
 
 const EnhancedApp = lifecycle({

@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
 import MainMenu from './routes/main-menu';
+import LevelOne from './routes/level-one';
 import MainLoadingPage from './routes/main-loading-page';
 
 export default function UI(props) {
@@ -14,6 +15,7 @@ export default function UI(props) {
           <Route exact path="/" component={() => <div />} />
           <Route exact path="/main" component={MainMenu} />
           <Route exact path="/loading/main" component={MainLoadingPage} />
+          <Route exact path="/level-one" component={LevelOne} />
         </Switch>
       </ConnectedRouter>
     </div>

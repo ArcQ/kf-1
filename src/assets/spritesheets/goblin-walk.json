@@ -1,0 +1,68 @@
+{"frames": {
+
+"1_GOBLIN_WALK_000.png":
+{
+	"frame": {"x":1155,"y":1,"w":184,"h":225},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":184,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_001.png":
+{
+	"frame": {"x":387,"y":1,"w":190,"h":225},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_002.png":
+{
+	"frame": {"x":1,"y":1,"w":191,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":191,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_003.png":
+{
+	"frame": {"x":579,"y":1,"w":190,"h":225},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_004.png":
+{
+	"frame": {"x":771,"y":1,"w":190,"h":225},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_005.png":
+{
+	"frame": {"x":194,"y":1,"w":191,"h":225},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":191,"h":225},
+	"sourceSize": {"w":191,"h":225}
+},
+"1_GOBLIN_WALK_006.png":
+{
+	"frame": {"x":963,"y":1,"w":190,"h":225},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":225},
+	"sourceSize": {"w":191,"h":225}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": " https://s3.ca-central-1.amazonaws.com/dev-assets-1/spritesheets/goblins/goblin-walk.png",
+	"format": "RGBA8888",
+	"size": {"w":1340,"h":227},
+	"scale": "0.25",
+	"smartupdate": "$TexturePacker:SmartUpdate:60442b44d876a9fe62d8d36059f168cd:fb29c50fae36c24573172d166f240a89:ac1f44b911f3a468dc1fa9d928d6c7eb$"
+}
+}

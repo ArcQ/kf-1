@@ -50,7 +50,6 @@
     "lint:fix": ".eslint/node_modules/.bin/eslint src --fix",
     "build-js": "NODE_PATH=src react-scripts build",
     "build": "npm-run-all build-css build-js",
-    "test": "NODE_PATH=src react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "NODE_PATH=src react-scripts test --env=jsdom"
   }
 }
