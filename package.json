@@ -26,6 +26,7 @@
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
+    "docdash": "^0.4.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-import-resolver-node": "^0.3.0",
@@ -35,6 +36,7 @@
     "eslint-plugin-jsx-a11y": "^5.0.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^6.10.3",
+    "jsdoc": "^3.5.5",
     "node-sass-chokidar": "^0.0.3",
     "npm-run-all": "^4.1.2",
     "react-scripts": "1.1.4",
@@ -42,6 +44,7 @@
     "tachyons-cli": "^1.2.0"
   },
   "scripts": {
+    "docs": "jsdoc src -c jsdoc.json -r -d docs/app && serve docs/",
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "start-js": "NODE_PATH=./src react-scripts start",

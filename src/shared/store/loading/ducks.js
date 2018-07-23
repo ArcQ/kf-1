@@ -9,13 +9,13 @@ const constArr = [
   'SET_LOAD_PERCENTAGE',
 ];
 
-/**
+/*
  * Constants and Actions
  */
 
 export const { constants, actions } = createConstantsAndActions(constArr);
 
-/**
+/*
  * Selectors
  */
 
@@ -23,7 +23,7 @@ export const selectors = {
   loadingPercentage: state => state.loading.percentage,
 };
 
-/**
+/*
  * Reducer
  */
 

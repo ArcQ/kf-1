@@ -16,13 +16,13 @@ const constArr = [
   'SAVE_EDIT_PROFILE',
 ];
 
-/**
+/*
  * Constants and Actions
  */
 
 export const { constants, actions } = createConstantsAndActions(constArr);
 
-/**
+/*
  * Selectors
  */
 
@@ -50,7 +50,7 @@ export const selectors = {
   },
 };
 
-/**
+/*
  * Reducer
  */
 

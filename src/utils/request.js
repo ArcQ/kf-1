@@ -2,11 +2,16 @@ import 'whatwg-fetch';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
-export const errorObserver = Observable.create(observer => {
-  this.errorObserver = observer;
+const DEFAULT_API_URL = 'http://localhost:7000';
+
+let errorObserver;
+
+export const errorObservable$ = Observable.create(observer => {
+  errorObserver = observer;
 });
 
-const esc = encodeURIComponent;
+errorObservable$.subscribe((e) => console.log(e))
+
 // const fetch = getFetch(); //in case for ssr
 
 function checkStatus(response) {
@@ -21,7 +26,7 @@ function checkStatus(response) {
 
 function formQuery(data) {
   const query = Object.keys(data)
-    .map((k) => `${esc(k)}=${esc(data[k])}`)
+    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`)
     .join('&');
   return `?${query}`;
 }
@@ -29,15 +34,14 @@ function formQuery(data) {
 export default function request(endpoint, body = {}, requestOptions = {}, customUrl) {
   let query = '';
   let path = endpoint;
-  const apiUrl = customUrl || process.env.REACT_APP_API_URL;
+  const apiUrl = customUrl || DEFAULT_API_URL || process.env.REACT_APP_API_URL;
   const defaults = {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Version': process.env.REACT_APP_VERSION,
     },
-    credentials: 'include',
+    // credentials: 'include',
   };
   const options = Object.assign({}, defaults, requestOptions);
 
@@ -53,15 +57,16 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
   }
 
   const destination = `${apiUrl}/${path}${query}`;
-
-  return fetch(destination, options)
-    .then(checkStatus)
-    .then((res) => res.json())
-    .then((data) => ({ data }))
-    .catch((error) => {
-      errorObserver.next(error);
-      return Observable.throw(error.json().error || 'Server error');
-    });
+  return Observable.create(observer => {
+    fetch(destination, options)
+      .then(checkStatus)
+      .then((res) => res.json())
+      .then((data) => ({ data }))
+      .catch((error) => {
+        errorObserver.next(error);
+        return Observable.throw(error || 'Server error');
+      });
+  });
 }
 
 // data$.subscribe(data => #<{(|do something with data|)}>#);

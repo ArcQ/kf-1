@@ -1,4 +1,3 @@
-// vendor
 import createHelpers from 'utils/reduxHelpers';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
@@ -9,13 +8,14 @@ const constArr = [
   'SET_PAUSED',
 ];
 
-/**
+
+/*
  * Constants and Actions
  */
 
 export const { constants, actions } = createConstantsAndActions(constArr);
 
-/**
+/*
  * Selectors
  */
 
@@ -23,7 +23,7 @@ export const selectors = {
   isPaused: state => state.game.isPaused,
 };
 
-/**
+/*
  * Reducer
  */
 

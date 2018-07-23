@@ -39,7 +39,6 @@ const engine = {
   scale: null,
   ui: {
     dispatch(action) {
-      console.log(action);
       engine.store.dispatch(action);
     },
     select(key) {
