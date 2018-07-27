@@ -57,16 +57,14 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
   }
 
   const destination = `${apiUrl}/${path}${query}`;
-  return Observable.create(observer => {
-    fetch(destination, options)
+  return Observable.from(fetch(destination, options)
       .then(checkStatus)
       .then((res) => res.json())
-      .then((data) => ({ data }))
+      // .then((data) => console.log(data) || ({ data }))
       .catch((error) => {
         errorObserver.next(error);
         return Observable.throw(error || 'Server error');
-      });
-  });
+      }));
 }
 
 // data$.subscribe(data => #<{(|do something with data|)}>#);
