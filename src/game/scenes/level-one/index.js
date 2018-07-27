@@ -4,13 +4,34 @@ import request from 'utils/request';
 import { getSprite } from 'game/engine/asset-manager';
 import mainLoadingScene from '../loading/main';
 
-function createTile() {
+function convertRGB(r,g,b) {
+  return 65536 * r + 256 * g + b;
+}
+
+function createTile(x, y) {
   const sprite = getSprite('levelOne', 'grassTexture');
-  sprite.x = 100;
-  sprite.y = 100;
-  sprite.height = 100;
-  sprite.width = 100;
+  sprite.x = x * 60;
+  sprite.y = y * 60;
+  sprite.height = 60;
+  sprite.width = 60;
+  // sprite.tint = Math.random() * 0xFFFFFF;
+  // const [r,g,b] = [30, 160, 30].map((v) => Math.random(1) + v);
+  // sprite.tint = convertRGB(r,g,b);
+  const [r,g,b] = [30, 160, 30].map((v) => parseInt(Math.random() * 70) + v);
+  sprite.tint = convertRGB(r,g,b);
   return sprite;
+}
+
+function flatten(arr) {
+  return arr.reduce((prev, curr) => prev.concat(curr))
+}
+
+function createTiledMap() {
+  const arr1d = Array(20).fill().map((e,y) => y);
+  const arr2d = arr1d
+    .map((y) => Array(10).fill().map((e,x)=> ({ x, y })))
+  return flatten(arr2d)
+    .map(({x, y}) => createTile(x, y));
 }
 
 function createGoblin() {
@@ -45,18 +66,20 @@ export default {
   willLoad() {
     request('/gamemap/generate').subscribe(
       (data) => console.log(data),
+      (error) => console.log('err:', error),
     );
   },
   onTick() {
-    // anim.rotation += 0.01;
   },
   onFinishLoad(stage) {
+
+    const tileMap = createTiledMap();
+    tileMap.map((tile) => stage.addChild(tile));
+
     // create an array of textures from an image path
     const goblin = createGoblin();
     stage.addChild(goblin);
 
-    const tile = createTile();
-    stage.addChild(tile);
   },
 };
 
