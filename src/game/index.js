@@ -17,11 +17,13 @@ import engine from './engine';
  * @returns {React.node}
  */
 function MainGameView(props) {
-  return (<div
-    id="mainGameContainer"
-    className="relative"
-    ref={props.setRef}
-  />);
+  return (
+    <div
+      id="mainGameContainer"
+      className="relative"
+      ref={props.setRef}
+    />
+  );
 }
 
 MainGameView.propTypes = {

@@ -5,10 +5,12 @@ import { wrapInPauseMenu } from 'utils/recompose';
 
 function LevelOne(props) {
   return props.isPaused
-    ? (<div className="ui-layer">
-      <h1 className="f1">Paused</h1>
-    </div>
-    )
+    ? (
+      <div className="ui-layer">
+        <h1 className="f1">
+          Paused
+        </h1>
+      </div>)
     : <div />;
 }
 

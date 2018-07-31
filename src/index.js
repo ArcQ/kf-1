@@ -12,7 +12,6 @@ import 'sanitize.css/sanitize.css';
 import configureStore from 'shared/store/store';
 import './tachyons.css';
 import './index.css';
-import x from 'utils/request';
 import registerServiceWorker from './registerServiceWorker';
 
 const history = createBrowserHistory();
@@ -32,7 +31,7 @@ App.propTypes = {
   history: PropTypes.shape({}),
 };
 
-const EnhancedApp = lifecycle({
+export const EnhancedApp = lifecycle({
   componentWillMount() {
     history.replace('/');
   },

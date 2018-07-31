@@ -1,6 +1,6 @@
 import { getSprite } from '../../engine/asset-manager';
 
-function convertRGB(r,g,b) {
+function convertRGB(r, g, b) {
   return 65536 * r + 256 * g + b;
 }
 
@@ -13,19 +13,19 @@ function createTile(x, y) {
   // sprite.tint = Math.random() * 0xFFFFFF;
   // const [r,g,b] = [30, 160, 30].map((v) => Math.random(1) + v);
   // sprite.tint = convertRGB(r,g,b);
-  const [r,g,b] = [30, 160, 30].map((v) => parseInt(Math.random() * 70) + v);
-  sprite.tint = convertRGB(r,g,b);
+  const [r, g, b] = [30, 160, 30].map(v => parseInt(Math.random() * 70, 10) + v);
+  sprite.tint = convertRGB(r, g, b);
   return sprite;
 }
 
 function flatten(arr) {
-  return arr.reduce((prev, curr) => prev.concat(curr))
+  return arr.reduce((prev, curr) => prev.concat(curr));
 }
 
 function map2d(arr2d, func) {
-  return arr2d.map((row,y) => row.map((val, x) => func(val, x, y)));
+  return arr2d.map((row, y) => row.map((val, x) => func(val, x, y)));
 }
 
-export function createTiledMap(gameMap) {
-  return flatten(map2d(gameMap, (v, x, y) => createTile(x,y)));
+export default function createTiledMap(gameMap) {
+  return flatten(map2d(gameMap, (v, x, y) => createTile(x, y)));
 }

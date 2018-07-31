@@ -6,7 +6,7 @@ const initialState = {
 
 export default function routeReducer(state = initialState, action) {
   switch (action.type) {
-      /* istanbul ignore next */
+    /* istanbul ignore next */
     case LOCATION_CHANGE:
       return {
         ...state,

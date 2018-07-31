@@ -17,5 +17,4 @@ export const getWHeight = () => ((iOS) ? _window.screen.height : _window.innerHe
 
 export const getWDimensions = () => ({ wWidth: getWWidth(), wHeight: getWHeight() });
 
-export const devicePixelRatio = _window.devicePixelRatio;
-
+export const { devicePixelRatio } = _window;

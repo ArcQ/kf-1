@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import 'whatwg-fetch'; //eslint-disable-line
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -6,11 +6,11 @@ const DEFAULT_API_URL = 'http://localhost:7000';
 
 let errorObserver;
 
-export const errorObservable$ = Observable.create(observer => {
+export const errorObservable$ = Observable.create((observer) => {
   errorObserver = observer;
 });
 
-errorObservable$.subscribe((e) => console.log(e))
+errorObservable$.subscribe((e) => console.log(e)) //eslint-disable-line
 
 // const fetch = getFetch(); //in case for ssr
 
@@ -26,7 +26,7 @@ function checkStatus(response) {
 
 function formQuery(data) {
   const query = Object.keys(data)
-    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`)
+    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(data[k])}`)
     .join('&');
   return `?${query}`;
 }
@@ -58,13 +58,13 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
 
   const destination = `${apiUrl}/${path}${query}`;
   return Observable.from(fetch(destination, options)
-      .then(checkStatus)
-      .then((res) => res.json())
-      // .then((data) => console.log(data) || ({ data }))
-      .catch((error) => {
-        errorObserver.next(error);
-        return Observable.throw(error || 'Server error');
-      }));
+    .then(checkStatus)
+    .then(res => res.json())
+    // .then((data) => console.log(data) || ({ data }))
+    .catch((error) => {
+      errorObserver.next(error);
+      return Observable.throw(error || 'Server error');
+    }));
 }
 
 // data$.subscribe(data => #<{(|do something with data|)}>#);

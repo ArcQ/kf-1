@@ -9,9 +9,9 @@ import createReducer from './reducers';
 // import Perf from 'react-addons-perf';
 // window.Perf = Perf;
 
-const composeEnhancers = getWindow() &&
-  getWindow().__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
-  process.env.NODE_ENV !== 'production'
+const composeEnhancers = getWindow()
+  && getWindow().__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  && process.env.NODE_ENV !== 'production'
   // ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ actionsBlacklist: ['rrf'] }) : compose;
   ? getWindow().__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
 

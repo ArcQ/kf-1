@@ -9,7 +9,8 @@
  * @example <caption>To push scene use pushScene</caption>
  * sceneManager.pushScene("testScene")
  *
- * @example <caption>Define a scene def, making sure you define asset keys inside of assets index.js</caption>
+ * @example <caption>Define a scene def, making sure you define
+ asset keys inside of assets index.js</caption>
  *
  * export default {
  *   name: 'level-one-scene',
@@ -43,7 +44,8 @@
  * scene definition object
  * @typedef {Object} SceneDef
  * @property {string} name - name of scene
- * @property {SceneDef} loading - another scene to be used while loading assets, scenes will load assets while running loading scene
+ * @property {SceneDef} loading - another scene to be used while loading assets,
+ scenes will load assets while running loading scene
  * @property {string[]} assets - assets dictionary to use to match keys inside of assets/index.js
  * @property {function=} willLoad - to be called right before load assets
  * @property {function=} onFinishLoad - to be fired when scene is ready
@@ -71,19 +73,17 @@ import 'rxjs/add/operator/delay';
  */
 function _loadScene(sceneObj, wrappedScene) {
   const loadingSceneObj = sceneObj.loading;
-  console.log(loadingSceneObj)
+  console.log(loadingSceneObj);
   const loadLoadingAssets$ = load(loadingSceneObj);
   const loadSceneAssets$ = load(sceneObj);
 
   wrappedScene.willLoad();
 
   loadLoadingAssets$
-    .do(null, null, () =>
-      engine.ui.dispatch(push({
-        pathname: loadingSceneObj.uiRoute,
-        state: { loadingScene: true },
-      })),
-    )
+    .do(null, null, () => engine.ui.dispatch(push({
+      pathname: loadingSceneObj.uiRoute,
+      state: { loadingScene: true },
+    })))
     .concat(loadSceneAssets$)
     .map(({ percentage }) => {
       engine.ui.dispatch(
@@ -117,7 +117,7 @@ function _wrapInSceneHelpers(sceneObj) {
   return wrappedScene;
 }
 
-/** @namespace sceneManager **/
+/** @namespace sceneManager * */
 const sceneManager = {
   /**
    * starts the scene manager with a default scene as specified in the config

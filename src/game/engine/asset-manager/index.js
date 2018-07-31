@@ -5,25 +5,23 @@
 
 import * as PIXI from 'pixi.js';
 import { Observable } from 'rxjs';
-import difference from 'lodash/difference'
+import difference from 'lodash/difference';
 
 import dicts from 'assets';
 
 /**
 set aws url for static assets using .env REACT_APP_ASSET_URL
 @constant assetUrl
- **/
+ * */
 const assetUrl = process.env.REACT_APP_ASSET_URL;
 
 let loadedDicts = [];
 
 function combineDicts(requiredDicts) {
-
   const combinedDict = requiredDicts.reduce((_combinedDict, dictName) => {
     const curDict = Object.keys(
-      dicts[dictName]).map(key =>
-        ({ dictName, key, assetName: dicts[dictName][key] }),
-      );
+      dicts[dictName],
+    ).map(key => ({ dictName, key, assetName: dicts[dictName][key] }));
     return [..._combinedDict, ...curDict];
   }, []);
   return combinedDict;
@@ -45,12 +43,10 @@ export function load({ assets }) {
     }
     const combinedDicts = combineDicts(notAddedDicts);
     combinedDicts
-      .reduce((loader, { dictName, key, assetName }) =>
-        ((loadedDicts.indexOf(dictName) === -1)
-          ? loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`)
-          : loader),
-        PIXI.loader,
-      )
+      .reduce((loader, { dictName, key, assetName }) => ((loadedDicts.indexOf(dictName) === -1)
+        ? loader.add(`${dictName}_${key}`, `${assetUrl}${assetName}`)
+        : loader),
+      PIXI.loader)
     /**
      * Percentage event.
      *
@@ -58,9 +54,7 @@ export function load({ assets }) {
      * @type {object}
      * @property {number} percentage - Indicates loading progress
      */
-      .on('progress', loader =>
-        observer.next({ percentage: parseInt(loader.progress, 10) }),
-      )
+      .on('progress', loader => observer.next({ percentage: parseInt(loader.progress, 10) }))
       .load(() => {
         loadedDicts = loadedDicts.concat(assets);
         observer.complete();

@@ -12,6 +12,7 @@ module.exports = {
     'jest'
   ],
   'env': {
+    "jest": true,
     'browser' : true
   },
   'globals': {
@@ -46,5 +47,7 @@ module.exports = {
     'class-methods-use-this':0,
     'react/require-default-props':0,
     'array-callback-return':0,
+    'react/destructuring-assignment':0,
+    'react/jsx-closing-tag-location':0,
   },
 }
