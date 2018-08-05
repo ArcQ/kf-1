@@ -6,11 +6,11 @@ export default {
   assets: ['mainLoading'],
   onTick() {},
   onFinishLoad(stage) {
-    const mushroom = getSprite('mainLoading', 'loading-animation');
-    mushroom.x = 0;
-    mushroom.y = 0;
-    mushroom.width = 90;
-    mushroom.height = 160;
-    stage.addChild(mushroom);
+    const loadingSprite = getSprite('mainLoading', 'loading-animation');
+    loadingSprite.x = 0;
+    loadingSprite.y = 0;
+    loadingSprite.width = 90;
+    loadingSprite.height = 160;
+    stage.addChild(loadingSprite);
   },
 };

@@ -1,4 +1,4 @@
-import { getSprite } from '../../engine/asset-manager';
+import { getSprite } from 'game/engine/asset-manager';
 
 function convertRGB(r, g, b) {
   return 65536 * r + 256 * g + b;

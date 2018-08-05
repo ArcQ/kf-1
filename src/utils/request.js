@@ -60,7 +60,6 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
   return Observable.from(fetch(destination, options)
     .then(checkStatus)
     .then(res => res.json())
-    // .then((data) => console.log(data) || ({ data }))
     .catch((error) => {
       errorObserver.next(error);
       return Observable.throw(error || 'Server error');

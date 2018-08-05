@@ -5,6 +5,7 @@
       "x": 9,
       "y": 16
     },
-    "disableResponsive": false
+    "disableResponsive": false,
+    "FPS": 30
   }
 }

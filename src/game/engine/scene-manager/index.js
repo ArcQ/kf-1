@@ -47,20 +47,63 @@
  * @property {SceneDef} loading - another scene to be used while loading assets,
  scenes will load assets while running loading scene
  * @property {string[]} assets - assets dictionary to use to match keys inside of assets/index.js
+ * @property {function=} load$ - to be called in parallel with loading scene assets
  * @property {function=} willLoad - to be called right before load assets
  * @property {function=} onFinishLoad - to be fired when scene is ready
  * @property {function=} onTick - game rendering cycle to be fired every fps
  */
 
+import {
+  concat, map, tap, catchError,
+} from 'rxjs/operators';
+import { Observable, empty } from 'rxjs/Rx';
 import { push } from 'react-router-redux';
 
-import engine from 'game/engine';
 import { load } from 'game/engine/asset-manager';
+import { actions as loadingActions } from 'shared/store/loading/ducks';
+import engine from 'game/engine';
 import sceneDict from 'game/scenes';
 
-import { actions as loadingActions } from 'shared/store/loading/ducks';
-import 'rxjs/add/observable/concat';
-import 'rxjs/add/operator/delay';
+/**
+ * _createLoadObs - creates the observer that first loads the loading scene assets
+ then runs the loading scene, then loads the actual scene assets, subscribe to this
+ and then run the actual scene
+ in parallell it will run load$ if specified inside of the scene definition object
+ *
+ * @param wrappedScene
+ * @returns {Observable}
+ */
+function _createLoadObs(wrappedScene) {
+  const loadingSceneObj = wrappedScene.loading;
+  const loadLoadingAssets$ = load(loadingSceneObj);
+  const loadSceneAssets$ = load(wrappedScene);
+  const sceneCustomLoad$ = wrappedScene.load$ || empty();
+
+  const launchLoadingScene$ = tap(null, null, () => engine.ui.dispatch(push({
+    pathname: loadingSceneObj.uiRoute,
+    state: { loadingScene: true },
+  })));
+
+  const setLoadPercentage$ = map(({ percentage }) => {
+    engine.ui.dispatch(
+      loadingActions.setLoadPercentage({ percentage }),
+    );
+    if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
+  });
+
+  const loadAssetPipe$ = loadLoadingAssets$.pipe(
+    launchLoadingScene$,
+    concat(loadSceneAssets$),
+    setLoadPercentage$,
+  );
+
+  return Observable.forkJoin(loadAssetPipe$, sceneCustomLoad$).pipe(
+    catchError((e) => {
+      console.warn(`error in loading scene ${wrappedScene.name}: ${e}`); //eslint-disable-line
+      if (wrappedScene.onLoadError) wrappedScene.onLoadError(e);
+    }),
+  );
+}
 
 /**
  * _loadScene function called on every scene change
@@ -71,47 +114,33 @@ import 'rxjs/add/operator/delay';
  * @param wrappedScene
  * @returns {undefined}
  */
-function _loadScene(sceneObj, wrappedScene) {
-  const loadingSceneObj = sceneObj.loading;
-  console.log(loadingSceneObj);
-  const loadLoadingAssets$ = load(loadingSceneObj);
-  const loadSceneAssets$ = load(sceneObj);
+function _loadScene(wrappedScene) {
+  if (wrappedScene.willLoad) wrappedScene.willLoad();
 
-  wrappedScene.willLoad();
+  const loadScene$ = _createLoadObs(wrappedScene);
 
-  loadLoadingAssets$
-    .do(null, null, () => engine.ui.dispatch(push({
-      pathname: loadingSceneObj.uiRoute,
-      state: { loadingScene: true },
-    })))
-    .concat(loadSceneAssets$)
-    .map(({ percentage }) => {
-      engine.ui.dispatch(
-        loadingActions.setLoadPercentage({ percentage }),
-      );
-      if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
-    })
-    .subscribe(
-      undefined,
-      (e) => {
-        if (wrappedScene.onLoadError) wrappedScene.onLoadError(e);
-      },
-      () => {
-        engine.ui.dispatch(push(sceneObj.uiRoute));
-        wrappedScene.onFinishLoad();
-        engine.app.ticker.add(wrappedScene.onTick);
-      },
-    );
+  loadScene$.subscribe(
+    ([ _, sceneCustomRes]) => { //eslint-disable-line
+      engine.ui.dispatch(push(wrappedScene.uiRoute));
+      if (wrappedScene.onFinishLoad) wrappedScene.onFinishLoad(sceneCustomRes);
+    },
+  );
 }
 
+/**
+ * _wrapInSceneHelpers - wraps a scene with the helper methods so it connects with _loadScene
+ *
+ * @param sceneObj
+ * @returns {SceneDef}
+ */
 function _wrapInSceneHelpers(sceneObj) {
   const wrappedScene = Object.assign({}, sceneObj, {
     start() {
-      _loadScene(sceneObj, wrappedScene);
+      _loadScene(wrappedScene);
     },
-    onFinishLoad() {
-      console.log(`finished loading ${sceneObj.name}`); //eslint-disable-line
-      sceneObj.onFinishLoad(engine.app.stage);
+    onFinishLoad(sceneCustomRes) {
+      if (sceneObj.onFinishLoad) sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes);
+      if (wrappedScene.run) wrappedScene.run(engine.app.stage, sceneCustomRes);
     },
   });
   return wrappedScene;
