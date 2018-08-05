@@ -1,6 +1,6 @@
 import request from 'utils/request';
 import mainLoadingScene from '../loading/main';
-import run from './run';
+import { obsGetterList, update, onFinishLoad } from './run';
 
 const state = {
   gameMap: undefined,
@@ -12,8 +12,9 @@ const scene = {
   uiRoute: '/level-one',
   assets: ['levelOne', 'goblins'],
   load$: request('/gamemap/generate'),
-  run,
-  onTick() {},
+  obsGetterList,
+  update,
+  onFinishLoad,
 };
 
 export default scene;

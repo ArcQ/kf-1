@@ -7,35 +7,9 @@ import { codeToKey } from 'utils/keyCodes';
 import { createGoblin } from './sprites/goblin';
 import createTiledMap from './tile-maps/create-tile-map';
 
-// This is our core stream of keyDown input events. It emits an object like `{"spacebar": 32}`
-//  each time a key is pressed down.
+function _render(state) {};
 
-const gameState$ = new BehaviorSubject({});
-
-function render(state) {};
-
-function update(deltaTime, state, inputState) {
-  render(state);
-  return state;
-}
-
-export function startScene(stage, sceneCustomRes) {
-  const tileMap = createTiledMap(sceneCustomRes.gameMap);
-  tileMap.map(tile => stage.addChild(tile));
-
-  const goblin = createGoblin();
-  stage.addChild(goblin);
-}
-
-export default function runLevelOne(stage, sceneCustomRes) {
-  startScene(stage, sceneCustomRes);
-  const frames$ = createGameLoop(obsGetterList, update, gameState$);
-  frames$.subscribe((gameState) => {
-    // render(gameState);
-  });
-}
-
-const obsGetterList = [
+export const obsGetterList = [
   function getKeysDownPerFrame(frames$) {
     const keysDown$ = fromEvent(document, 'keydown')
       .pipe(
@@ -65,3 +39,18 @@ const obsGetterList = [
     return keysDownPerFrame$;
   },
 ];
+
+export function update(deltaTime, state, inputState) {
+  _render(state);
+  return state;
+}
+
+export function onFinishLoad(stage, sceneCustomRes) {
+  const tileMap = createTiledMap(sceneCustomRes.gameMap);
+  tileMap.map(tile => stage.addChild(tile));
+
+  const goblin = createGoblin();
+  stage.addChild(goblin);
+}
+
+export default {};

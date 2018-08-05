@@ -47,22 +47,25 @@
  * @property {SceneDef} loading - another scene to be used while loading assets,
  scenes will load assets while running loading scene
  * @property {string[]} assets - assets dictionary to use to match keys inside of assets/index.js
- * @property {function=} load$ - to be called in parallel with loading scene assets
- * @property {function=} willLoad - to be called right before load assets
  * @property {function=} onFinishLoad - to be fired when scene is ready
- * @property {function=} onTick - game rendering cycle to be fired every fps
+ * @property {function=} update - game rendering cycle to be fired every fps
+ * @property {function=} [load$] - to be called in parallel with loading scene assets
+ * @property {function=} [willLoad] - to be called right before load assets
  */
 
+import { BehaviorSubject, Observable, empty } from 'rxjs';
 import {
-  concat, map, tap, catchError,
+  concat, map, tap, catchError, takeUntil,
 } from 'rxjs/operators';
-import { Observable, empty } from 'rxjs/Rx';
 import { push } from 'react-router-redux';
 
 import { load } from 'game/engine/asset-manager';
 import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
 import sceneDict from 'game/scenes';
+
+import { createGameLoop } from '../game-loop';
+import { update } from '../../scenes/level-one/run';
 
 /**
  * _createLoadObs - creates the observer that first loads the loading scene assets
@@ -122,10 +125,16 @@ function _loadScene(wrappedScene) {
   loadScene$.subscribe(
     ([ _, sceneCustomRes]) => { //eslint-disable-line
       engine.ui.dispatch(push(wrappedScene.uiRoute));
-      if (wrappedScene.onFinishLoad) wrappedScene.onFinishLoad(sceneCustomRes);
+      wrappedScene.onFinishLoad(sceneCustomRes);
     },
   );
 }
+
+let _cancelPrevGameLoopObs;
+const _cancelPrevGameLoop$ = new Observable(obs => {
+  console.log('initiate');
+  _cancelPrevGameLoopObs = obs;
+});
 
 /**
  * _wrapInSceneHelpers - wraps a scene with the helper methods so it connects with _loadScene
@@ -136,11 +145,27 @@ function _loadScene(wrappedScene) {
 function _wrapInSceneHelpers(sceneObj) {
   const wrappedScene = Object.assign({}, sceneObj, {
     start() {
+      // emit event ot cancel previous game loop
+      if (_cancelPrevGameLoopObs) _cancelPrevGameLoopObs.next();
       _loadScene(wrappedScene);
     },
+    /**
+     * onFinishLoad - launches scene def methods and should also launch ui
+     * @param sceneCustomRes - response form custom load$ observable supplied in scene def
+     * @returns {undefined}
+     */
     onFinishLoad(sceneCustomRes) {
       if (sceneObj.onFinishLoad) sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes);
-      if (wrappedScene.run) wrappedScene.run(engine.app.stage, sceneCustomRes);
+      const gameState$ = new BehaviorSubject({});
+      const frames$ = createGameLoop(
+        sceneObj.obsGetterList || [],
+        sceneObj.update,
+        gameState$,
+      )
+        .pipe(
+          takeUntil(_cancelPrevGameLoop$),
+        );
+      frames$.subscribe();
     },
   });
   return wrappedScene;

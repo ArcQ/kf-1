@@ -50,7 +50,7 @@ function calculateStep(prevFrame) {
  * many can subscribe to
  * @returns frames {Observable} - returns the frame observable that a scene can subscribre to
  */
-export default function createGameLoop(obsGetterList, update, gameState$) {
+export function createGameLoop(obsGetterList, update, gameState$) {
   const frames$ = of(undefined)
     .pipe(
       expand(val => calculateStep(val)),
@@ -67,3 +67,5 @@ export default function createGameLoop(obsGetterList, update, gameState$) {
     tap(gameState => gameState$.next(gameState)),
   );
 }
+
+export default {};
