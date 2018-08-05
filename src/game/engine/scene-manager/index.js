@@ -131,8 +131,7 @@ function _loadScene(wrappedScene) {
 }
 
 let _cancelPrevGameLoopObs;
-const _cancelPrevGameLoop$ = new Observable(obs => {
-  console.log('initiate');
+const _cancelPrevGameLoop$ = new Observable((obs) => {
   _cancelPrevGameLoopObs = obs;
 });
 

@@ -1,9 +1,8 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { buffer, filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 
-import createGameLoop from 'game/engine/game-loop';
 import { codeToKey } from 'utils/keyCodes';
+
 import { createGoblin } from './sprites/goblin';
 import createTiledMap from './tile-maps/create-tile-map';
 
@@ -46,6 +45,7 @@ export function update(deltaTime, state, inputState) {
 }
 
 export function onFinishLoad(stage, sceneCustomRes) {
+  console.log(sceneCustomRes);
   const tileMap = createTiledMap(sceneCustomRes.gameMap);
   tileMap.map(tile => stage.addChild(tile));
 
