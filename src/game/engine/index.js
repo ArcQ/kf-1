@@ -30,6 +30,10 @@ function resizeContainers(app, mainGameViewRef, engine) {
     '#333',
   )(app.renderer.view);
   engine.scale = scale;
+  engine.bounds = [
+    getDocument().querySelector('.app').clientWidth,
+    getDocument().querySelector('.app').clientHeight,
+  ];
 }
 
 const engine = {
@@ -58,7 +62,7 @@ const engine = {
     mainGameViewRef.appendChild(app.view);
     resizeContainers(app, mainGameViewRef, engine);
     if (!gameConfig.disableResponsive) {
-      window.onresize = () => {
+      getWindow().onresize = () => {
         resizeContainers(app, mainGameViewRef, engine);
       };
     }

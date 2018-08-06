@@ -77,7 +77,7 @@ import { update } from '../../scenes/level-one/run';
  * @returns {Observable}
  */
 function _createLoadObs(wrappedScene) {
-  const loadingSceneObj = wrappedScene.loading;
+  const loadingSceneObj = wrappedScene.loading();
   const loadLoadingAssets$ = load(loadingSceneObj);
   const loadSceneAssets$ = load(wrappedScene);
   const sceneCustomLoad$ = wrappedScene.load$ || empty();
@@ -192,7 +192,8 @@ const sceneManager = {
    *
    */
   pushScene(sceneKey) {
-    const scene = _wrapInSceneHelpers(sceneDict[sceneKey]);
+    const sceneObj = sceneDict[sceneKey]();
+    const scene = _wrapInSceneHelpers(sceneObj);
     scene.start(engine.app.stage);
   },
 };

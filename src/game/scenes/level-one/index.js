@@ -1,20 +1,16 @@
-import request from 'utils/request';
-import mainLoadingScene from '../loading/main';
 import { obsGetterList, update, onFinishLoad } from './run';
+import mainLoadingScene from '../loading/main';
+import { generateGameMap } from './api';
 
-const state = {
-  gameMap: undefined,
-};
-
-const scene = {
-  name: 'level-one-scene',
-  loading: mainLoadingScene,
-  uiRoute: '/level-one',
-  assets: ['levelOne', 'goblins'],
-  load$: request('/gamemap/generate'),
-  obsGetterList,
-  update,
-  onFinishLoad,
-};
-
-export default scene;
+export default function getSceneObj() {
+  return {
+    name: 'level-one-scene',
+    loading: mainLoadingScene,
+    uiRoute: '/level-one',
+    assets: ['levelOne', 'goblins'],
+    load$: generateGameMap(),
+    obsGetterList,
+    update,
+    onFinishLoad,
+  };
+}

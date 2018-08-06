@@ -1,5 +1,6 @@
 import { buffer, filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs/observable/fromEvent';
+import engine from 'game/engine';
 
 import { codeToKey } from 'utils/keyCodes';
 
@@ -45,7 +46,6 @@ export function update(deltaTime, state, inputState) {
 }
 
 export function onFinishLoad(stage, sceneCustomRes) {
-  console.log(sceneCustomRes);
   const tileMap = createTiledMap(sceneCustomRes.gameMap);
   tileMap.map(tile => stage.addChild(tile));
 
