@@ -6,8 +6,8 @@ export function generateGameMap() {
   return request(
     '/gamemap/generate',
     {
-      x: parseInt(engine.bounds[0] / TILE_SIZE, 10),
-      y: parseInt(engine.bounds[1] / TILE_SIZE, 10),
+      x: parseInt(engine.web.screen.bounds[0] / TILE_SIZE, 10),
+      y: parseInt(engine.web.screen.bounds[1] / TILE_SIZE, 10),
     },
   );
 }

@@ -1,46 +1,22 @@
-import { buffer, filter, map } from 'rxjs/operators';
-import { fromEvent } from 'rxjs/observable/fromEvent';
 import engine from 'game/engine';
-
-import { codeToKey } from 'utils/keyCodes';
 
 import { createGoblin } from './sprites/goblin';
 import createTiledMap from './tile-maps/create-tile-map';
+import events from './events';
 
 function _render(state) {};
 
-export const obsGetterList = [
-  function getKeysDownPerFrame(frames$) {
-    const keysDown$ = fromEvent(document, 'keydown')
-      .pipe(
-        map((event) => {
-          const name = codeToKey(event.keyCode);
-          if (name !== '') {
-            const keyMap = {};
-            keyMap[name] = event.code;
-            return keyMap;
-          }
-          return undefined;
-        }),
-        filter(keyMap => keyMap !== undefined),
-      );
+export const obsList = events;
 
-    // Here we buffer our keyDown stream until we get a new frame emission. This
-    //  gives us a set of all the keyDown events that have triggered since the previous
-    //  frame. We reduce these all down to a single dictionary of keys that were pressed.
-    const keysDownPerFrame$ = keysDown$
-      .pipe(
-        buffer(frames$),
-        map(frames => frames.reduce(
-          (prev, curr) => ({ ...prev, ...curr }), {},
-        )),
-      );
-
-    return keysDownPerFrame$;
-  },
-];
+function inputReducer() {
+}
 
 export function update(deltaTime, state, inputState) {
+  if (inputState.length > 0) {
+    console.log(deltaTime, state, inputState);
+    engine.web.screen.offset;
+    state.x = state.x ? state.x + 1 : 1;
+  }
   _render(state);
   return state;
 }

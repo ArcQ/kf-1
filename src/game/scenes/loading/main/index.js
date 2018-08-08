@@ -6,7 +6,6 @@ export default function getSceneObj(){
     uiRoute: '/loading/main',
     assets: ['mainLoading'],
     onFinishLoad(stage) {
-      console.log('hi');
       const loadingSprite = getSprite('mainLoading', 'loading-animation');
       loadingSprite.x = 0;
       loadingSprite.y = 0;

@@ -1,4 +1,4 @@
-import { obsGetterList, update, onFinishLoad } from './run';
+import { obsList, update, onFinishLoad } from './run';
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
 
@@ -9,7 +9,7 @@ export default function getSceneObj() {
     uiRoute: '/level-one',
     assets: ['levelOne', 'goblins'],
     load$: generateGameMap(),
-    obsGetterList,
+    obsList,
     update,
     onFinishLoad,
   };

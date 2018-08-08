@@ -30,16 +30,25 @@ function resizeContainers(app, mainGameViewRef, engine) {
     '#333',
   )(app.renderer.view);
   engine.scale = scale;
-  engine.bounds = [
+  engine.web.screen.bounds = [
     getDocument().querySelector('.app').clientWidth,
     getDocument().querySelector('.app').clientHeight,
+  ];
+  engine.web.screen.offset = [
+    getDocument().querySelector('.app').offsetLeft,
+    getDocument().querySelector('.app').offsetTop,
   ];
 }
 
 const engine = {
   app: null,
   store: null,
-  bounds: null,
+  web: {
+    screen: {
+      bounds: null,
+      offset: null,
+    },
+  },
   scale: null,
   ui: {
     dispatch(action) {
@@ -51,7 +60,7 @@ const engine = {
   },
   start(gameConfig, mainGameViewRef, store) {
     engine.store = store;
-    const options = { antialias: false, transparent: false, resolution: devicePixelRatio };
+    const options = { antialias: false, transparent: true, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
       gameConfig.aspectRatio.y / gameConfig.aspectRatio.x,
       getWindow,

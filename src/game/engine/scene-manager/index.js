@@ -157,7 +157,7 @@ function _wrapInSceneHelpers(sceneObj) {
       if (sceneObj.onFinishLoad) sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes);
       const gameState$ = new BehaviorSubject({});
       const frames$ = createGameLoop(
-        sceneObj.obsGetterList || [],
+        sceneObj.obsList || [],
         sceneObj.update,
         gameState$,
       )

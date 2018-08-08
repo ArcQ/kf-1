@@ -1,16 +1,36 @@
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import {
-  expand, filter, map, tap, withLatestFrom, share,
+  zip, expand, filter, map, tap, withLatestFrom, share, buffer,
 } from 'rxjs/operators';
 
 import config from 'config.json';
+import { flatten } from 'utils/arrUtils';
 
 import { clampToFPS } from './utils';
 
-
 const FPS = config.game.FPS || 30;
 
+/**
+ * getBufferedEvent - Here we buffer our event stream until we get a new frame emission. This
+ gives us a set of all the events that have triggered since the previous
+ frame. We reduce these all down to a single dictionary of events that occured
+ *
+ * @param frames$
+ * @param event$
+ * @returns {undefined}
+ */
+
+function getBufferedEvent(frames$, event$) {
+  const eventPerFrame$ = event$
+    .pipe(
+      buffer(frames$),
+      // map(frames => frames.reduce(
+      //   (prev, curr) => ({ ...prev, ...curr }), {},
+      // )),
+    );
+  return eventPerFrame$;
+}
 
 /**
  * calculateStep - We use recursively call this function using expand to give us each
@@ -50,7 +70,7 @@ function calculateStep(prevFrame) {
  * many can subscribe to
  * @returns frames {Observable} - returns the frame observable that a scene can subscribre to
  */
-export function createGameLoop(obsGetterList, update, gameState$) {
+export function createGameLoop(obsList, update, gameState$) {
   const frames$ = of(undefined)
     .pipe(
       expand(val => calculateStep(val)),
@@ -59,11 +79,12 @@ export function createGameLoop(obsGetterList, update, gameState$) {
       share(),
     );
 
-  const obsList = obsGetterList.map(obsGetter => obsGetter(frames$));
+  const bufferedObsList = obsList.map(obsGetter => getBufferedEvent(frames$, obsGetter));
 
   return frames$.pipe(
-    withLatestFrom(...obsList),
-    map(update),
+    zip(gameState$, ...bufferedObsList,
+      (deltaTime, _gameState$, ...args) => [deltaTime, _gameState$, flatten(args)]),
+    map(args => update(...args)),
     tap(gameState => gameState$.next(gameState)),
   );
 }
