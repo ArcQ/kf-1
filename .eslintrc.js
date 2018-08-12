@@ -49,5 +49,6 @@ module.exports = {
     'array-callback-return':0,
     'react/destructuring-assignment':0,
     'react/jsx-closing-tag-location':0,
+    'space-before-function-paren':0,
   },
 }

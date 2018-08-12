@@ -1,6 +1,5 @@
 import 'whatwg-fetch'; //eslint-disable-line
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
+import { Observable, from } from 'rxjs';
 
 const DEFAULT_API_URL = 'http://localhost:7000';
 
@@ -57,7 +56,7 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
   }
 
   const destination = `${apiUrl}/${path}${query}`;
-  return Observable.from(fetch(destination, options)
+  return from(fetch(destination, options)
     .then(checkStatus)
     .then(res => res.json())
     .catch((error) => {

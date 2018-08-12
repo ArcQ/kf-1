@@ -53,7 +53,7 @@
  * @property {function=} [willLoad] - to be called right before load assets
  */
 
-import { BehaviorSubject, Observable, empty } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, empty } from 'rxjs';
 import {
   concat, map, tap, catchError, takeUntil,
 } from 'rxjs/operators';
@@ -100,7 +100,7 @@ function _createLoadObs(wrappedScene) {
     setLoadPercentage$,
   );
 
-  return Observable.forkJoin(loadAssetPipe$, sceneCustomLoad$).pipe(
+  return forkJoin(loadAssetPipe$, sceneCustomLoad$).pipe(
     catchError((e) => {
       console.warn(`error in loading scene ${wrappedScene.name}: ${e}`); //eslint-disable-line
       if (wrappedScene.onLoadError) wrappedScene.onLoadError(e);

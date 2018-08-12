@@ -1,13 +1,13 @@
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
+import engine from 'game/engine';
 import {
-  zip, expand, filter, map, tap, withLatestFrom, share, buffer,
+  zip, expand, filter, map, tap, share, buffer,
 } from 'rxjs/operators';
 
 import config from 'config.json';
 import { flatten } from 'utils/arrUtils';
 
-import { clampToFPS } from './utils';
+import { clampToFPS } from './game-loop.utils';
 
 const FPS = config.game.FPS || 30;
 
@@ -25,9 +25,6 @@ function getBufferedEvent(frames$, event$) {
   const eventPerFrame$ = event$
     .pipe(
       buffer(frames$),
-      // map(frames => frames.reduce(
-      //   (prev, curr) => ({ ...prev, ...curr }), {},
-      // )),
     );
   return eventPerFrame$;
 }
@@ -44,6 +41,7 @@ function getBufferedEvent(frames$, event$) {
  * @returns {Observable}
  */
 function calculateStep(prevFrame) {
+  // TODO rx has it's own requestAnimationFrame direclty to obs
   return Observable.create((observer) => {
     requestAnimationFrame((frameStartTime) => {
       const deltaTime = prevFrame ? (frameStartTime - prevFrame.frameStartTime) / 1000 : 0;
@@ -81,10 +79,17 @@ export function createGameLoop(obsList, update, gameState$) {
 
   const bufferedObsList = obsList.map(obsGetter => getBufferedEvent(frames$, obsGetter));
 
+  /**
+   * gameStateUpdater - takes in a update func, and returns a func that will update game state
+   *
+   * @returns {func}
+   */
+  const gameStateUpdater = updateF => gameState$.next(updateF(gameState$.getValue()));
+
   return frames$.pipe(
     zip(gameState$, ...bufferedObsList,
       (deltaTime, _gameState$, ...args) => [deltaTime, _gameState$, flatten(args)]),
-    map(args => update(...args)),
+    map(args => update(frames$, engine.app.stage, gameStateUpdater, ...args)),
     tap(gameState => gameState$.next(gameState)),
   );
 }

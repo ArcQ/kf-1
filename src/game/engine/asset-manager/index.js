@@ -5,7 +5,7 @@
 
 import * as PIXI from 'pixi.js';
 import { Observable } from 'rxjs';
-import difference from 'lodash/difference';
+import { difference } from 'ramda';
 
 import dicts from 'assets';
 

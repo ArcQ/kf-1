@@ -1,5 +1,6 @@
 import { filter, map } from 'rxjs/operators';
-import { fromEvent } from 'rxjs/observable/fromEvent';
+import { fromEvent } from 'rxjs';
+import { mapDOMPosToStage } from 'game/engine/game-loop/render.utils';
 
 const keyCodes = ['Enter'];
 
@@ -16,10 +17,11 @@ const keyDown$ = fromEvent(document, 'keydown')
 
 const click$ = fromEvent(document, 'click')
   .pipe(
+    // clicked outside of app container (side borders)
+    filter(event => event.target.id !== 'root'),
     map(event => ({
       type: 'click',
-      x: event.offsetX,
-      y: event.offsetY,
+      pos: mapDOMPosToStage([event.offsetX, event.offsetY]),
     })),
   );
 
