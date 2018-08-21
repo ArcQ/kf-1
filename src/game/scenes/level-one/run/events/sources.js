@@ -4,7 +4,7 @@ import { mapDOMPosToStage } from 'game/engine/game-loop/render.utils';
 
 const keyCodes = ['Enter'];
 
-const keyDown$ = fromEvent(document, 'keydown')
+export const keyDown$ = fromEvent(document, 'keydown')
   .pipe(
     map((event) => {
       if (keyCodes.indexOf(event.code) > -1) {
@@ -15,7 +15,7 @@ const keyDown$ = fromEvent(document, 'keydown')
     filter(keyMap => keyMap !== undefined),
   );
 
-const click$ = fromEvent(document, 'click')
+export const click$ = fromEvent(document, 'click')
   .pipe(
     // clicked outside of app container (side borders)
     filter(event => event.target.id !== 'root'),
@@ -25,7 +25,4 @@ const click$ = fromEvent(document, 'click')
     })),
   );
 
-export default [
-  keyDown$,
-  click$,
-];
+export default {};

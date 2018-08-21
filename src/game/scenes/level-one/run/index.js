@@ -1,64 +1,42 @@
-import { of } from 'rxjs';
-import { scan, tap, combineLatest, takeWhile } from 'rxjs/operators';
-import * as PIXI from 'pixi.js'
+import { fromJS } from 'immutable';
+import { map } from 'rxjs/operators';
 
 import engine from 'game/engine';
-import { obsDictFactory } from 'game/engine/game-loop/update.utils';
-import { safeGetFn } from 'utils/dictUtils';
+import { keyDown$, click$ } from './events/sources';
+import eventsReducer from './events/reducer';
+import _render, { renderInitialReturnState } from './render';
+import { createGoblin } from './items/goblin';
 
-import { createGoblin } from './sprites/goblin';
-import createTiledMap from './tile-maps/create-tile-map';
-import events from './events';
+export const eventSources = [
+  keyDown$,
+  click$,
+];
 
+export function update(gameLoopAttrs, deltaTime, inputState) {
+  const {
+    framesAndEvents$, updateGame,
+  } = gameLoopAttrs;
 
-function _render(state) {};
-
-export const obsList = events;
-
-const eventObsDict = {
-  click: ([frames$, stage, updateState, deltaTime, state, inputState], inputDef) => {
-    const addCircleToStageAndReturn = () =>  {
-      console.log(inputDef);
-      const graphics = new PIXI.Graphics();
-      graphics.lineStyle(2, 0xFF00FF);
-      graphics.drawCircle(...inputDef.pos, 20);
-      graphics.endFill();
-      stage.addChild(graphics);
-      return graphics;
-    }
-    const drawTempCircle$ = of(addCircleToStageAndReturn());
-    return obsDictFactory(
-      frames$.pipe(
-        combineLatest(drawTempCircle$),
-        scan((acc, v) => acc + v),
-        tap((v) => console.log(v) || v),
-        takeWhile(val => val < 2),
-      ))
-  },
-};
-
-export function update(...args) {
-  const [ frames$, stage, updateState, deltaTime, state, inputState ] = args;
   if (inputState.length > 0) {
-    state.x = state.x ? state.x + 1 : 1;
     const obsArr = inputState.map(
       (def) => {
-        const obsDict = safeGetFn([def.type], eventObsDict)(args, def);
-        // should use safeGetFn for good practice, but it seems like we can't do this ramda style
+        // const obsDict = safeGetFn([def.type], eventReducer)(gameLoopAttrs, def);
+        const obsDict = eventsReducer(gameLoopAttrs, def);
         obsDict.obs.subscribe();
+        return obsDict;
       },
     );
   }
-  _render(state);
-  return state;
 }
+
+export const render = _render;
+
+const initialGameState = fromJS({
+  goblin: createGoblin([100, 100]),
+});
+
+export function start({ frames$, updateState }) {}
 
 export function onFinishLoad(stage, sceneCustomRes) {
-  const tileMap = createTiledMap(sceneCustomRes.gameMap);
-  tileMap.map(tile => stage.addChild(tile));
-
-  const goblin = createGoblin();
-  stage.addChild(goblin);
+  return renderInitialReturnState(sceneCustomRes.gameMap, initialGameState);
 }
-
-export default {};

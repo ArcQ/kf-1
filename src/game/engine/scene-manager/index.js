@@ -54,8 +54,9 @@
  */
 
 import { BehaviorSubject, Observable, forkJoin, empty } from 'rxjs';
+import { map as Map } from 'immutable';
 import {
-  concat, map, tap, catchError, takeUntil,
+  concat, map, tap, catchError, takeUntil, combineLatest,
 } from 'rxjs/operators';
 import { push } from 'react-router-redux';
 
@@ -64,7 +65,7 @@ import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
 import sceneDict from 'game/scenes';
 
-import { createGameLoop } from '../game-loop';
+import { createGameLoop, createGameState } from '../game-loop';
 import { update } from '../../scenes/level-one/run';
 
 /**
@@ -154,17 +155,33 @@ function _wrapInSceneHelpers(sceneObj) {
      * @returns {undefined}
      */
     onFinishLoad(sceneCustomRes) {
-      if (sceneObj.onFinishLoad) sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes);
-      const gameState$ = new BehaviorSubject({});
-      const frames$ = createGameLoop(
-        sceneObj.obsList || [],
-        sceneObj.update,
-        gameState$,
-      )
-        .pipe(
-          takeUntil(_cancelPrevGameLoop$),
-        );
-      frames$.subscribe();
+      const initialState = (sceneObj.onFinishLoad)
+        ? sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes)
+        : new Map();
+
+      const gameLoopArgs = createGameLoop(
+        sceneObj.eventSources,
+        initialState,
+        _cancelPrevGameLoop$,
+      );
+
+      const {
+        renderState$,
+        framesAndEvents$,
+      } = gameLoopArgs;
+
+      // render on gameState updates and at most 1 frame/s
+      renderState$.pipe(
+        combineLatest(framesAndEvents$),
+      ).subscribe(([renderState]) => sceneObj.render(renderState));
+
+      if (sceneObj.start) sceneObj.start(gameLoopArgs);
+      if (sceneObj.update) {
+        framesAndEvents$.pipe(
+          map(combinedRes =>
+            sceneObj.update(gameLoopArgs, combinedRes.deltaTime, combinedRes.inputState)),
+        ).subscribe();
+      }
     },
   });
   return wrappedScene;

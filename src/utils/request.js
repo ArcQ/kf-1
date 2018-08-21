@@ -9,7 +9,7 @@ export const errorObservable$ = Observable.create((observer) => {
   errorObserver = observer;
 });
 
-errorObservable$.subscribe((e) => console.log(e)) //eslint-disable-line
+errorObservable$.subscribe((e) => console.warn(e)) //eslint-disable-line
 
 // const fetch = getFetch(); //in case for ssr
 

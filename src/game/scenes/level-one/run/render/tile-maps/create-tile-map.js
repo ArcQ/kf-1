@@ -1,7 +1,7 @@
 import { getSprite } from 'game/engine/asset-manager';
-import { TILE_SIZE } from '../constants';
+import { TILE_SIZE } from '../../constants';
 
-const GAMEMAP_TO_TEXTUE =  [
+const GAMEMAP_TO_TEXTUE = [
   'grassTexture',
   'sandTexture',
   'waterTexture',

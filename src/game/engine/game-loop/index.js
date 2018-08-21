@@ -1,7 +1,6 @@
-import { Observable, of } from 'rxjs';
-import engine from 'game/engine';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
-  zip, expand, filter, map, tap, share, buffer,
+  zip, expand, filter, map, share, buffer, takeUntil,
 } from 'rxjs/operators';
 
 import config from 'config.json';
@@ -56,42 +55,89 @@ function calculateStep(prevFrame) {
     );
 }
 
+
+function createGameLoopState(initialState, cancel$) {
+  const gameState$ = new BehaviorSubject(initialState.initialGameState);
+    // .pipe(
+    //   takeUntil(cancel$),
+    // );;
+  const renderState$ = new BehaviorSubject(initialState.initialRenderState);
+    // .pipe(
+    //   takeUntil(cancel$),
+    // );;
+  return {
+    renderState$,
+    gameState$,
+    /**
+     * updateGame - takes in a update func, and returns a func that will update game state
+     * - keep heavier nested objects in here that affects game logic,
+     * update gameState, then update renderState
+     *
+     * @returns {updatedGameState}
+     */
+    updateGame: (updateF) => {
+      gameState$.next(
+        updateF(gameState$.getValue(), renderState$.getValue()),
+      );
+      return gameState$.getValue();
+    },
+    /**
+     * updateRender - takes in a update func, and returns a func that will update render state
+     * - keep lighter non-nested objects in here that only affects rendering
+     *
+     * @returns {updatedRenderState}
+     */
+    updateRender: (updateF) => {
+      renderState$.next(
+        updateF(renderState$.getValue(), gameState$.getValue()),
+      );
+      return renderState$.getValue();
+    },
+  };
+}
+
 /**
  * createGameLoop - returns an observable game loop that you can subscribe to,
  * will run until you manually cancel
  *
- * @param obsGetterList - event getters that are functions that return observables such as
+ * @description game flow should go as such frame$ + event observable updates should flow through
+ * update function, which will spawn multiple observables and update gameState using updateState
+ * a single render function will watch all updates to gameState$ and 'dumbly' update screen
+ * keeping unidirectional state flow
+ *
+ * @param sceneObj {Object} - base scene config at index of every scene
+ * @param scene.obsGetterList - event getters that are functions that return observables such as
  * $keysDown to merge with the main frame$ observable, getters should take an argument frame$
  * so for example they can buffer to the frame$ observable
- * @param update - update function called every frame update, returns a new game state obj
+ * @param scene.update - update function called every frame update, returns a new game state obj
  * @param gameState {Observable} - should be an observable...most probably a behaviorsubject that
  * many can subscribe to
  * @returns frames {Observable} - returns the frame observable that a scene can subscribre to
  */
-export function createGameLoop(obsList, update, gameState$) {
+export function createGameLoop(eventSources = [], initialState, cancel$) {
+  const gameLoopStates = createGameLoopState(initialState, cancel$);
+  const { renderState$, gameState$, updateGame, updateRender } = gameLoopStates;
+
   const frames$ = of(undefined)
     .pipe(
       expand(val => calculateStep(val)),
       filter(frame => frame !== undefined),
       map(frame => frame.deltaTime),
-      share(),
+      takeUntil(cancel$),
     );
 
-  const bufferedObsList = obsList.map(obsGetter => getBufferedEvent(frames$, obsGetter));
+  const bufferedObsList = eventSources.map(obsGetter => getBufferedEvent(frames$, obsGetter));
 
-  /**
-   * gameStateUpdater - takes in a update func, and returns a func that will update game state
-   *
-   * @returns {func}
-   */
-  const gameStateUpdater = updateF => gameState$.next(updateF(gameState$.getValue()));
+  gameState$
 
-  return frames$.pipe(
-    zip(gameState$, ...bufferedObsList,
-      (deltaTime, _gameState$, ...args) => [deltaTime, _gameState$, flatten(args)]),
-    map(args => update(frames$, engine.app.stage, gameStateUpdater, ...args)),
-    tap(gameState => gameState$.next(gameState)),
-  );
+  return {
+    framesAndEvents$: frames$.pipe(
+      zip(...bufferedObsList,
+        (deltaTime, ...args) => ({ deltaTime, inputState: flatten(args) })),
+      share(),
+    ),
+    ...gameLoopStates,
+  };
 }
 
 export default {};

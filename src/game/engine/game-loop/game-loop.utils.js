@@ -1,5 +1,5 @@
 import {
-  bufferCount, map,
+  buffer, bufferCount, map,
 } from 'rxjs/operators';
 
 /**
@@ -23,7 +23,6 @@ export function getFPS(frames$) {
       }),
     );
 }
-
 
 /**
  * clampToFPS(frame)
