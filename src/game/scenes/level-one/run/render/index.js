@@ -12,10 +12,13 @@ let spriteStore = {};
 
 export function renderInitialReturnState(gameMap, initialGameState) {
   const initialRenderState = fromJS({
-    'goblin.pos': initialGameState.goblin,
+    'goblin.pos': console.log(initialGameState.getIn(['goblin', 'pos'])) || initialGameState.getIn(['goblin', 'pos']),
     'goblin.isShow': false,
+    'moveTargetCircle.isShow': false,
     'moveTargetCircle.pos': [100, 100],
   });
+
+  console.log(initialRenderState.toJS());
 
   const tileMap = createTiledMap(gameMap);
   tileMap.map(tile => engine.app.stage.addChild(tile));
@@ -46,4 +49,5 @@ export default function render(renderState) {
   } else {
     spriteStore.moveTargetCircle.visibility = false;
   }
+  setPos(spriteStore.goblin, renderState.get('goblin.pos'));
 }

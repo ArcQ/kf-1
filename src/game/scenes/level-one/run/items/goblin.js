@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { fromJS } from 'immutable';
 
 export function createGoblinSprite() {
   const frames = Array(6).fill(0).map((v, i) => PIXI.Texture.fromFrame(`1_GOBLIN_WALK_00${i}.png`));
@@ -21,13 +22,12 @@ export function createGoblinSprite() {
 }
 
 export function createGoblin(pos) {
-  return {
+  return fromJS({
     sprite: '', speed: 10, pos,
-  };
+  });
 }
 
 export function move(traits, destination) {
-  console.log(arguments);
   const origin = traits.get('pos');
   const diff = {
     y: destination[1] - traits.getIn(['pos', 1]),
@@ -36,12 +36,11 @@ export function move(traits, destination) {
   const rad = Math.atan(diff.y / diff.x);
   const xMult = Math.cos(rad);
   const yMult = Math.sin(rad);
+  console.log(xMult);
+  console.log(yMult);
 
   return (dt) => {
-    const d = traits.speed * dt;
-    return {
-      x: d * xMult,
-      y: d * yMult,
-    };
+    const d = traits.get('speed') * dt;
+    return [d * xMult, d * yMult];
   };
 }

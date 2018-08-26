@@ -1,43 +1,49 @@
 import { of } from 'rxjs';
+import { fromJS } from 'immutable';
 import {
-  combineLatest, takeWhile, mergeMap, map, tap, flatMap,
+  combineLatest, takeWhile, mergeMap, tap, map,
 } from 'rxjs/operators';
 import { obsDictFactory } from 'game/engine/game-loop/update.utils';
 import { move } from '../items/goblin';
 
 export default function reducer({
-  framesAndEvents$, updateGame, updateRender, gameState$
+  framesAndEvents$, updateGame, updateRender, gameState$,
 }, inputDef) {
-  console.log(gameState$.getValue());
   switch (inputDef.type) {
     case 'click': {
+      const showCircle$ = of(updateRender(renderState => renderState
+        .setIn('targetCircle.pos', inputDef.pos)
+        .setIn('targetCircle.isShow', true)));
+
+      const hideCircle$ = of(updateRender(state => state
+        .set('targetCircle.isShow', false)));
+
       const moveGoblin = move(
         gameState$.getValue().get('goblin'),
         inputDef.pos,
       );
-      console.log(arguments);
-      const showCircleMoveGoblin$ = of(
-        updateGame(gameState => gameState
-          .update(['goblin', 'pos'], goblin => goblin
-            .set('pos', move(goblin.get('pos'), inputDef.pos)))),
-      ).pipe(
-        tap((gameState) => updateRender(renderState => console.log(renderState) || renderState
-          .setIn(['goblin.pos'], inputDef.pos)
-          .setIn('targetCircle.pos', inputDef.pos)
-          .setIn('targetCircle.isShow', true))),
+
+      const updateNewGoblinPos = map(({ deltaTime }) => {
+        const newPos = moveGoblin(deltaTime);
+        updateGame(gameState =>
+          gameState.updateIn(['goblin', 'pos'],
+            (pos) => fromJS([pos[0] + newPos[0], pos[1] + newPos[1]])));
+        updateRender(renderState => console.log(renderState.toJS()['goblin.pos']) ||
+          renderState.update('goblin.pos', (pos) => console.log(pos) ||
+          fromJS([pos[0] + newPos[0], pos[1] + newPos[1]])));
+
+        return newPos;
+      });
+
+      const showCircleMoveGoblin$ = showCircle$.pipe(
+        mergeMap(() => framesAndEvents$),
+        updateNewGoblinPos,
+        takeWhile(({ newPos }) => newPos !== inputDef.pos),
+        mergeMap(() => hideCircle$),
       );
 
-      const hideCircle$ = of(updateRender(state => console.log('hi') || state
-        .set('targetCircle.isShow', false)));
-
       return obsDictFactory(
-        framesAndEvents$.pipe(
-          flatMap(
-            showCircleMoveGoblin$,
-          ),
-          takeWhile((args) => args[0].deltaTime < 2),
-          mergeMap(() => hideCircle$),
-        ),
+        showCircleMoveGoblin$,
       );
     }
     default:

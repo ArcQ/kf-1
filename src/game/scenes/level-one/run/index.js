@@ -32,7 +32,7 @@ export function update(gameLoopAttrs, deltaTime, inputState) {
 export const render = _render;
 
 const initialGameState = fromJS({
-  goblin: createGoblin([100, 100]),
+  goblin: createGoblin([200, 200]),
 });
 
 export function start({ frames$, updateState }) {}
