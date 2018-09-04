@@ -1,10 +1,8 @@
 import { fromJS } from 'immutable';
-import { map } from 'rxjs/operators';
 
-import engine from 'game/engine';
 import { keyDown$, click$ } from './events/sources';
 import eventsReducer from './events/reducer';
-import _render, { renderInitialReturnState } from './render';
+import _render, { initialRender } from './render';
 import { createGoblin } from './items/goblin';
 
 export const eventSources = [
@@ -13,10 +11,6 @@ export const eventSources = [
 ];
 
 export function update(gameLoopAttrs, deltaTime, inputState) {
-  const {
-    framesAndEvents$, updateGame,
-  } = gameLoopAttrs;
-
   if (inputState.length > 0) {
     const obsArr = inputState.map(
       (def) => {
@@ -33,10 +27,15 @@ export const render = _render;
 
 const initialGameState = fromJS({
   goblin: createGoblin([200, 200]),
+  moveTargetCircle: {
+    isShow: false,
+    pos: [100, 100],
+  },
 });
 
-export function start({ frames$, updateState }) {}
+export function start() {}
 
 export function onFinishLoad(stage, sceneCustomRes) {
-  return renderInitialReturnState(sceneCustomRes.gameMap, initialGameState);
+  initialRender(sceneCustomRes.gameMap, initialGameState);
+  return initialGameState;
 }

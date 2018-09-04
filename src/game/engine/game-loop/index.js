@@ -56,42 +56,23 @@ function calculateStep(prevFrame) {
 }
 
 
-function createGameLoopState(initialState, cancel$) {
-  const gameState$ = new BehaviorSubject(initialState.initialGameState);
-    // .pipe(
-    //   takeUntil(cancel$),
-    // );;
-  const renderState$ = new BehaviorSubject(initialState.initialRenderState);
+function createGameLoopState(initialGameState, cancel$) {
+  const gameState$ = new BehaviorSubject(initialGameState);
     // .pipe(
     //   takeUntil(cancel$),
     // );;
   return {
-    renderState$,
     gameState$,
     /**
      * updateGame - takes in a update func, and returns a func that will update game state
-     * - keep heavier nested objects in here that affects game logic,
-     * update gameState, then update renderState
      *
      * @returns {updatedGameState}
      */
     updateGame: (updateF) => {
       gameState$.next(
-        updateF(gameState$.getValue(), renderState$.getValue()),
+        updateF(gameState$.getValue()),
       );
       return gameState$.getValue();
-    },
-    /**
-     * updateRender - takes in a update func, and returns a func that will update render state
-     * - keep lighter non-nested objects in here that only affects rendering
-     *
-     * @returns {updatedRenderState}
-     */
-    updateRender: (updateF) => {
-      renderState$.next(
-        updateF(renderState$.getValue(), gameState$.getValue()),
-      );
-      return renderState$.getValue();
     },
   };
 }
@@ -116,7 +97,7 @@ function createGameLoopState(initialState, cancel$) {
  */
 export function createGameLoop(eventSources = [], initialState, cancel$) {
   const gameLoopStates = createGameLoopState(initialState, cancel$);
-  const { renderState$, gameState$, updateGame, updateRender } = gameLoopStates;
+  const { gameState$, updateGame } = gameLoopStates;
 
   const frames$ = of(undefined)
     .pipe(

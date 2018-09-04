@@ -1,5 +1,3 @@
-import { fromJS } from 'immutable';
-
 import engine from 'game/engine';
 import { drawTargetCircle } from 'game/scenes/level-one/run/graphics/draw';
 import { setPos } from 'utils/pixi.utils';
@@ -9,45 +7,27 @@ import { createGoblinSprite } from '../items/goblin';
 
 let spriteStore = {};
 
-
-export function renderInitialReturnState(gameMap, initialGameState) {
-  const initialRenderState = fromJS({
-    'goblin.pos': console.log(initialGameState.getIn(['goblin', 'pos'])) || initialGameState.getIn(['goblin', 'pos']),
-    'goblin.isShow': false,
-    'moveTargetCircle.isShow': false,
-    'moveTargetCircle.pos': [100, 100],
-  });
-
-  console.log(initialRenderState.toJS());
-
+export function initialRender(gameMap, initialGameState) {
   const tileMap = createTiledMap(gameMap);
   tileMap.map(tile => engine.app.stage.addChild(tile));
 
   const goblin = createGoblinSprite(initialGameState.goblin);
   engine.app.stage.addChild(goblin);
 
-
-  const moveTargetCircle = drawTargetCircle(initialRenderState.get('moveTargetCircle.pos'));
+  const moveTargetCircle = drawTargetCircle(initialGameState.getIn(['moveTargetCircle', 'pos']));
   engine.app.stage.addChild(moveTargetCircle);
 
-  // side effect
   spriteStore = { goblin, moveTargetCircle };
-
-  return {
-    initialGameState,
-    initialRenderState,
-  };
 }
 
-export default function render(renderState) {
-  if (!renderState) return;
-  if (renderState.get('targetCircle.pos')) {
-    setPos(spriteStore.moveTargetCircle, renderState.get('targetCircle.pos'));
-  }
-  if (renderState.get('targetCircle.isShow')) {
+export default function render(gameState) {
+  if (!gameState) return;
+  if (gameState.getIn(['moveTargetCircle', 'isShow'])) {
+    // console.log(gameState.getIn(['moveTargetCircle','pos']));
     spriteStore.moveTargetCircle.visibility = true;
+    setPos(spriteStore.moveTargetCircle, gameState.getIn(['moveTargetCircle', 'pos']));
   } else {
     spriteStore.moveTargetCircle.visibility = false;
   }
-  setPos(spriteStore.goblin, renderState.get('goblin.pos'));
+  // setPos(spriteStore.goblin, gameState.getIn(['goblin', 'pos']));
 }

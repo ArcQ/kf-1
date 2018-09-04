@@ -1,22 +1,25 @@
 import { of } from 'rxjs';
-import { fromJS } from 'immutable';
 import {
-  combineLatest, takeWhile, mergeMap, tap, map,
+  takeWhile, mergeMap, map,
 } from 'rxjs/operators';
 import { obsDictFactory } from 'game/engine/game-loop/update.utils';
+import { movePointIm } from 'utils/immutable.utils';
+
 import { move } from '../items/goblin';
 
 export default function reducer({
-  framesAndEvents$, updateGame, updateRender, gameState$,
+  framesAndEvents$, updateGame, gameState$,
 }, inputDef) {
   switch (inputDef.type) {
     case 'click': {
-      const showCircle$ = of(updateRender(renderState => renderState
-        .setIn('targetCircle.pos', inputDef.pos)
-        .setIn('targetCircle.isShow', true)));
+      // const showCircle$ = of(actions.showCircle({ pos: inputDef.pos }));
+      // const hideCircle$ = of(actions.hideCircle());
+      const showCircle$ = of(updateGame(gameState => gameState
+        .setIn(['moveTargetCircle', 'pos'], inputDef.pos)
+        .setIn(['moveTargetCircle', 'isShow'], true)));
 
-      const hideCircle$ = of(updateRender(state => state
-        .set('targetCircle.isShow', false)));
+      const hideCircle$ = of(updateGame(gameState => gameState
+        .setIn(['targetCircle', 'isShow'], false)));
 
       const moveGoblin = move(
         gameState$.getValue().get('goblin'),
@@ -27,11 +30,7 @@ export default function reducer({
         const newPos = moveGoblin(deltaTime);
         updateGame(gameState =>
           gameState.updateIn(['goblin', 'pos'],
-            (pos) => fromJS([pos[0] + newPos[0], pos[1] + newPos[1]])));
-        updateRender(renderState => console.log(renderState.toJS()['goblin.pos']) ||
-          renderState.update('goblin.pos', (pos) => console.log(pos) ||
-          fromJS([pos[0] + newPos[0], pos[1] + newPos[1]])));
-
+            pos => console.log(pos) || movePointIm(pos, newPos)));
         return newPos;
       });
 
