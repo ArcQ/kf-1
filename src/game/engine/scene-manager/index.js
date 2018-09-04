@@ -19,7 +19,7 @@
  *   assets: ['levelOne', 'goblins'],
  *   willLoad() {
  *     request('/gamemap/generate').subscribe(
- *       (data) => console.log(data),
+ *       (data) => data,
  *     );
  *   },
  *   onTick() {

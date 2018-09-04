@@ -36,11 +36,9 @@ export function move(traits, destination) {
   const rad = Math.atan(diff.y / diff.x);
   const xMult = Math.cos(rad);
   const yMult = Math.sin(rad);
-  console.log(xMult);
-  console.log(yMult);
 
   return (dt) => {
-    const d = traits.get('speed') * dt;
+    const d = traits.get('speed') * dt * 5;
     return [d * xMult, d * yMult];
   };
 }

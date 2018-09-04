@@ -23,11 +23,10 @@ export function initialRender(gameMap, initialGameState) {
 export default function render(gameState) {
   if (!gameState) return;
   if (gameState.getIn(['moveTargetCircle', 'isShow'])) {
-    // console.log(gameState.getIn(['moveTargetCircle','pos']));
     spriteStore.moveTargetCircle.visibility = true;
     setPos(spriteStore.moveTargetCircle, gameState.getIn(['moveTargetCircle', 'pos']));
   } else {
     spriteStore.moveTargetCircle.visibility = false;
   }
-  // setPos(spriteStore.goblin, gameState.getIn(['goblin', 'pos']));
+  setPos(spriteStore.goblin, gameState.getIn(['goblin', 'pos']));
 }

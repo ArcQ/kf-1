@@ -1,4 +1,5 @@
 import { of } from 'rxjs';
+import { fromJS } from 'immutable';
 import {
   takeWhile, mergeMap, map,
 } from 'rxjs/operators';
@@ -15,7 +16,7 @@ export default function reducer({
       // const showCircle$ = of(actions.showCircle({ pos: inputDef.pos }));
       // const hideCircle$ = of(actions.hideCircle());
       const showCircle$ = of(updateGame(gameState => gameState
-        .setIn(['moveTargetCircle', 'pos'], inputDef.pos)
+        .setIn(['moveTargetCircle', 'pos'], fromJS(inputDef.pos))
         .setIn(['moveTargetCircle', 'isShow'], true)));
 
       const hideCircle$ = of(updateGame(gameState => gameState
@@ -30,7 +31,7 @@ export default function reducer({
         const newPos = moveGoblin(deltaTime);
         updateGame(gameState =>
           gameState.updateIn(['goblin', 'pos'],
-            pos => console.log(pos) || movePointIm(pos, newPos)));
+            pos => movePointIm(pos, newPos)));
         return newPos;
       });
 
