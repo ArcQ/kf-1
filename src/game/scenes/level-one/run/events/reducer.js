@@ -28,10 +28,9 @@ export default function reducer({
       );
 
       const updateNewGoblinPos = map(({ deltaTime }) => {
-        const newPos = moveGoblin(deltaTime);
+        const newPos = moveGoblin(gameState$.getValue().getIn(['goblin', 'pos']), deltaTime);
         updateGame(gameState =>
-          gameState.updateIn(['goblin', 'pos'],
-            pos => movePointIm(pos, newPos)));
+          gameState.setIn(['goblin', 'pos'], newPos));
         return newPos;
       });
 
