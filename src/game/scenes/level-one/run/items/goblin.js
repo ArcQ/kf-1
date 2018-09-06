@@ -29,6 +29,14 @@ export function createGoblin(pos) {
   });
 }
 
+function checkIfPastF(diff, destination) {
+  const signs = diff.map(d => Math.sign(d));
+  return nextPt =>
+    signs
+      .map((s, i) => Math.sign(destination[i] - nextPt.get(i)) !== s)
+      .reduce((acc, v) => v || acc, false);
+}
+
 export function move(traits, destination) {
   const diff = [
     destination[0] - traits.getIn(['pos', 0]),
@@ -42,9 +50,15 @@ export function move(traits, destination) {
     Math.sin(rad),
   ];
 
+  const checkIfPast = checkIfPastF(diff, destination);
+
+  const destinationIm = fromJS(destination);
+
   return (curPos, dt) => {
     const dist = traits.get('speed') * dt * 5;
     const moveDiff = multipliers.map((m, i) => m * dist * normalized[i]);
-    return movePointIm(curPos, moveDiff);
+    const nextPt = movePointIm(curPos, moveDiff);
+    return checkIfPast(nextPt)
+      ? destinationIm : nextPt;
   };
 }

@@ -19,9 +19,6 @@ export default function reducer({
         .setIn(['moveTargetCircle', 'pos'], fromJS(inputDef.pos))
         .setIn(['moveTargetCircle', 'isShow'], true)));
 
-      const hideCircle$ = of(updateGame(gameState => gameState
-        .setIn(['targetCircle', 'isShow'], false)));
-
       const moveGoblin = move(
         gameState$.getValue().get('goblin'),
         inputDef.pos,
@@ -31,18 +28,24 @@ export default function reducer({
         const newPos = moveGoblin(gameState$.getValue().getIn(['goblin', 'pos']), deltaTime);
         updateGame(gameState =>
           gameState.setIn(['goblin', 'pos'], newPos));
-        return newPos;
+        return { newPos };
       });
 
       const showCircleMoveGoblin$ = showCircle$.pipe(
         mergeMap(() => framesAndEvents$),
         updateNewGoblinPos,
-        takeWhile(({ newPos }) => newPos !== inputDef.pos),
-        mergeMap(() => hideCircle$),
+        takeWhile(({ newPos }) => newPos.get(0) !== inputDef.pos[0]),
       );
 
-      return obsDictFactory(
+      const obsDict = obsDictFactory(
         showCircleMoveGoblin$,
+      );
+
+      obsDict.obs.subscribe(
+        () => undefined,
+        () => undefined,
+        () => updateGame(gameState => gameState
+          .setIn(['moveTargetCircle', 'isShow'], false)),
       );
     }
     default:

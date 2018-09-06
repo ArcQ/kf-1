@@ -30,6 +30,7 @@ export default function levelOneGameRedcuer(state = initialState, action) {
         .setIn(['targetCircle', 'pos'], action.payload.pos)
         .setIn(['targetCircle', 'isShow'], true);
     case c.HIDE_CIRCLE:
+      console.log('hi');
       return state
         .setIn(['targetCircle', 'isShow'], false);
     default:

@@ -16,7 +16,6 @@ export function update(gameLoopAttrs, deltaTime, inputState) {
       (def) => {
         // const obsDict = safeGetFn([def.type], eventReducer)(gameLoopAttrs, def);
         const obsDict = eventsReducer(gameLoopAttrs, def);
-        obsDict.obs.subscribe();
         return obsDict;
       },
     );
