@@ -1,3 +1,6 @@
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 /**
  * mapInputState - hoc that returns a function mapsInputStateToEventObs
  *
@@ -20,13 +23,26 @@ export function mapInputState(eventObsDict) {
 /**
  * obsDictFactory - for storing event obs
  *
- * @param createF
+ * @param {Array} chain - array of rxjs operators
+ * @param {String} type - available types: takeLatest
  * @returns {Object} - hasAttr of .create .obs and .next
  */
-export function obsDictFactory(obs) {
+export function obsDictFactory(_obs$, type) {
+  let obsvr;
+  let obs$;
+  if (type === 'takeLatest') {
+    obs$ = Observable.create(
+      (_obsvr) => {
+        obsvr = _obsvr;
+        obsvr.next();
+      },
+    ).pipe(
+      switchMap((nextObs$) => nextObs$ || _obs$),
+    );
+  }
   return {
-    obs,
-    next: undefined,
+    obs$,
+    next: (arg) => obsvr.next(arg),
   };
 }
 

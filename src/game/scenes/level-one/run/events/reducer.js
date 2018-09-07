@@ -8,6 +8,8 @@ import { movePointIm } from 'utils/immutable.utils';
 
 import { move } from '../items/goblin';
 
+let obsStore = {};
+
 export default function reducer({
   framesAndEvents$, updateGame, gameState$,
 }, inputDef) {
@@ -15,6 +17,7 @@ export default function reducer({
     case 'click': {
       // const showCircle$ = of(actions.showCircle({ pos: inputDef.pos }));
       // const hideCircle$ = of(actions.hideCircle());
+
       const showCircle$ = of(updateGame(gameState => gameState
         .setIn(['moveTargetCircle', 'pos'], fromJS(inputDef.pos))
         .setIn(['moveTargetCircle', 'isShow'], true)));
@@ -37,16 +40,20 @@ export default function reducer({
         takeWhile(({ newPos }) => newPos.get(0) !== inputDef.pos[0]),
       );
 
-      const obsDict = obsDictFactory(
-        showCircleMoveGoblin$,
-      );
+      if (obsStore.click) {
+        obsStore.click.next(showCircleMoveGoblin$);
+      } else {
+        const obsDict = obsDictFactory(
+          showCircleMoveGoblin$,
+          'takeLatest',
+        );
+        obsDict.obs$.subscribe(undefined, undefined,
+          () => updateGame(gameState => gameState
+            .setIn(['moveTargetCircle', 'isShow'], false)),
+        );
+        obsStore.click = obsDict;
+      }
 
-      obsDict.obs.subscribe(
-        () => undefined,
-        () => undefined,
-        () => updateGame(gameState => gameState
-          .setIn(['moveTargetCircle', 'isShow'], false)),
-      );
     }
     default:
       return undefined;
