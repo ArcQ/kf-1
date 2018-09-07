@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { fromJS } from 'immutable';
 import {
-  takeWhile, mergeMap, map,
+  endWith, takeWhile, mergeMap, map,
 } from 'rxjs/operators';
 import { obsDictFactory } from 'game/engine/game-loop/update.utils';
 import { movePointIm } from 'utils/immutable.utils';
@@ -9,6 +9,9 @@ import { movePointIm } from 'utils/immutable.utils';
 import { move } from '../items/goblin';
 
 let obsStore = {};
+
+const RUNNING = 0;
+const COMPLETE = 1;
 
 export default function reducer({
   framesAndEvents$, updateGame, gameState$,
@@ -38,6 +41,8 @@ export default function reducer({
         mergeMap(() => framesAndEvents$),
         updateNewGoblinPos,
         takeWhile(({ newPos }) => newPos.get(0) !== inputDef.pos[0]),
+        map(() => RUNNING),
+        endWith(COMPLETE)
       );
 
       if (obsStore.click) {
@@ -47,10 +52,12 @@ export default function reducer({
           showCircleMoveGoblin$,
           'takeLatest',
         );
-        obsDict.obs$.subscribe(undefined, undefined,
-          () => updateGame(gameState => gameState
-            .setIn(['moveTargetCircle', 'isShow'], false)),
-        );
+        obsDict.obs$.subscribe((v) => {
+          if (v === COMPLETE) {
+            updateGame(gameState => gameState
+              .setIn(['moveTargetCircle', 'isShow'], false));
+          }
+        });
         obsStore.click = obsDict;
       }
 

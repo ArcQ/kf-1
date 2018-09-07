@@ -37,7 +37,7 @@ export function obsDictFactory(_obs$, type) {
         obsvr.next();
       },
     ).pipe(
-      switchMap((nextObs$) => nextObs$ || _obs$),
+      switchMap((nextObs$) => nextObs$ || _obs$)
     );
   }
   return {
