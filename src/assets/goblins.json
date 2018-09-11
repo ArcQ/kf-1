@@ -1,3 +1,4 @@
 {
-  "goblins": "spritesheets/goblins/goblin-walk.json"
+  "goblins": "spritesheets/goblins/goblin-walk.json",
+  "goblin1": "spritesheets/goblins/goblin-walk.json"
 }

@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 
-import { keyDown$, click$ } from './events/sources';
-import eventsReducer from './events/reducer';
+import { keyDown$, click$ } from './event-sources';
+import _update from './update';
 import _render, { initialRender } from './render';
 import { createGoblin } from './items/goblin';
 
@@ -10,17 +10,7 @@ export const eventSources = [
   click$,
 ];
 
-export function update(gameLoopAttrs, deltaTime, inputState) {
-  if (inputState.length > 0) {
-    const obsArr = inputState.map(
-      (def) => {
-        // const obsDict = safeGetFn([def.type], eventReducer)(gameLoopAttrs, def);
-        const obsDict = eventsReducer(gameLoopAttrs, def);
-        return obsDict;
-      },
-    );
-  }
-}
+export const update = _update;
 
 export const render = _render;
 
