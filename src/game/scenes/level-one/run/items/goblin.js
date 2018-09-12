@@ -23,12 +23,6 @@ export function createGoblinSprite() {
   return anim;
 }
 
-export function createGoblin(pos) {
-  return fromJS({
-    sprite: '', speed: 10, pos,
-  });
-}
-
 function checkIfPastF(diff, destination) {
   const signs = diff.map(d => Math.sign(d));
   return nextPt =>
