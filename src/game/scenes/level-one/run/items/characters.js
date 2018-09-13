@@ -94,13 +94,13 @@ export const assasin = {
   create(pos) {
     return ({
       sprite: '', speed: 10, pos,
-    })
+    });
   },
   sprite(pos) {
-    const frames = Array(6)
+    const frames = Array(5)
       .fill(0)
       .map((v, i) =>
-        PIXI.Texture.fromFrame(`1_GOBLIN_WALK_00${i}.png`));
+        PIXI.Texture.fromFrame(`2_WALK_00${i}assasin.png`));
 
     // create an AnimatedSprite (brings back memories from the days of Flash, right ?)
     const anim = new PIXI.extras.AnimatedSprite(frames);

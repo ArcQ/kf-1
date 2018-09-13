@@ -12,7 +12,7 @@ export function initialRender(gameMap, initialGameState) {
   const tileMap = createTiledMap(gameMap);
   tileMap.map(tile => engine.app.stage.addChild(tile));
 
-  const charKeys = ['goblin', 'wizard', 'assasin', 'demon'];
+  const charKeys = ['goblin', 'assasin', 'wizard', 'demon'];
   const sprites = charKeys.reduce((acc, k) => {
     const sprite = characters[k].sprite(initialGameState.getIn([k, 'pos']));
     engine.app.stage.addChild(sprite);
@@ -34,4 +34,5 @@ export default function render(gameState) {
     spriteStore.moveTargetCircle.visible = false;
   }
   setPos(spriteStore.goblin, gameState.getIn(['goblin', 'pos']));
+  setPos(spriteStore.assasin, gameState.getIn(['assasin', 'pos']));
 }

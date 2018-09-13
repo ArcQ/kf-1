@@ -18,8 +18,8 @@ export const render = _render;
 
 const initialGameState = fromJS({
   goblin: goblin.create([100, 100]),
-  wizard: demon.create([200, 200]),
-  demon: wizard.create([100, 300]),
+  demon: demon.create([200, 200]),
+  wizard: wizard.create([100, 300]),
   assasin: assasin.create([200, 400]),
   moveTargetCircle: {
     isShow: false,

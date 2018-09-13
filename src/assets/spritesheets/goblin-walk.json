@@ -59,7 +59,7 @@
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": " https://s3.ca-central-1.amazonaws.com/dev-assets-1/spritesheets/goblins/goblin-walk.png",
+	"image": "https://s3.ca-central-1.amazonaws.com/dev-assets-1/spritesheets/goblins/goblin-walk.png",
 	"format": "RGBA8888",
 	"size": {"w":1340,"h":227},
 	"scale": "0.25",
