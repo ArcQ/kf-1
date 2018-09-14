@@ -7,7 +7,9 @@
 /coverage
 
 # production
-/build
+lib/battleGround/node-build
+lib/battleGround/browser-build
+build/
 
 # misc
 .DS_Store
@@ -20,3 +22,4 @@ spritesheets
 
 .shadow-cljs
 lib/battleground/target
+**/.nrepl-port
