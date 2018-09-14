@@ -17,3 +17,6 @@ yarn-debug.log*
 yarn-error.log*
 **/*.css
 spritesheets
+
+.shadow-cljs
+lib/battleground/target
