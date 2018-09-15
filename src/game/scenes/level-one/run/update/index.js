@@ -1,5 +1,5 @@
 import { moveCharF } from './update-functions';
-import battleGround from 'battleGround';
+import battleGround from 'battleground/out/battle.core';
 
 export function eventControl(opts, inputDef) {
   switch (inputDef.type) {
@@ -17,7 +17,8 @@ export function eventControl(opts, inputDef) {
 
 export default function update(gameLoopAttrs, deltaTime, inputState) {
   if (inputState.length > 0) {
-    battleGround.battleSystem();
+    console.log(battleGround.start());
+    // battleGroundStart();
     const obsArr = inputState.map(
       (def) => {
         const obsDict = eventControl(gameLoopAttrs, def);

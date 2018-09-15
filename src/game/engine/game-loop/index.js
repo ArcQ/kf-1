@@ -97,7 +97,6 @@ function createGameLoopState(initialGameState, cancel$) {
  */
 export function createGameLoop(eventSources = [], initialState, cancel$) {
   const gameLoopStates = createGameLoopState(initialState, cancel$);
-  const { gameState$, updateGame } = gameLoopStates;
 
   const frames$ = of(undefined)
     .pipe(
@@ -108,8 +107,6 @@ export function createGameLoop(eventSources = [], initialState, cancel$) {
     );
 
   const bufferedObsList = eventSources.map(obsGetter => getBufferedEvent(frames$, obsGetter));
-
-  gameState$
 
   return {
     framesAndEvents$: frames$.pipe(

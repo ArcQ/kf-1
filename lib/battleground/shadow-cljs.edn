@@ -1,9 +1,5 @@
 {:source-paths ["src"]
  :dependencies [] 
- :builds {:browser {:target :browser
-                    :output-dir "build"
-                    ;; :exports   {:battleSystem battle.core/battleSystem}}
-                    :modules {:main {:entries [battle.core]}}}
-          :node {:target :npm-module
-                    :output-dir "node-build"
-                    :exports   {:battleSystem battle.core/battleSystem}}}}
+ :builds {:node {:target :npm-module
+                 :output-dir "node-build/out"
+                 :exports   {:start battle.core/start}}}}

@@ -1,7 +1,6 @@
 import engine from 'game/engine';
 import { drawTargetCircle } from 'game/scenes/level-one/run/graphics/draw';
 import { setPos } from 'utils/pixi.utils';
-import battleGround from 'battleGround';
 
 import createTiledMap from './tile-maps/create-tile-map';
 import characters from '../items/characters';
