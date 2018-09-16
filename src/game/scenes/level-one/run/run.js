@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import battleGround from 'battleground/out/battle.core';
 
 import { keyDown$, click$ } from './event-sources';
 import _update from './update';
@@ -16,7 +16,7 @@ export const update = _update;
 
 export const render = _render;
 
-const initialGameState = fromJS({
+const initialGameState = {
   goblin: goblin.create([100, 100]),
   demon: demon.create([200, 200]),
   wizard: wizard.create([100, 300]),
@@ -25,11 +25,12 @@ const initialGameState = fromJS({
     isShow: false,
     pos: [100, 100],
   },
-});
+};
 
 export function start() {}
 
 export function onFinishLoad(stage, sceneCustomRes) {
+  battleGround.start({}, initialGameState, (state) => console.log(state));
   initialRender(sceneCustomRes.gameMap, initialGameState);
   return initialGameState;
 }

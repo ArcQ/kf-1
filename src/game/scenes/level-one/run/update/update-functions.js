@@ -5,6 +5,7 @@ import {
 } from 'rxjs/operators';
 import { obsDictFactory } from 'game/engine/game-loop/update.utils';
 import { movePointIm } from 'utils/immutable.utils';
+import { getIn } from 'utils/cljs.utils';
 
 import { move } from '../items/goblin';
 

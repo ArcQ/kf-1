@@ -53,10 +53,10 @@
  * @property {function=} [willLoad] - to be called right before load assets
  */
 
-import { BehaviorSubject, Observable, forkJoin, empty } from 'rxjs';
+import { Observable, forkJoin, empty } from 'rxjs';
 import { map as Map } from 'immutable';
 import {
-  concat, map, tap, catchError, takeUntil, combineLatest,
+  concat, map, tap, catchError, combineLatest,
 } from 'rxjs/operators';
 import { push } from 'react-router-redux';
 
@@ -65,8 +65,7 @@ import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
 import sceneDict from 'game/scenes';
 
-import { createGameLoop, createGameState } from '../game-loop';
-import { update } from '../../scenes/level-one/run';
+import { createGameLoop } from '../game-loop';
 
 /**
  * _createLoadObs - creates the observer that first loads the loading scene assets

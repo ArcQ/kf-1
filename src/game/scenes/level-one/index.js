@@ -1,6 +1,6 @@
 import {
   start, eventSources, update, render, onFinishLoad,
-} from './run';
+} from './run/run';
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
 
