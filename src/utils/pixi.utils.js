@@ -1,3 +1,4 @@
+import { getIn } from 'utils/cljs.utils';
 /**
  * setPos - set position of sprite (mutates original sprite)
  *
@@ -6,6 +7,6 @@
  * @returns {undefined}
  */
 export function setPos(sprite, pos) {
-  sprite.position.x = pos.get(0); //eslint-disable-line
-  sprite.position.y = pos.get(1); //eslint-disable-line
+  sprite.position.x = getIn(pos, [0]); //eslint-disable-line
+  sprite.position.y = getIn(pos, [1]); //eslint-disable-line
 }

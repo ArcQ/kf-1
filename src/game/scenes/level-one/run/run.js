@@ -1,8 +1,9 @@
 import battleGround from 'battleground/out/battle.core';
 
 import { keyDown$, click$ } from './event-sources';
-import _update from './update';
+// import _update from './update';
 import _render, { initialRender } from './render';
+import { getIn } from 'utils/cljs.utils';
 import {
   goblin, demon, assasin, wizard,
 } from './items/characters';
@@ -12,7 +13,7 @@ export const eventSources = [
   click$,
 ];
 
-export const update = _update;
+export const { update } = battleGround;
 
 export const render = _render;
 
@@ -30,7 +31,7 @@ const initialGameState = {
 export function start() {}
 
 export function onFinishLoad(stage, sceneCustomRes) {
-  battleGround.start({}, initialGameState, (state) => console.log(state));
-  initialRender(sceneCustomRes.gameMap, initialGameState);
+  const pState = battleGround.start({}, initialGameState, (state) => state);
+  initialRender(sceneCustomRes.gameMap, pState);
   return initialGameState;
 }

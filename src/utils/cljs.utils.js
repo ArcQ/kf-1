@@ -1,5 +1,9 @@
 /** @module **/
 
+import battleGround from 'battleground/out/battle.core';
+
+const { jsutils } = battleGround;
+
 //TODO should account for all sequence data structures, not jsut hashmaps
 /**
  * getIn - map
@@ -8,10 +12,4 @@
  * @param keyDef
  * @returns {undefined}
  */
-export default function getIn(keyDef, persistantHashMap) {
-  if (persistantHashMap === undefined) return undefined;
-  return (keyDef instanceof Array)
-    ? keyDef.reduce((prev, key) =>
-      (prev === undefined ? undefined : prev.get(key)), persistantHashMap)
-    : persistantHashMap.get(keyDef);
-}
+export const getIn = jsutils.getIn;
