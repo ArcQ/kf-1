@@ -58,9 +58,6 @@ function calculateStep(prevFrame) {
 
 function createGameLoopState(initialGameState, cancel$) {
   const gameState$ = new BehaviorSubject(initialGameState);
-    // .pipe(
-    //   takeUntil(cancel$),
-    // );;
   return {
     gameState$,
     /**

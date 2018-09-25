@@ -165,20 +165,14 @@ function _wrapInSceneHelpers(sceneObj) {
       );
 
       const {
-        gameState$,
         framesAndEvents$,
       } = gameLoopArgs;
-
-      // render on gameState updates and at most 1 frame/s
-      gameState$.pipe(
-        combineLatest(framesAndEvents$),
-      ).subscribe(([gameState]) => sceneObj.render(gameState));
 
       if (sceneObj.start) sceneObj.start(gameLoopArgs);
       if (sceneObj.update) {
         framesAndEvents$.pipe(
           map(combinedRes =>
-            sceneObj.update(gameLoopArgs, combinedRes.deltaTime, combinedRes.inputState)),
+            sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
         ).subscribe();
       }
     },

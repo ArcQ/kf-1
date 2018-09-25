@@ -20,7 +20,8 @@ export const click$ = fromEvent(document, 'click')
     // clicked outside of app container (side borders)
     filter(event => event.target.id !== 'root'),
     map(event => ({
-      type: 'click',
+      type: 'charMove',
+      key: 'goblin',
       pos: mapDOMPosToStage([event.offsetX, event.offsetY]),
     })),
   );

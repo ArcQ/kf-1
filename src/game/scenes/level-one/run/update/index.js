@@ -16,8 +16,7 @@ export function eventControl(opts, inputDef) {
 
 export default function update(gameLoopAttrs, deltaTime, inputState) {
   if (inputState.length > 0) {
-    // battleGroundStart();
-    const obsArr = inputState.map(
+    inputState.map(
       (def) => {
         const obsDict = eventControl(gameLoopAttrs, def);
         return obsDict;
@@ -25,3 +24,27 @@ export default function update(gameLoopAttrs, deltaTime, inputState) {
     );
   }
 }
+
+/**
+ * startEndFs - functions injected on start and on end of update function given current event
+ */
+export const startEndFs = {
+  charMove: {
+    start(updateGameState, inputDef) {
+      console.log(updateGameState);
+      updateGameState({
+        moveTargetCircle: {
+          pos: inputDef.pos,
+          isShow: true,
+        },
+      });
+    },
+    end(updateGameState) {
+      updateGameState({
+        moveTargetCircle: {
+          isShow: false,
+        },
+      });
+    },
+  },
+};

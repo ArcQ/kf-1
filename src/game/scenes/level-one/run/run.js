@@ -1,21 +1,19 @@
 import battleGround from 'battleground/out/battle.core';
 
-import { keyDown$, click$ } from './event-sources';
-// import _update from './update';
-import _render, { initialRender } from './render';
-import { getIn } from 'utils/cljs.utils';
+import { startEndFs } from './update';
+
 import {
   goblin, demon, assasin, wizard,
 } from './items/characters';
+import { keyDown$, click$ } from './event-sources';
+import render, { initialRender } from './render';
 
 export const eventSources = [
   keyDown$,
   click$,
 ];
 
-export const { update } = battleGround;
-
-export const render = _render;
+export const update = battleGround.getUpdate(startEndFs);
 
 const initialGameState = {
   goblin: goblin.create([100, 100]),
@@ -31,7 +29,7 @@ const initialGameState = {
 export function start() {}
 
 export function onFinishLoad(stage, sceneCustomRes) {
-  const pState = battleGround.start({}, initialGameState, (state) => state);
+  const pState = battleGround.start({}, initialGameState, render);
   initialRender(sceneCustomRes.gameMap, pState);
   return initialGameState;
 }

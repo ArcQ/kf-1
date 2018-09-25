@@ -1,5 +1,5 @@
 import {
-  start, eventSources, update, render, onFinishLoad,
+  start, eventSources, update, onFinishLoad,
 } from './run/run';
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
@@ -14,7 +14,6 @@ export default function getSceneObj() {
     eventSources,
     start,
     update,
-    render,
     onFinishLoad,
   };
 }
