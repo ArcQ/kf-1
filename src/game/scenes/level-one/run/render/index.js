@@ -32,7 +32,6 @@ export default function render(gameState) {
     spriteStore.moveTargetCircle.visible = true;
     setPos(spriteStore.moveTargetCircle, getIn(gameState, ['moveTargetCircle', 'pos']));
   } else {
-    console.log(spriteStore);
     spriteStore.moveTargetCircle.visible = false;
   }
   setPos(spriteStore.goblin, getIn(gameState, ['goblin', 'pos']));

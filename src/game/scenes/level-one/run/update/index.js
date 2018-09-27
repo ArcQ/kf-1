@@ -31,7 +31,6 @@ export default function update(gameLoopAttrs, deltaTime, inputState) {
 export const startEndFs = {
   charMove: {
     start(updateGameState, inputDef) {
-      console.log(updateGameState);
       updateGameState({
         moveTargetCircle: {
           pos: inputDef.pos,

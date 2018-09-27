@@ -9,7 +9,7 @@ export default function getSceneObj() {
     name: 'level-one-scene',
     loading: mainLoadingScene,
     uiRoute: '/level-one',
-    assets: ['levelOne', 'goblins'],
+    assets: ['levelOne', 'goblins', 'chars'],
     load$: generateGameMap(),
     eventSources,
     start,

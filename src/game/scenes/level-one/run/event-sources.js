@@ -2,6 +2,13 @@ import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import { mapDOMPosToStage } from 'game/engine/game-loop/render.utils';
 
+// function clickEventsHandler(event) {
+//   return switch() {
+//     case 1:
+//       default :
+//   }
+// }
+
 const keyCodes = ['Enter'];
 
 export const keyDown$ = fromEvent(document, 'keydown')

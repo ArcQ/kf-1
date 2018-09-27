@@ -4,7 +4,6 @@ import {
   endWith, takeWhile, mergeMap, map,
 } from 'rxjs/operators';
 import { obsDictFactory } from 'game/engine/game-loop/update.utils';
-import { movePointIm } from 'utils/immutable.utils';
 
 import { move } from '../items/goblin';
 
