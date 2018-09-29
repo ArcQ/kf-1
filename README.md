@@ -1,17 +1,12 @@
-#phaser-react-starter
+#kf-1
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). For more information on how to build the ui, please visit their readme.
+This is for a game.
 
-The concept of this project revovles around using React for your ui and phaser for your game layer. Redux will be shared between the two layers for all common pieces of state.
-The project was designed so that it would be easy to update to newer versions of create react app as well as being able to utilize the functionality that it will continue to bring in the future. 
-Only npm run eject as a last case scenario.
+This project utilizes cljs as the ui layer, and pixijs + js around the game engine, and rust-wasm for the game logic used in a manner that can be taken out and tested on very easily.
 
-Clone this repo and then do the following to get started:
+#Development
+Everything compiles down into public/js, wasm modules are directly imported inside public/index.html.
+Rust-wasm modules use wasm-bindgen --no-modules, use start-dev script inside of rust `/battle-rust` to start a watching compiling script.
+Inside of project root, run `lein figwheel dev` to start figwheel server.
 
-```
-
-npm install
-
-npm start
-
-```
+Currently, engine is using 'legacy' code using pixijs, js, + rxjs.
