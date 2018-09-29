@@ -1,0 +1,15 @@
+{
+  "name": "battleground-rust",
+  "collaborators": [
+    "ArcQ <eddielaw296@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "battleground_rust_bg.wasm",
+    "battleground_rust.js",
+    "battleground_rust.d.ts"
+  ],
+  "module": "battleground_rust.js",
+  "types": "battleground_rust.d.ts",
+  "sideEffects": "false"
+}

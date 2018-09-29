@@ -16,6 +16,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 const history = createBrowserHistory();
 const store = configureStore({}, history);
+const bgR = import("battleground-rust")
+
+bgR.then((v) => console.log(v))
 
 function App(props) {
   return (
