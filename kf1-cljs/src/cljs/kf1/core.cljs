@@ -4,7 +4,6 @@
     [re-frame.core :as re-frame]
     [kf1.events :as events]
     [kf1.routes :as routes]
-    [kf1.views :as views]
     [kf1.config :as config]
     [kf1.app :as app]))
 
@@ -16,7 +15,7 @@
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render [(-> {:history (routes/app-routes)} 
-                       app/EnhancedApp)]
+                       app/App)]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []

@@ -1,12 +1,18 @@
 (ns kf1.app
   (:require
-    [reagent.core :as reagent]))
+    [reagent.core :as reagent]
+    [kf1.views.ui.core :as ui]
+    [kf1.views.game.core :as game])) 
 
-(defn App [] 
-  [:div])
 
-(defn EnhancedApp [props]
+
+(defn App [props]
   (let [state (reagent/atom {})] ;; you can include state
     (reagent/create-class
-      {:component-will-mount (fn [] (.replaceToken (:history props) "/" ))
-       :render (fn [] [:div]) })))
+      {:component-will-mount 
+       (fn [] (.replaceToken (:history props) "/" ))
+       :reagent-render 
+       (fn [props] 
+         [:div { :class "app"}
+          [ui/view props]
+          [game/view]]) })))
