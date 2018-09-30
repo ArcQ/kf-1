@@ -1,28 +1,26 @@
 (ns kf1.routes
   (:require-macros [secretary.core :refer [defroute]])
-  (:import goog.History)
+  (:import goog.history.Html5History)
   (:require [secretary.core :as secretary]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [re-frame.core :as re-frame]))
 
 (defn hook-browser-navigation! []
-  (doto (History.)
+  (doto (Html5History.)
     (events/listen
      EventType/NAVIGATE
      (fn [event]
        (secretary/dispatch! (.-token event))))
+    (.setUseFragment false)
+    (.setPathPrefix "")
     (.setEnabled true)))
 
 (defn app-routes []
-  (secretary/set-config! :prefix "#")
-  ;; --------------------
-  ;; define routes here
   (defroute "/" []
     (re-frame/dispatch [:set-active-route :home-panel]))
-
+  
   (defroute "/profile" []
     (re-frame/dispatch [:set-active-route :profile-panel]))
 
-  ;; --------------------
   (hook-browser-navigation!))
