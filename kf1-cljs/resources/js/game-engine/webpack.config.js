@@ -4,7 +4,9 @@ module.exports = {
   entry: './src/index.js',
   resolve: {
     alias: {
-      utils: path.resolve(__dirname, 'src/utils/')
+      utils: path.resolve(__dirname, 'src/utils/'),
+      "game/engine": path.resolve(__dirname, 'src/'),
+      "assets": path.resolve(__dirname, '../../assets')
     }
   },
   module: {

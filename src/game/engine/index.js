@@ -79,6 +79,8 @@ const engine = {
     engine.ui.dispatch(push('/'));
     return engine.app;
   },
+  assetManager,
+  gameLoop,
 };
 
 export default engine;

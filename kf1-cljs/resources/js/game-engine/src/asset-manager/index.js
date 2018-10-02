@@ -9,12 +9,6 @@ import { difference } from 'ramda';
 
 import dicts from 'assets';
 
-/**
-set aws url for static assets using .env REACT_APP_ASSET_URL
-@constant assetUrl
- * */
-const assetUrl = process.env.REACT_APP_ASSET_URL;
-
 let loadedDicts = [];
 
 function combineDicts(requiredDicts) {
@@ -34,7 +28,7 @@ function combineDicts(requiredDicts) {
  * @param {string[]} {assets}
  * @returns {Observable}
  */
-export function load({ assets }) {
+export function load(assetUrl, { assets }) {
   return Observable.create((observer) => {
     const notAddedDicts = difference(assets, loadedDicts);
     if (notAddedDicts.length === 0) {
@@ -75,4 +69,4 @@ export function getSprite(dictName, key) {
   );
 }
 
-export default {};
+export default { getSprite };

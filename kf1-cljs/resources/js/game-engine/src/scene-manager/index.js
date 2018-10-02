@@ -58,10 +58,11 @@ import { map as Map } from 'immutable';
 import {
   concat, map, tap, catchError, combineLatest,
 } from 'rxjs/operators';
+import { curry } from 'ramda';
 // import { push } from 'react-router-redux';
 
 import { load } from 'game/engine/asset-manager';
-import { actions as loadingActions } from 'shared/store/loading/ducks';
+// import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
 import sceneDict from 'game/scenes';
 
@@ -74,12 +75,14 @@ import { createGameLoop } from '../game-loop';
  in parallell it will run load$ if specified inside of the scene definition object
  *
  * @param wrappedScene
+ * @param assetUrl
  * @returns {Observable}
  */
-function _createLoadObs(wrappedScene) {
+function _createLoadObs(wrappedScene, assetUrl) {
   const loadingSceneObj = wrappedScene.loading();
-  const loadLoadingAssets$ = load(loadingSceneObj);
-  const loadSceneAssets$ = load(wrappedScene);
+  const loadFromUrl = curry(load)(sceneManager.assetUrl);
+  const loadLoadingAssets$ = loadFromAssetUrl(loadingSceneObj);
+  const loadSceneAssets$ = loadFromAssetUrl(wrappedScene);
   const sceneCustomLoad$ = wrappedScene.load$ || empty();
 
   const launchLoadingScene$ = tap(null, null, () =>
@@ -91,9 +94,9 @@ function _createLoadObs(wrappedScene) {
   );
 
   const setLoadPercentage$ = map(({ percentage }) => {
-    engine.ui.dispatch(
-      loadingActions.setLoadPercentage({ percentage }),
-    );
+    // engine.ui.dispatch(
+    //   loadingActions.setLoadPercentage({ percentage }),
+    // );
     if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
   });
 
@@ -185,15 +188,21 @@ function _wrapInSceneHelpers(sceneObj) {
 
 /** @namespace sceneManager * */
 const sceneManager = {
+  sceneDict: undefined,
+  assetUrl: undefined,
   /**
    * starts the scene manager with a default scene as specified in the config
    *
    * @function
    * @param {GameConfig} config - A color, in hexadecimal format.
+   * @param {GameConfig} sceneDict - a dictionary of all the different scene definitions in the game
+   * @param {GameConfig} assetUrl - base static assets url (s3)
    * @returns {undefined}
    *
    */
-  start(config) {
+  start(config, sceneDict, assetUrl) {
+    sceneManager.sceneDict = sceneDict;
+    sceneManager.assetUrl = assetUrl;
     sceneManager.pushScene(config.defaultScene);
   },
   /**

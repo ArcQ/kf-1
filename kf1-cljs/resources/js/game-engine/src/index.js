@@ -1,6 +1,8 @@
 import * as PIXI from 'pixi.js';
 // import { push } from 'react-router-redux';
 import scaleToWindowPixi from 'scale-to-window-pixi';
+import assetManager from './asset-manager';
+import sceneManager from './scene-manager';
 
 import { getWindow, getDocument, devicePixelRatio } from 'utils/global';
 
@@ -42,7 +44,6 @@ function resizeContainers(app, mainGameViewRef, engine) {
 
 const engine = {
   app: null,
-  store: null,
   web: {
     screen: {
       bounds: null,
@@ -52,14 +53,13 @@ const engine = {
   scale: null,
   ui: {
     dispatch(action) {
-      engine.store.dispatch(action);
+      // engine.store.dispatch(action);
     },
     select(key) {
-      return engine.app.store[key];
+      // return engine.app.store[key];
     },
   },
-  start(gameConfig, mainGameViewRef, store) {
-    engine.store = store;
+  start(gameConfig, mainGameViewRef) {
     const options = { antialias: false, transparent: true, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
       gameConfig.aspectRatio.y / gameConfig.aspectRatio.x,
@@ -79,6 +79,8 @@ const engine = {
     // engine.ui.dispatch(push('/'));
     return engine.app;
   },
+  assetManager,
+  sceneManager,
 };
 
 export default engine;

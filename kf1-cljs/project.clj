@@ -38,6 +38,10 @@
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
                     :install-deps true
+                    :closure-defines {
+                                      process.env/NODE_ENV "development"
+                                      process.env/REACT_APP_ASSET_URL "development"
+                                      }
                     :foreign-libs [{:file "resources/js/game-engine/dist/gameEngine.js"
                                     :provides ["kfGameEngine"]
                                     :module-type :commonjs}]

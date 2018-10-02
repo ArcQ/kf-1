@@ -3,12 +3,11 @@ import {
   zip, expand, filter, map, share, buffer, takeUntil,
 } from 'rxjs/operators';
 
-import config from 'config.json';
 import { flatten } from 'utils/arrUtils';
 
 import { clampToFPS } from './game-loop.utils';
 
-const FPS = config.game.FPS || 30;
+const FPS = 30;
 
 /**
  * getBufferedEvent - Here we buffer our event stream until we get a new frame emission. This

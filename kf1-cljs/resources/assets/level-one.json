@@ -1,0 +1,6 @@
+{
+  "grassTexture": "backgrounds/td/textures/grass_texture_2.jpg",
+  "sandTexture": "backgrounds/td/sand/ground.jpg",
+  "waterTexture": "backgrounds/td/water/water.jpg",
+  "mountainTexture": "backgrounds/td/mountain/mountain.png"
+}
