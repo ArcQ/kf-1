@@ -4,8 +4,6 @@
     [kf1.views.ui.core :as ui]
     [kf1.views.game.core :as game])) 
 
-
-
 (defn App [props]
   (let [state (reagent/atom {})] ;; you can include state
     (reagent/create-class

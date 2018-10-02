@@ -3,7 +3,9 @@
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.8.0"]
                  [re-frame "0.10.5"]
-                 [secretary "1.2.3"]]
+                 [secretary "1.2.3"]
+                 [cljfmt "0.5.1"]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -17,11 +19,14 @@
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.9.10"]]
-
+   {:dependencies [[figwheel-sidecar "0.5.16"]
+                   [com.cemerick/piggieback "0.2.1"]
+                   [binaryage/devtools "0.9.10"]]
+    :source-paths ["src/cljs"]
     :plugins      [[lein-figwheel "0.5.16"]]}
    :prod { }
    }
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
 
   :cljsbuild
   {:builds
@@ -32,6 +37,10 @@
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"
                     :asset-path           "js/compiled/out"
+                    :install-deps true
+                    :foreign-libs [{:file "resources/js/game-engine/dist/gameEngine.js"
+                                    :provides ["kfGameEngine"]
+                                    :module-type :commonjs}]
                     :source-map-timestamp true
                     :preloads             [devtools.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}
