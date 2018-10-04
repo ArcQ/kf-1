@@ -64,7 +64,6 @@ import { curry } from 'ramda';
 import { load } from 'game/engine/asset-manager';
 // import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
-import sceneDict from 'game/scenes';
 
 import { createGameLoop } from '../game-loop';
 

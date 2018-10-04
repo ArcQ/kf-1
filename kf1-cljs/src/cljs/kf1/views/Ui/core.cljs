@@ -1,8 +1,6 @@
 (ns kf1.views.ui.core
   (:require
-    [re-frame.core :as re-frame]
-    [kf1.subs :as subs]
-    ))
+    [re-frame.core :as rf]))
 
 (defn LevelOneGameUi [] 
   [:div
@@ -16,12 +14,12 @@
   [:div
     [:h1 "Welcome to KF1" ]])
 
-(defmulti panels identity)
-(defmethod panels :menu-home [] [MenuHome])
-(defmethod panels :level-one [] [LevelOneGameUi])
-(defmethod panels :default [] [Home])
+(defmulti routes identity)
+(defmethod routes :menu-home [] [MenuHome])
+(defmethod routes :level-one [] [LevelOneGameUi])
+(defmethod routes :default [] [Home])
 
 (defn view [props]
-  (let [active-route (re-frame/subscribe [:active-route])]
+  (let [active-route (rf/subscribe [:active-route])]
     [:<>
-     (panels @active-route)]))
+     (routes @active-route)]))

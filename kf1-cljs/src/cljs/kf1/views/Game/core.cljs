@@ -5,29 +5,26 @@
     [reagent.core :as reagent]
     [kf1.config :as config]
     [kfGameEngine :as engine]
-    [kf1.subs :as subs]
     ))
 
 (defn MainGameView [props]
   [:div {
          :id "mainGameContainer" 
          :className "relative"
-         :ref (:handleRef props)}])
+         :ref (partial (:setRef props) "gameView")}])
 
 (defn initPixi [mainGameViewRef]
-  (let [gameConfig (config/game)]
+  (let [gameConfig (clj->js (config/game))]
     ((goog.object/get engine "start") gameConfig mainGameViewRef)
-    ((goog.object/get sceneManager "start") gameConfig))) 
+    ((goog.object/getValueByKeys engine ["sceneManager" "start"]) gameConfig))) 
 
-(defn initPixiOnMount []
+(defn initPixiOnMount [component]
   (lifecycle {:component-did-mount
-              (fn [component] 
-                (let [props (reagent/props component)
+              (fn [component [_ p]] 
+                (let [pasd (prn p)
+                      props (reagent/props component)
                       handleRef (:handleRef props)]
-                  (handleRef (fn [mainGameViewRef]
-                               (initPixi mainGameViewRef)))))}))
+                  (handleRef "gameView" (fn [mainGameViewRef]
+                               (initPixi mainGameViewRef)))))}) component)
 
-(def view ((comp
-             (withRefHandlers)
-             (initPixiOnMount)) MainGameView))
-;; (def view MainGameView)
+(def view ((comp withRefHandlers initPixiOnMount) MainGameView))

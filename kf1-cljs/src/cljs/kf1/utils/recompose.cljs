@@ -1,9 +1,10 @@
-(ns kf1.utils.recompose)
+(ns kf1.utils.recompose
+  (:require [reagent.core :as reagent]))
 
 (defn withRefHandlers [component] 
   (let [refs (atom {})]
     (letfn [(setRef [k com] 
-              (swap! !ref merge {(keyword k) com}))
+              (swap! refs assoc (keyword k) com))
             (handleRef [k cb] 
               (cb ((keyword k) @refs)))] 
       (fn [props] 

@@ -59,7 +59,6 @@ import { concat, map, tap, catchError, combineLatest } from 'rxjs/operators';
 import { load } from 'game/engine/asset-manager';
 import { actions as loadingActions } from 'shared/store/loading/ducks';
 import engine from 'game/engine';
-import sceneDict from 'game/scenes';
 import { createGameLoop } from '../game-loop';
 /**
  * _createLoadObs - creates the observer that first loads the loading scene assets
@@ -169,6 +168,7 @@ function _wrapInSceneHelpers(sceneObj) {
 
 
 const sceneManager = {
+  sceneDict: undefined,
   /**
    * starts the scene manager with a default scene as specified in the config
    *
@@ -177,7 +177,8 @@ const sceneManager = {
    * @returns {undefined}
    *
    */
-  start(config) {
+  start(config, sceneDict) {
+    sceneManager.sceneDict = sceneDict;
     sceneManager.pushScene(config.defaultScene);
   },
 
@@ -190,7 +191,7 @@ const sceneManager = {
    *
    */
   pushScene(sceneKey) {
-    const sceneObj = sceneDict[sceneKey]();
+    const sceneObj = sceneManager.sceneDict[sceneKey]();
 
     const scene = _wrapInSceneHelpers(sceneObj);
 

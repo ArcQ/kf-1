@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import scaleToWindowPixi from 'scale-to-window-pixi';
 import assetManager from './asset-manager';
 import sceneManager from './scene-manager';
+import utils from './utils';
 
 import { getWindow, getDocument, devicePixelRatio } from 'utils/global';
 
@@ -81,6 +82,7 @@ const engine = {
   },
   assetManager,
   sceneManager,
+  utils,
 };
 
 export default engine;
