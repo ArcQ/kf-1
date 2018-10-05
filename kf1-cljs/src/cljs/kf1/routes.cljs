@@ -4,7 +4,12 @@
   (:require [secretary.core :as secretary]
             [goog.events :as events]
             [goog.history.EventType :as EventType]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as rf]))
+
+(def routes 
+  [["/" :home] 
+   ["/main-loading" :main-loading-page]
+   ["level-one" :leve-one]])
 
 (defn hook-browser-navigation! []
   (doto (Html5History.)
@@ -17,10 +22,7 @@
     (.setEnabled true)))
 
 (defn app-routes []
-  (defroute "/" []
-    (re-frame/dispatch [:set-active-route :home-panel]))
-  
-  (defroute "/profile" []
-    (re-frame/dispatch [:set-active-route :profile-panel]))
-
+  (map #(defroute 
+          (% 1) [] (rf/dispatch [:set-active-route (% 2)])) 
+       routes)
   (hook-browser-navigation!))

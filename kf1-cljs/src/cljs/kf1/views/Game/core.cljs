@@ -8,13 +8,13 @@
     ))
 
 (defn MainGameView [props]
-  [:div {
-         :id "mainGameContainer" 
+  [:div {:id "mainGameContainer" 
          :className "relative"
          :ref (partial (:setRef props) "gameView")}])
 
 (defn initPixi [mainGameViewRef]
   (let [gameConfig (clj->js (config/game))]
+    (prn (goog.object/get engine "start"))
     ((goog.object/get engine "start") gameConfig mainGameViewRef)
     ((goog.object/getValueByKeys engine ["sceneManager" "start"]) gameConfig))) 
 
@@ -25,6 +25,6 @@
                       props (reagent/props component)
                       handleRef (:handleRef props)]
                   (handleRef "gameView" (fn [mainGameViewRef]
-                               (initPixi mainGameViewRef)))))}) component)
+                                          (initPixi mainGameViewRef)))))}) component)
 
 (def view ((comp withRefHandlers initPixiOnMount) MainGameView))

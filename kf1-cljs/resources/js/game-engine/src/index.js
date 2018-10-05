@@ -61,6 +61,7 @@ const engine = {
     },
   },
   start(gameConfig, mainGameViewRef) {
+    console.log(start);
     const options = { antialias: false, transparent: true, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
       gameConfig.aspectRatio.y / gameConfig.aspectRatio.x,
