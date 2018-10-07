@@ -6,8 +6,8 @@
 
 (re-frame/reg-event-db
  ::initialize-db
- (fn [_ _]
-   db/default-db))
+ (fn [db _]
+       (assoc db :loading-percentage 0)))
 
 (re-frame/reg-event-db
  :set-active-route

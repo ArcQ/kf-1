@@ -28,6 +28,6 @@ module.exports = {
     filename: 'gameEngine.js',
     path: path.resolve(__dirname, 'dist'),
     library: 'gameEngine',
-    libraryTarget: 'commonjs',
+    libraryTarget: 'commonjs2',
   }
 };

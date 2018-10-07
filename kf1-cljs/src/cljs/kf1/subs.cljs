@@ -11,4 +11,9 @@
 (re-frame/reg-sub
   :active-route
   (fn [db _]
-    (reaction (:active-route @db))))
+    (:active-route db)))
+
+(re-frame/reg-sub
+  :loading-percentage
+  (fn [db _]
+    (:loading-percentage db)))

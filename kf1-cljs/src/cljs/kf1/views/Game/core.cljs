@@ -14,15 +14,13 @@
 
 (defn initPixi [mainGameViewRef]
   (let [gameConfig (clj->js (config/game))]
-    (prn (goog.object/get engine "start"))
     ((goog.object/get engine "start") gameConfig mainGameViewRef)
     ((goog.object/getValueByKeys engine ["sceneManager" "start"]) gameConfig))) 
 
 (defn initPixiOnMount [component]
   (lifecycle {:component-did-mount
               (fn [component [_ p]] 
-                (let [pasd (prn p)
-                      props (reagent/props component)
+                (let [props (reagent/props component)
                       handleRef (:handleRef props)]
                   (handleRef "gameView" (fn [mainGameViewRef]
                                           (initPixi mainGameViewRef)))))}) component)

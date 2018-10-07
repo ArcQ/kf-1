@@ -10,7 +10,7 @@
       {:component-will-mount 
        (fn [] (.replaceToken (:history props) "/" ))
        :reagent-render 
-       (fn [props] 
+       (fn [] 
          [:div { :class "app"}
           [:div {:class "ui"}
            [ui/view props]]

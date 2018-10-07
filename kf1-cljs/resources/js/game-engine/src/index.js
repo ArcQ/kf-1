@@ -45,6 +45,7 @@ function resizeContainers(app, mainGameViewRef, engine) {
 
 const engine = {
   app: null,
+  assetUrl: "https://s3.ca-central-1.amazonaws.com/dev-assets-1/",
   web: {
     screen: {
       bounds: null,
@@ -61,7 +62,9 @@ const engine = {
     },
   },
   start(gameConfig, mainGameViewRef) {
-    console.log(start);
+    console.log("start");
+    engine.assetUrl = "https://s3.ca-central-1.amazonaws.com/dev-assets-1/";
+
     const options = { antialias: false, transparent: true, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
       gameConfig.aspectRatio.y / gameConfig.aspectRatio.x,
@@ -83,7 +86,8 @@ const engine = {
   },
   assetManager,
   sceneManager,
-  utils,
 };
+
+engine.utils = utils(engine);
 
 export default engine;

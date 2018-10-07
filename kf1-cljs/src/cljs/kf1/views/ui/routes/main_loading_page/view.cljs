@@ -1,13 +1,16 @@
 (ns kf1.views.ui.routes.main-loading-page.view  
   (:require [re-frame.core :as rf]
-            [kfGameEngine :refer (utils)]
+            [kfGameEngine :refer [default]]
             [kf1.subs :as subs]))
 
-(defn MainLoadingScene [] 
-  (let [loadingPercentage (rf/subscribe [:loadingPercentage])]
+(defn MainLoadingPage [] 
+  (prn ((goog.object/getValueByKeys kfGameEngine #js ["default" "utils" "getImgSrc"])  "framework-images/test-loading-1s-200px.svg"))
+  ;; (prn ((.-getImgSrc (.-utils default)) "framework-images/test-loading-1s-200px.svg"))
+  (let [loading-percentage (rf/subscribe [:loading-percentage])]
     [:div {:class "ui-layer"}
-     [:img {:alt "logo" :src (utils.getImgSrc "framework-images/test-loading-1s-200px.svg")}]
+     [:img {:alt "logo" :src ((goog.object/getValueByKeys kfGameEngine #js ["default" "utils" "getImgSrc"])  "framework-images/test-loading-1s-200px.svg")}]
      [:h2 {:class "f1"} 
       "Loading..."
       [:span {:class "ph3"}
-       @loadingPercentage]]]))
+       @loading-percentage]
+      ]]))

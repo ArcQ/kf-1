@@ -1,5 +1,7 @@
+import { getImgSrc } from './img';
 import request from './request';
 
-export default {
+export default (engine) => ({
   request,
-};
+  getImgSrc: getImgSrc(engine),
+});

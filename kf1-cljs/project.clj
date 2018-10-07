@@ -15,7 +15,8 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :ring-handler kf1.dev-server/handler}
 
   :profiles
   {:dev
@@ -32,7 +33,8 @@
   {:builds
    [{:id           "dev"
      :source-paths ["src/cljs"]
-     :figwheel     {:on-jsload "kf1.core/mount-root"}
+     :figwheel     {:on-jsload "kf1.core/mount-root"
+                    :websocket-host :js-client-host }
      :compiler     {:main                 kf1.core
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"

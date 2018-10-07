@@ -2,7 +2,8 @@
   (:require [kfGameEngine :as engine :refer [utils]]))
 ;; not done yet
 (defn generateGameMap []
-  (utils/request 
+  (js/console.log "hi")
+  (engine.utils/request 
     "/gamemap/generate" 
     (apply hash-map 
            (mapcat vector [:x :y] 
