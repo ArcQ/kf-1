@@ -6,13 +6,20 @@
     (letfn [(setRef [k com] 
               (swap! refs assoc (keyword k) com))
             (handleRef [k cb] 
-              (cb ((keyword k) @refs)))] 
+              (-> (get @refs (keyword k))
+                  ((fn [kRef] (if kRef 
+                                (cb kRef))))))] 
       (fn [props] 
         (component (merge props {:setRef setRef :handleRef handleRef}))))))
 
 (defn lifecycle [classConfig] 
-  (fn [component]
-    (fn [props] 
-      (reagent/create-class
-        (merge classConfig {:reagent-render 
-                            (component props)})))))
+  (letfn [(wrapInProps [_props _classConfig] 
+            (reduce-kv 
+              (fn [prev k v] 
+                (assoc prev k (fn [component] (v component _props)))) 
+              {} _classConfig))] 
+    (fn [component]
+      (fn [props] 
+        (reagent/create-class
+          (merge (wrapInProps props classConfig) 
+                 {:reagent-render (fn [] (component props))}))))))

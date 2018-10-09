@@ -1,7 +1,6 @@
 (ns kf1.views.ui.routes.main-menu.view
   (:import goog.history.Html5History)
-  (:require [re-frame.core :as rf] 
-            [kfGameEngine :as engine]))
+  (:require [re-frame.core :as rf]))
 
 (defn MainMenu [props] 
   [:div {:class "ui-layer"}

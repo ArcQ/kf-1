@@ -79,7 +79,7 @@ import { createGameLoop } from '../game-loop';
  */
 function _createLoadObs(wrappedScene, assetUrl) {
   const loadingSceneObj = wrappedScene.loading();
-  const loadFromUrl = curry(load)(sceneManager.assetUrl);
+  const loadFromAssetUrl = curry(load)(sceneManager.assetUrl);
   const loadLoadingAssets$ = loadFromAssetUrl(loadingSceneObj);
   const loadSceneAssets$ = loadFromAssetUrl(wrappedScene);
   const sceneCustomLoad$ = wrappedScene.load$ || empty();
@@ -199,9 +199,9 @@ const sceneManager = {
    * @returns {undefined}
    *
    */
-  start(config, sceneDict, assetUrl) {
+  start(config, sceneDict) {
+    sceneManager.assetUrl = config.assetUrl;
     sceneManager.sceneDict = sceneDict;
-    sceneManager.assetUrl = assetUrl;
     sceneManager.pushScene(config.defaultScene);
   },
   /**
@@ -213,7 +213,7 @@ const sceneManager = {
    *
    */
   pushScene(sceneKey) {
-    const sceneObj = sceneDict[sceneKey]();
+    const sceneObj = sceneManager.sceneDict[sceneKey]();
     const scene = _wrapInSceneHelpers(sceneObj);
     scene.start(engine.app.stage);
   },

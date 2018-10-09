@@ -4,8 +4,6 @@
             [kf1.subs :as subs]))
 
 (defn MainLoadingPage [] 
-  (prn ((goog.object/getValueByKeys kfGameEngine #js ["default" "utils" "getImgSrc"])  "framework-images/test-loading-1s-200px.svg"))
-  ;; (prn ((.-getImgSrc (.-utils default)) "framework-images/test-loading-1s-200px.svg"))
   (let [loading-percentage (rf/subscribe [:loading-percentage])]
     [:div {:class "ui-layer"}
      [:img {:alt "logo" :src ((goog.object/getValueByKeys kfGameEngine #js ["default" "utils" "getImgSrc"])  "framework-images/test-loading-1s-200px.svg")}]
