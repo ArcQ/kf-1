@@ -1,7 +1,6 @@
 (ns kf1.views.ui.routes.level-one.view
   (:require [re-frame.core :as rf]
-            [kfGameEngine :refer (utils)]
-            [kf1.subs :as subs]))
+            [kfGameEngine :refer (utils)]))
 
 (defn LevelOne [props] 
   (let [isPaused (rf/subscribe [:isPaused])]

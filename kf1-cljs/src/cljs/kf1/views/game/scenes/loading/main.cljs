@@ -4,7 +4,7 @@
     [kf1.utils.engine-interface :refer [getSprite]]))
 
 (defn getSceneObj [] 
-  {
+  (clj->js {
    :name "mainLoadingScene"
    :uiRoute "/loading/main"
    :assets ["mainLoading"]
@@ -15,4 +15,4 @@
                          (goog.object/set "width" 90)
                          (goog.object/set "height" 160)))
                    (stage.addChild))
-   })
+   }))

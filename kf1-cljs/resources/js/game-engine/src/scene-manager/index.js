@@ -77,7 +77,8 @@ import { createGameLoop } from '../game-loop';
  * @param assetUrl
  * @returns {Observable}
  */
-function _createLoadObs(wrappedScene, assetUrl) {
+function _createLoadObs(wrappedScene) {
+  const assetUrl = engine.assetUrl;
   const loadingSceneObj = wrappedScene.loading();
   const loadFromAssetUrl = curry(load)(sceneManager.assetUrl);
   const loadLoadingAssets$ = loadFromAssetUrl(loadingSceneObj);
@@ -189,18 +190,19 @@ function _wrapInSceneHelpers(sceneObj) {
 const sceneManager = {
   sceneDict: undefined,
   assetUrl: undefined,
+  storeFn: undefined,
   /**
    * starts the scene manager with a default scene as specified in the config
    *
    * @function
-   * @param {GameConfig} config - A color, in hexadecimal format.
+   * @param {GameConfig} config - Game config, requires assetUrl as param
    * @param {GameConfig} sceneDict - a dictionary of all the different scene definitions in the game
-   * @param {GameConfig} assetUrl - base static assets url (s3)
    * @returns {undefined}
    *
    */
-  start(config, sceneDict) {
+  start(config, sceneDict, storeFn) {
     sceneManager.assetUrl = config.assetUrl;
+    sceneManager.sceneDict = sceneDict;
     sceneManager.sceneDict = sceneDict;
     sceneManager.pushScene(config.defaultScene);
   },

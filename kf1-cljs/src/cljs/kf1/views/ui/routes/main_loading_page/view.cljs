@@ -1,7 +1,6 @@
 (ns kf1.views.ui.routes.main-loading-page.view  
   (:require [re-frame.core :as rf]
-            [kfGameEngine :refer [default]]
-            [kf1.subs :as subs]))
+            [kfGameEngine :refer [default]]))
 
 (defn MainLoadingPage [] 
   (let [loading-percentage (rf/subscribe [:loading-percentage])]

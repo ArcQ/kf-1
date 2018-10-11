@@ -5,7 +5,6 @@
     [kf1.events :as events]
     [kf1.routes :as routes]
     [kf1.config :as config]
-    [kf1.subs :as subs]
     [kf1.app :as app]))
 
 (defn dev-setup []

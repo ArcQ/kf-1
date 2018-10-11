@@ -54,16 +54,23 @@ const engine = {
   },
   scale: null,
   ui: {
-    dispatch(action) {
-      // engine.store.dispatch(action);
-    },
-    select(key) {
-      // return engine.app.store[key];
-    },
+    dispatch(action) {},
+    select(key) {},
   },
-  start(gameConfig, mainGameViewRef) {
-    console.log("start");
+
+  /**
+   * starts the scene manager with a default scene as specified in the config
+   *
+   * @function
+   * @param {GameConfig} gameConfig - Game config, requires assetUrl as param
+   * @param {GameConfig} mainGameViewRef - the dom element (div) to use for your canvas
+   * @param {GameConfig} storeFn - store functions (like redux) { dispatchFn, selectFn }
+   * @returns {undefined}
+   *
+   */
+  start(gameConfig, mainGameViewRef, storeFn) {
     engine.assetUrl = "https://s3.ca-central-1.amazonaws.com/dev-assets-1/";
+    engine.ui = { ...engine.ui, ...storeFn };
 
     const options = { antialias: false, transparent: true, resolution: devicePixelRatio };
     const initialDimensions = getDimensions(
