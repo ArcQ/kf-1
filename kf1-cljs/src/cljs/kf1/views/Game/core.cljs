@@ -14,9 +14,11 @@
          :className "relative"
          :ref (partial (:setRef props) "gameView")}])
 
-(def storeFn {:dispatch (fn [action] (-> (case (action.type)
-                                           :default false)
-                                         ((fn [v] (if v (rf/dispatch v))))))
+(defn storeFn [props] {:dispatch (fn [action] (prn (.-path action))
+                          (-> (case (.-type action)
+                                "push-location" (not (.setToken (:history props) (.-path action)))
+                                false)
+                              ((fn [v] (if v (prn v) (rf/dispatch v))))))
               :select (fn [ks] (get-in @rfdb/app-db (map #(keyword %) ks)))})
 
 (defn initPixi [props mainGameViewRef]
@@ -24,7 +26,7 @@
     (let [gameConfig (clj->js config/game)
           engineStart (goog.object/getValueByKeys kfGameEngine #js ["default" "start" ])
           sceneStart (goog.object/getValueByKeys kfGameEngine #js ["default" "sceneManager" "start" ])]
-      (engineStart gameConfig mainGameViewRef storeFn)
+      (engineStart gameConfig mainGameViewRef (clj->js (storeFn props)))
       (sceneStart gameConfig (clj->js sceneDict) )))) 
 
 (def initPixiOnMount 

@@ -82,10 +82,12 @@ function _createLoadObs(wrappedScene) {
   const loadSceneAssets$ = load(wrappedScene);
   const sceneCustomLoad$ = wrappedScene.load$ || empty();
 
-  const launchLoadingScene$ = tap(null, null, () => engine.ui.dispatch(push({
+  const route = {
     pathname: loadingSceneObj.uiRoute,
     state: { loadingScene: true },
-  })));
+  }
+
+  const launchLoadingScene$ = tap(null, null, () => engine.ui.dispatch(push(route.pathname)));
 
   const setLoadPercentage$ = map(({ percentage }) => {
     engine.ui.dispatch(

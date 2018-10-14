@@ -54,12 +54,14 @@
  */
 
 import { Observable, forkJoin, empty } from 'rxjs';
-import { map as Map } from 'immutable';
+import {
+ of,
+} from 'rxjs';
 import {
   concat, map, tap, catchError, combineLatest,
 } from 'rxjs/operators';
 import { curry } from 'ramda';
-// import { push } from 'react-router-redux';
+import { push } from 'utils/store/ducks';
 
 import { load } from 'game/engine/asset-manager';
 // import { actions as loadingActions } from 'shared/store/loading/ducks';
@@ -83,14 +85,15 @@ function _createLoadObs(wrappedScene) {
   const loadFromAssetUrl = curry(load)(sceneManager.assetUrl);
   const loadLoadingAssets$ = loadFromAssetUrl(loadingSceneObj);
   const loadSceneAssets$ = loadFromAssetUrl(wrappedScene);
-  const sceneCustomLoad$ = wrappedScene.load$ || empty();
+  const sceneCustomLoad$ = wrappedScene.load$ || of(false);
+
+  // const rObj = {
+  //   pathname: loadingSceneObj.uiRoute,
+  //   state: { loadingScene: true },
+  // };
 
   const launchLoadingScene$ = tap(null, null, () =>
-    console.log('hi'),
-    // engine.ui.dispatch(push({
-    // pathname: loadingSceneObj.uiRoute,
-    // state: { loadingScene: true },
-    // }))
+    engine.ui.dispatch(push(loadingSceneObj.uiRoute))
   );
 
   const setLoadPercentage$ = map(({ percentage }) => {
@@ -162,7 +165,7 @@ function _wrapInSceneHelpers(sceneObj) {
     onFinishLoad(sceneCustomRes) {
       const initialState = (sceneObj.onFinishLoad)
         ? sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes)
-        : new Map();
+        : {};
 
       const gameLoopArgs = createGameLoop(
         sceneObj.eventSources,
@@ -202,7 +205,6 @@ const sceneManager = {
    */
   start(config, sceneDict, storeFn) {
     sceneManager.assetUrl = config.assetUrl;
-    sceneManager.sceneDict = sceneDict;
     sceneManager.sceneDict = sceneDict;
     sceneManager.pushScene(config.defaultScene);
   },

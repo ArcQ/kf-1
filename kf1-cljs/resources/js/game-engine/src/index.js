@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-// import { push } from 'react-router-redux';
+import { push } from 'utils/store/ducks';
 import scaleToWindowPixi from 'scale-to-window-pixi';
 import assetManager from './asset-manager';
 import sceneManager from './scene-manager';
@@ -45,7 +45,7 @@ function resizeContainers(app, mainGameViewRef, engine) {
 
 const engine = {
   app: null,
-  assetUrl: "https://s3.ca-central-1.amazonaws.com/dev-assets-1/",
+  assetUrl: '',
   web: {
     screen: {
       bounds: null,
@@ -88,7 +88,9 @@ const engine = {
       };
     }
     engine.app = app;
-    // engine.ui.dispatch(push('/'));
+    console.log(engine.ui);
+    console.log(storeFn);
+    engine.ui.dispatch(push('/'));
     return engine.app;
   },
   assetManager,
