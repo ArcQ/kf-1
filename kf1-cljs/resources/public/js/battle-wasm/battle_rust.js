@@ -3,6 +3,8 @@
     const __exports = {};
 
 
+    const __wbg_log_c6a78ae4e9683470_target = console.log;
+
     let cachedDecoder = new TextDecoder('utf-8');
 
     let cachegetUint8Memory = null;
@@ -17,9 +19,9 @@
         return cachedDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
     }
 
-    __exports.__wbg_alert_4afca543c3543396 = function(arg0, arg1) {
+    __exports.__wbg_log_c6a78ae4e9683470 = function(arg0, arg1) {
         let varg0 = getStringFromWasm(arg0, arg1);
-        alert(varg0);
+        __wbg_log_c6a78ae4e9683470_target(varg0);
     };
 
     let cachedEncoder = new TextEncoder('utf-8');
