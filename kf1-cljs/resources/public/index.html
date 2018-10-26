@@ -26,7 +26,10 @@
 
       // we'll defer our execution until the wasm is ready to go
       function run() {
-          greet('World');
+        window['wasmLoaded'] = true;
+        const event = new Event('wasm_load');
+        document.dispatchEvent(event);
+        greet('World');
       }
 
       wasm_bindgen('js/battle-wasm/battle_rust_bg.wasm').then(run);
