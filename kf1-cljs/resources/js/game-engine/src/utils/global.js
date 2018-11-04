@@ -1,10 +1,12 @@
 // abstract away uses of window in case of ssr
 
+import { safeGetIn } from './dictUtils';
+
 const _window = window;
 const _document = document;
 const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !_window.MSStream;
 
-export const getWindow = () => window;
+export const getWindow = (attrs) => attrs ? safeGetIn(window, attrs) : window;
 export const getDocument = () => document;
 
 export const getWWidth = () => ((iOS) ? _window.screen.width : _window.innerWidth

@@ -53,21 +53,16 @@
  * @property {function=} [willLoad] - to be called right before load assets
  */
 
-import { Observable, forkJoin, empty } from 'rxjs';
-import {
- of,
-} from 'rxjs';
-import {
-  concat, map, tap, catchError, combineLatest,
-} from 'rxjs/operators';
+import { Observable, forkJoin, of } from 'rxjs';
+import { concat, map, tap, catchError } from 'rxjs/operators';
 import { curry } from 'ramda';
-import { push } from 'utils/store/ducks';
 
 import { load } from 'game/engine/asset-manager';
-// import { actions as loadingActions } from 'shared/store/loading/ducks';
+import { push } from 'utils/store/ducks';
 import engine from 'game/engine';
 
 import { createGameLoop } from '../game-loop';
+import { runOnWasmLoad } from 'utils/wasm.utils';
 
 /**
  * _createLoadObs - creates the observer that first loads the loading scene assets
@@ -177,13 +172,22 @@ function _wrapInSceneHelpers(sceneObj) {
         framesAndEvents$,
       } = gameLoopArgs;
 
-      if (sceneObj.start) sceneObj.start(gameLoopArgs);
-      if (sceneObj.update) {
-        framesAndEvents$.pipe(
-          map(combinedRes =>
-            sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
-        ).subscribe();
-      }
+      runOnWasmLoad((wasmBindgen) => {
+        if (sceneObj.start) sceneObj.start(gameLoopArgs);
+        if (sceneObj.gameFnNames) {
+          const { update, start } = sceneObj.gameFnNames;
+          console.log(wasmBindgen.wasm);
+
+          const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
+          // wasmBindgen.wasm[start]();
+          framesAndEvents$.pipe(
+            map(combinedRes =>
+              wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
+              // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
+          ).subscribe();
+        }
+      });
+
     },
   });
   return wrappedScene;
