@@ -12,15 +12,11 @@ struct CharTraits {
     basic: BasicTraits,
 }
 
-fn movePt(pt: [f32; 2], diff: [f32; 2]) -> types::Pt {
-    types::Pt { x: pt[0] + diff[1], y: pt[1] + diff[1] }
-}
-
 fn getPtFromSlice(ptSlice: [f32;2]) -> types::Pt {
     types::Pt { x: ptSlice[0 as usize],  y: ptSlice[1 as usize] }
 }
 
-pub fn run (traits: CharTraits, destinationSlice: [f32; 2]) -> impl Fn([f32; 2], f32) -> types::Pt {
+pub fn run (traits: CharTraits, destinationSlice: [f32; 2]) -> impl Fn(f32, types::Pt) -> types::Pt {
     let destination = types::Pt::fromSlice(destinationSlice);
     let diff = traits.basic.pos.sub(destination);
     let normalized = types::Pt::new(diff.x / diff.x.abs(), diff.x / diff.x.abs());
@@ -40,12 +36,12 @@ pub fn run (traits: CharTraits, destinationSlice: [f32; 2]) -> impl Fn([f32; 2],
         isPast
     };
 
-    |curPos: [f32; 2], dt: f32| {
+    |dt: f32, curPos: types::Pt| -> types::Pt {
         let dist = traits.basic.speed * dt * 5.0;
         let moveDiff = multipliers.mapWith(normalized, |multipliersProp, normalizedProp, _| {
             multipliersProp * normalizedProp * dist
         });
-        let nextPt = movePt(curPos, moveDiff);
+        let nextPt = curPos::add(moveDiff);
         let finalPt = if checkIfPast(nextPt) {
             destination
         } else {

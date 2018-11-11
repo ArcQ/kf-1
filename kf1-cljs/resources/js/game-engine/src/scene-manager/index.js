@@ -180,11 +180,13 @@ function _wrapInSceneHelpers(sceneObj) {
 
           const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
           // wasmBindgen.wasm[start]();
-          framesAndEvents$.pipe(
-            map(combinedRes =>
-              wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
-              // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
-          ).subscribe();
+          // framesAndEvents$.pipe(
+          //   map(combinedRes =>
+          //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
+          //     // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
+          // ).subscribe();
+          console.log(wasmBindgen.wasm);
+          wasmBindgen.wasm.levelone_new();
         }
       });
 

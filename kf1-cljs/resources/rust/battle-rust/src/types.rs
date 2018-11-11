@@ -15,14 +15,15 @@ impl Pt {
         Pt { x: ptSlice[0 as usize],  y: ptSlice[1 as usize] }
     }
 
-    pub fn toSlicce(self) -> &mut f32{
-        &mut [self.x, self.y]
-    }
+    // pub fn toSlice(self) -> &mut f32 {
+    //     &mut [self.x, self.y]
+    // }
     /// get x or y based on a string key of x or y
     pub fn getKeyString(&self, k: &str) -> f32 {
         match k {
             "x" => self.x,
-            "y" => self.y
+            "y" => self.y,
+            _ => self.y
         }
     }
     /// maps over x and y, runs the handler fn(self.x|y , x|y) on each and returns a new pt
@@ -43,7 +44,7 @@ impl Pt {
     }
 }
 
-/// game types
+/// game specific config
 pub struct Config {}
 pub struct GameState { }
 
