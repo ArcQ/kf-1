@@ -6,6 +6,6 @@ free(): void;
 
  constructor(arg0: any);
 
- level_one_get_update(arg0: number, arg1: Float32Array): void;
+ get_update(arg0: number): void;
 
 }

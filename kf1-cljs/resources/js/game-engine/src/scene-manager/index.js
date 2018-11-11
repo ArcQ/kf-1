@@ -176,8 +176,6 @@ function _wrapInSceneHelpers(sceneObj) {
         if (sceneObj.start) sceneObj.start(gameLoopArgs);
         if (sceneObj.gameFnNames) {
           const { update, start } = sceneObj.gameFnNames;
-          console.log(wasmBindgen.wasm);
-
           const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
           // wasmBindgen.wasm[start]();
           // framesAndEvents$.pipe(
@@ -185,8 +183,10 @@ function _wrapInSceneHelpers(sceneObj) {
           //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
           //     // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
           // ).subscribe();
-          console.log(wasmBindgen.wasm);
-          wasmBindgen.wasm.levelone_new();
+          const levelOne = new wasmBindgen.LevelOne();
+
+          levelOne.get_update(0.1);
+          // console.log(wasmBindgen.wasm.levelone_new());
         }
       });
 

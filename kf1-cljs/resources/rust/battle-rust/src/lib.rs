@@ -29,8 +29,6 @@ impl LevelOne {
             world.register::<types::Pt>();
             world.register::<Speed>();
 
-            // Only the second entity will get a position update,
-            // because the first one does not have a velocity.
             world.create_entity()
                 .with(Name::new(1))
                 .with(CharType::new(0))
@@ -48,7 +46,7 @@ impl LevelOne {
                 // .with(MapInputs, "input", &[])
                 // .with(MakeDecisions, "AiMakeDecisions", &[])
                 .with(UpdateChar, "update_char", &[])
-                // .with_thread_local(WatchAll)
+                .with_thread_local(WatchAll)
                 .build();
             dispatcher.setup(&mut world.res);
             dispatcher.dispatch(&mut world.res);
@@ -57,7 +55,8 @@ impl LevelOne {
         }
     }
 
-    pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
+    // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
+    pub fn get_update(&mut self, dt: f32) {
         self.dispatcher.dispatch(&mut self.world.res)
     }
 }

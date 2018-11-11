@@ -9,12 +9,19 @@ pub mod components;
 use self::components::{Name, CharType, CharStateStore};
 
 pub struct WatchAll;
-//
-// #[wasm_bindgen]
-// extern "C" {
+
+#[wasm_bindgen]
+extern "C" {
 //     #[wasm_bindgen(js_namespace = game_config)]
 //     fn level_one_update(name: i32);
-// }
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_u32(a: u32);
+}
     
 impl<'a> System<'a> for WatchAll {
     type SystemData = (ReadStorage<'a, Name>, 
@@ -24,8 +31,12 @@ impl<'a> System<'a> for WatchAll {
 
     fn run(&mut self, (name, charType, pos, charStateStore): Self::SystemData) {
         // js_watcher.call3(name, charType, pos, charStateStore);
+
+
+
         for name in name.join() {
             // level_one_update(name.0);
+            log_u32(name.0 as u32);
         }
     }
 }
