@@ -176,16 +176,16 @@ function _wrapInSceneHelpers(sceneObj) {
         if (sceneObj.start) sceneObj.start(gameLoopArgs);
         if (sceneObj.gameFnNames) {
           const { update, start } = sceneObj.gameFnNames;
-          const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
+          // const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
           // wasmBindgen.wasm[start]();
           // framesAndEvents$.pipe(
           //   map(combinedRes =>
           //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
           //     // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
           // ).subscribe();
-          const levelOne = new wasmBindgen.LevelOne();
-
-          levelOne.get_update(0.1);
+          const levelOne = new wasmBindgen.LevelOne(() => console.log);
+          const inputDef = Uint16Array.from([250]);
+          levelOne.get_update(0.1, inputDef);
           // console.log(wasmBindgen.wasm.levelone_new());
         }
       });

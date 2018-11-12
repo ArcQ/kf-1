@@ -13,6 +13,19 @@ use ecs::components::{Name, CharType, Speed};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+extern "C" {
+//     #[wasm_bindgen(js_namespace = game_config)]
+//     fn level_one_update(name: i32);
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_u32(a: u32);
+}
+
+#[wasm_bindgen]
 pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
     world: World,
@@ -56,7 +69,8 @@ impl LevelOne {
     }
 
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
-    pub fn get_update(&mut self, dt: f32) {
+    pub fn get_update(&mut self, dt: f32, input_def: &[u16]) {
+        log_u32(input_def[0] as u32);
         self.dispatcher.dispatch(&mut self.world.res)
     }
 }

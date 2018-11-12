@@ -15,6 +15,20 @@
         stack.push(obj);
         return ((stack.length - 1) << 1) | 1;
     }
+
+    let cachegetUint16Memory = null;
+    function getUint16Memory() {
+        if (cachegetUint16Memory === null || cachegetUint16Memory.buffer !== wasm.memory.buffer) {
+            cachegetUint16Memory = new Uint16Array(wasm.memory.buffer);
+        }
+        return cachegetUint16Memory;
+    }
+
+    function passArray16ToWasm(arg) {
+        const ptr = wasm.__wbindgen_malloc(arg.length * 2);
+        getUint16Memory().set(arg, ptr / 2);
+        return [ptr, arg.length];
+    }
     /**
     * @param {any} arg0
     * @returns {void}
@@ -60,10 +74,19 @@
         }
         /**
         * @param {number} arg0
+        * @param {Uint16Array} arg1
         * @returns {void}
         */
-        get_update(arg0) {
-            return wasm.levelone_get_update(this.ptr, arg0);
+        get_update(arg0, arg1) {
+            const [ptr1, len1] = passArray16ToWasm(arg1);
+            try {
+                return wasm.levelone_get_update(this.ptr, arg0, ptr1, len1);
+
+            } finally {
+                wasm.__wbindgen_free(ptr1, len1 * 2);
+
+            }
+
         }
     }
     __exports.LevelOne = LevelOne;
