@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rxjs": "6",
+    "namespace-constants": "^0.5.0",
     "pixi.js": "^4.5.5",
     "ramda": "^0.25.0",
+    "redux-actions": "^2.6.4",
+    "rxjs": "6",
     "sanitize.css": "^5.0.0",
     "scale-to-window-pixi": "^1.2.0",
     "whatwg-fetch": "^2.0.4"

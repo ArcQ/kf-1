@@ -89,6 +89,7 @@ function _createLoadObs(wrappedScene) {
 
   const launchLoadingScene$ = tap(null, null, () => engine.ui.dispatch(push(route.pathname)));
 
+  console.log(loadingActions.setLoadPercentage({ percentage }));
   const setLoadPercentage$ = map(({ percentage }) => {
     engine.ui.dispatch(
       loadingActions.setLoadPercentage({ percentage }),
@@ -206,6 +207,7 @@ const sceneManager = {
   pushScene(sceneKey) {
     const sceneObj = sceneDict[sceneKey]();
     const scene = _wrapInSceneHelpers(sceneObj);
+    console.log(scene);
     scene.start(engine.app.stage);
   },
 };

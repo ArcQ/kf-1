@@ -13,7 +13,6 @@
             :gameFnNames {
                     :start "level_one_init"
                     :update "level_one_tick" } 
-
             ;; :update update
             ;; :onFinishLoad onFinishLoad
             }))

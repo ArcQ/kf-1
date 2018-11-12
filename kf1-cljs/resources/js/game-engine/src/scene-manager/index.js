@@ -58,7 +58,7 @@ import { concat, map, tap, catchError } from 'rxjs/operators';
 import { curry } from 'ramda';
 
 import { load } from 'game/engine/asset-manager';
-import { push } from 'utils/store/ducks';
+import { actions as gameEngineActions } from 'utils/store/ducks';
 import engine from 'game/engine';
 
 import { createGameLoop } from '../game-loop';
@@ -86,15 +86,15 @@ function _createLoadObs(wrappedScene) {
   //   pathname: loadingSceneObj.uiRoute,
   //   state: { loadingScene: true },
   // };
-
+  console.log(loadingSceneObj.uiRoute);
   const launchLoadingScene$ = tap(null, null, () =>
-    engine.ui.dispatch(push(loadingSceneObj.uiRoute))
+    engine.ui.dispatch(gameEngineActions.pushLocation({ path: loadingSceneObj.uiRoute }))
   );
 
   const setLoadPercentage$ = map(({ percentage }) => {
-    // engine.ui.dispatch(
-    //   loadingActions.setLoadPercentage({ percentage }),
-    // );
+    engine.ui.dispatch(
+      gameEngineActions.setLoadPercentage({ percentage }),
+    );
     if (wrappedScene.onLoadNext) wrappedScene.onLoadNext();
   });
 
@@ -128,7 +128,7 @@ function _loadScene(wrappedScene) {
 
   loadScene$.subscribe(
     ([ _, sceneCustomRes]) => { //eslint-disable-line
-      engine.ui.dispatch(push(wrappedScene.uiRoute));
+      engine.ui.dispatch(gameEngineActions.pushLocation({ path: wrappedScene.uiRoute }));
       wrappedScene.onFinishLoad(sceneCustomRes);
     },
   );
@@ -186,7 +186,6 @@ function _wrapInSceneHelpers(sceneObj) {
           const levelOne = new wasmBindgen.LevelOne(() => console.log);
           const inputDef = Uint16Array.from([250]);
           levelOne.get_update(0.1, inputDef);
-          // console.log(wasmBindgen.wasm.levelone_new());
         }
       });
 

@@ -7,7 +7,9 @@
   {:initialize-db  (fn [db _]
                      {:loading-percentage 0})
    :set-active-route (fn [db [_ active-route]]
-                       (assoc db :active-route active-route))})
+                       (assoc db :active-route active-route))
+   "GAME-ENGINE-SET-LOAD-PERCENTAGE" (fn [db [_ {p "percentage"}]]
+                                     (assoc db :loading-percentage p))})
 
 (def simpleSubsMap 
   [:active-route :loading-percentage])
@@ -18,10 +20,10 @@
 ;;     (:active-route db)))
 ;;
 ;; (rf/reg-sub
-;;   :loading-percentage
+;;   :GAME-ENGINE-LOADING-PERCENTAGE
 ;;   (fn [db _]
-    ;; (:loading-percentage db)))
+;;     (:loading-percentage db)))
 
 (doall (map (partial apply rf/reg-event-db) eventsMap))
 (doall (map (fn [k] 
-              (rf/reg-sub k (fn [db _] (k db))))  simpleSubsMap))
+              (rf/reg-sub k (fn [db _] (k db)))) simpleSubsMap))

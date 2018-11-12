@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { push } from 'utils/store/ducks';
+import {  actions as gameEngineActions, push } from 'utils/store/ducks';
 import scaleToWindowPixi from 'scale-to-window-pixi';
 import assetManager from './asset-manager';
 import sceneManager from './scene-manager';
@@ -88,9 +88,7 @@ const engine = {
       };
     }
     engine.app = app;
-    console.log(engine.ui);
-    console.log(storeFn);
-    engine.ui.dispatch(push('/'));
+    engine.ui.dispatch(gameEngineActions.pushLocation({ path: '/' }));
     return engine.app;
   },
   assetManager,
