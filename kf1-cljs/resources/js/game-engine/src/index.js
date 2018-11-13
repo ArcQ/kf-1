@@ -93,6 +93,7 @@ const engine = {
   },
   assetManager,
   sceneManager,
+  PIXI,
 };
 
 engine.utils = utils(engine);
