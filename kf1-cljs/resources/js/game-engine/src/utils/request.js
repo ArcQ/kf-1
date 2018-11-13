@@ -1,15 +1,8 @@
 import 'whatwg-fetch'; //eslint-disable-line
-import { Observable, from } from 'rxjs';
 
 const DEFAULT_API_URL = 'http://localhost:7000';
 
 let errorObserver;
-
-export const errorObservable$ = Observable.create((observer) => {
-  errorObserver = observer;
-});
-
-errorObservable$.subscribe((e) => console.warn(e)) //eslint-disable-line
 
 // const fetch = getFetch(); //in case for ssr
 
@@ -56,13 +49,12 @@ export default function request(endpoint, body = {}, requestOptions = {}, custom
   }
 
   const destination = `${apiUrl}/${path}${query}`;
-  return from(fetch(destination, options)
+  return fetch(destination, options)
     .then(checkStatus)
     .then(res => res.json())
     .catch((error) => {
-      errorObserver.next(error);
-      return Observable.throw(error || 'Server error');
-    }));
+      console.warn(error);
+    });
 }
 
 // data$.subscribe(data => #<{(|do something with data|)}>#);

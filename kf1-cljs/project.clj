@@ -5,7 +5,7 @@
                  [re-frame "0.10.5"]
                  [secretary "1.2.3"]
                  [cljfmt "0.5.1"]
-                 ]
+                 [cljs-http "0.1.45"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 

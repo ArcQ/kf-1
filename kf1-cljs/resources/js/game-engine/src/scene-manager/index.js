@@ -122,6 +122,7 @@ function _createLoadObs(wrappedScene) {
  * @returns {undefined}
  */
 function _loadScene(wrappedScene) {
+  console.log(wrappedScene.willLoad);
   if (wrappedScene.willLoad) wrappedScene.willLoad();
 
   const loadScene$ = _createLoadObs(wrappedScene);
@@ -223,6 +224,7 @@ const sceneManager = {
    */
   pushScene(sceneKey) {
     const sceneObj = sceneManager.sceneDict[sceneKey]();
+    console.log(sceneObj);
     const scene = _wrapInSceneHelpers(sceneObj);
     scene.start(engine.app.stage);
   },

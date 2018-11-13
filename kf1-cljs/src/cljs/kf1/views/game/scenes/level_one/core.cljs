@@ -8,7 +8,7 @@
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
             :assets ["goblins", "chars"]
-            :load api/generateGameMap
+            :willLoad api/generateGameMap
             ;; :eventSources eventSources 
             :gameFnNames {
                     :start "level_one_init"
