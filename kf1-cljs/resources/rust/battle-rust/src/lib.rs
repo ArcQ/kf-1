@@ -14,12 +14,8 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-//     #[wasm_bindgen(js_namespace = game_config)]
-//     fn level_one_update(name: i32);
-
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
-
 
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_u32(a: u32);
@@ -62,7 +58,7 @@ impl LevelOne {
                 .with_thread_local(WatchAll)
                 .build();
             dispatcher.setup(&mut world.res);
-            dispatcher.dispatch(&mut world.res);
+            // dispatcher.dispatch(&mut world.res);
             world.maintain();
             LevelOne { dispatcher: dispatcher, world: world }
         }

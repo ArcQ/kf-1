@@ -11,7 +11,6 @@ const GAMEMAP_TO_TEXTUE = [
 function convertRGB(r, g, b) {
   return 65536 * r + 256 * g + b;
 }
-
 function createTile(v, x, y) {
   const sprite = getSprite('levelOne', GAMEMAP_TO_TEXTUE[v]);
   sprite.x = x * TILE_SIZE;

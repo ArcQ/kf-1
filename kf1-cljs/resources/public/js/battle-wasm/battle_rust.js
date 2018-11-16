@@ -3,6 +3,14 @@
     const __exports = {};
 
 
+    const __wbg_update_f293655a2c60af1d_target = (typeof cljs_wasm_adapter === 'undefined' ? null : cljs_wasm_adapter.update || function() {
+        throw new Error(`wasm-bindgen: cljs_wasm_adapter.update does not exist`);
+    }).bind(cljs_wasm_adapter);
+
+    __exports.__wbg_update_f293655a2c60af1d = function(arg0) {
+        __wbg_update_f293655a2c60af1d_target(arg0);
+    };
+
     const __wbg_log_722bff039eebdf61_target = console.log;
 
     __exports.__wbg_log_722bff039eebdf61 = function(arg0) {

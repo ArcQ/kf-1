@@ -60,6 +60,7 @@ import { curry } from 'ramda';
 import { load } from 'game/engine/asset-manager';
 import { actions as gameEngineActions } from 'utils/store/ducks';
 import engine from 'game/engine';
+import { getWindow } from 'utils/global';
 
 import { createGameLoop } from '../game-loop';
 import { runOnWasmLoad } from 'utils/wasm.utils';
@@ -140,6 +141,10 @@ const _cancelPrevGameLoop$ = new Observable((obs) => {
   _cancelPrevGameLoopObs = obs;
 });
 
+function setCljsWasmAdapter(props) {
+  getWindow().game_config = { ...getWindow().game_config, ...props };
+}
+
 /**
  * _wrapInSceneHelpers - wraps a scene with the helper methods so it connects with _loadScene
  *
@@ -177,16 +182,16 @@ function _wrapInSceneHelpers(sceneObj) {
         if (sceneObj.start) sceneObj.start(gameLoopArgs);
         if (sceneObj.gameFnNames) {
           const { update, start } = sceneObj.gameFnNames;
-          // const importedMemoryArray = new Uint32Array(wasmBindgen.wasm.memory.buffer);
-          // wasmBindgen.wasm[start]();
+          window.game_config = {};
+          setCljsWasmAdapter({ updateFn: sceneObj.update });
+          const levelOne = new wasmBindgen.LevelOne(() => console.log);
+          const inputDef = Uint16Array.from([250]);
+          levelOne.get_update(0.1, inputDef);
           // framesAndEvents$.pipe(
           //   map(combinedRes =>
           //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
           //     // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
           // ).subscribe();
-          const levelOne = new wasmBindgen.LevelOne(() => console.log);
-          const inputDef = Uint16Array.from([250]);
-          levelOne.get_update(0.1, inputDef);
         }
       });
 

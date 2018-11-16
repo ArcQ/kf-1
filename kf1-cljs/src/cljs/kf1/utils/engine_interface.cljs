@@ -10,15 +10,14 @@
   (let [graphics (-> (.-PIXI kfGameEngine)
                      (.-Graphics )
                      (Graphics.))]
-    (.lineStyle graphics 2 0xFF00FF)
-    (.drawCircle graphics 0 , 0 ,20)
-    (setPos graphics pos)
-    (prn (.-position graphics))
-    (.endFill graphics)
-    graphics))
+    (doto graphics 
+      (.lineStyle 2 0xFF00FF)
+      (.drawCircle 0 , 0 ,20)
+      (setPos pos)
+      (.endFill ))))
 
 (defn setPos [sprite, pos]
-  (set! (.-x (.-position sprite)) (pos 0))
-  (set! (.-y (.-position sprite)) (pos 1))
-  (sprite))
+  (doto sprite
+    (goog.object/set "x" (pos 0))
+    (goog.object/set "y" (pos 1))))
 

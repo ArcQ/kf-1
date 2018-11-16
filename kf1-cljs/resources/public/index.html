@@ -18,6 +18,14 @@
       // hack when deploying over HTTP.
       delete WebAssembly.instantiateStreaming;
     </script>
+    <script>
+      window.game_config = {};
+      window.cljs_wasm_adapter = {
+        update(name) {
+          window.game_config.updateFn(name);
+        }
+      };
+    </script>
     <script src='js/battle-wasm/battle_rust.js'></script>
     <div id="app"></div>
     <script> 

@@ -12,8 +12,10 @@ pub struct WatchAll;
 
 #[wasm_bindgen]
 extern "C" {
-//     #[wasm_bindgen(js_namespace = game_config)]
-//     fn level_one_update(name: i32);
+    type cljs_wasm_adapter;
+    
+    #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
+    fn update(name: i32);
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
@@ -35,8 +37,7 @@ impl<'a> System<'a> for WatchAll {
 
 
         for name in name.join() {
-            // level_one_update(name.0);
-            log_u32(name.0 as u32);
+            cljs_wasm_adapter::update(name.0);
         }
     }
 }

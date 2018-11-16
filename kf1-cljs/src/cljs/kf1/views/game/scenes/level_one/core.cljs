@@ -3,6 +3,9 @@
             [kf1.views.game.scenes.loading.main :as mainLoadingScene]
             [kf1.views.game.scenes.loading.main :as eventSources]))
 
+(defn updateFn [args] (prn "updateFn") (prn args))
+(defn start [args] (prn "start") (prn args))
+
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
             :loading mainLoadingScene/getSceneObj
@@ -13,6 +16,7 @@
             :gameFnNames {
                     :start "level_one_init"
                     :update "level_one_tick" } 
-            ;; :update update
+            :start start
+            :update updateFn
             ;; :onFinishLoad onFinishLoad
             }))
