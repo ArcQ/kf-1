@@ -87,7 +87,6 @@ function _createLoadObs(wrappedScene) {
   //   pathname: loadingSceneObj.uiRoute,
   //   state: { loadingScene: true },
   // };
-  console.log(loadingSceneObj.uiRoute);
   const launchLoadingScene$ = tap(null, null, () =>
     engine.ui.dispatch(gameEngineActions.pushLocation({ path: loadingSceneObj.uiRoute }))
   );
@@ -123,7 +122,6 @@ function _createLoadObs(wrappedScene) {
  * @returns {undefined}
  */
 function _loadScene(wrappedScene) {
-  console.log(wrappedScene.willLoad);
   if (wrappedScene.willLoad) wrappedScene.willLoad();
 
   const loadScene$ = _createLoadObs(wrappedScene);
@@ -216,7 +214,6 @@ const sceneManager = {
    *
    */
   start(config, sceneDict, storeFn) {
-    console.log('hi');
     sceneManager.assetUrl = config.assetUrl;
     sceneManager.sceneDict = sceneDict;
     sceneManager.pushScene(config.defaultScene);

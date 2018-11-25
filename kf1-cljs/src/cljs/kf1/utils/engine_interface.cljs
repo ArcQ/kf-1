@@ -2,13 +2,12 @@
   (:require [kfGameEngine]
             [oops.core :refer [oget oset! ocall!]]))
 
-(def getSprite (goog.object/getValueByKeys kfGameEngine #js ["default" "assetManager" "getSprite"]))
+(def getSprite (oget kfGameEngine ["default" "assetManager" "getSprite"]))
 
 (defn addChildToStage [sprite]
   (ocall! kfGameEngine ["default" "app" "stage" "addChild"] sprite))
 
 (defn setPos! [sprite, pos]
-  (prn sprite pos)
   (doto sprite
     (oset! "x" (pos 0))
     (oset! "y" (pos 1))))

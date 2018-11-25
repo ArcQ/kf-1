@@ -18,20 +18,22 @@
 
 (defn createTile [v, x, y]
   (doto (getSprite "levelOne" (GAMEMAP_TO_TEXTURE v))
-    (goog.object/set "x" (* x TILE_SIZE))
-    (goog.object/set "y" (* y TILE_SIZE))
-    (goog.object/set "width" TILE_SIZE)
-    (goog.object/set "height" TILE_SIZE)))
+    (oset! "x" (* x TILE_SIZE))
+    (oset! "y" (* y TILE_SIZE))
+    (oset! "width" TILE_SIZE)
+    (oset! "height" TILE_SIZE)))
 
 (defn createTileMap [gameMap]
-  (-> (fn [y] (map-indexed #(createTile %1 %2 y) gameMap))
+  (prn gameMap)
+  (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y)) row))
+      (map-indexed gameMap)
       (flatten)))
 
 (defn initialRender []
   (let [initialPos {:goblin [100 100] :assasin [300 100] :moveTargetCircle [0 0]}
         gameMap (:gameMap @nonUiState)
-        tileMap (->> (createTileMap gameMap)
-                     (map #(addChildToStage %1)))]
+        tileMap (doall (->> (createTileMap gameMap)
+                     (map #(addChildToStage %1))))]
     (letfn [(charKeysReducer [acc k] 
               (let [_ (prn "k" k)
                     sprite ((:sprite (get charactersDict k)) 

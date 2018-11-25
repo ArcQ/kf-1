@@ -12,7 +12,7 @@
   (clj->js {:name "level-one-scene"
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
-            :assets ["goblins", "chars"]
+            :assets ["goblins" "chars" "levelOne"]
             :willLoad api/generateGameMap
             ;; :eventSources eventSources 
             :gameFnNames {

@@ -14,8 +14,6 @@
          :ref (partial (:setRef props) "gameView")}])
 
 (defn storeFn [props] {:dispatch (fn [action]
-                                   (prn "hi")
-                                   (prn action)
                                    (-> (case (.-type action)
                                          "GAME-ENGINE-PUSH-LOCATION" (not (.setToken 
                                                                             (:history props) 
