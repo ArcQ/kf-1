@@ -169,7 +169,8 @@ function _wrapInSceneHelpers(sceneObj) {
         : {};
 
       const gameLoopArgs = createGameLoop(
-        sceneObj.eventSources,
+        // sceneObj.eventSources || undefined,
+        undefined,
         initialState,
         _cancelPrevGameLoop$,
       );
@@ -215,6 +216,7 @@ const sceneManager = {
    *
    */
   start(config, sceneDict, storeFn) {
+    console.log('hi');
     sceneManager.assetUrl = config.assetUrl;
     sceneManager.sceneDict = sceneDict;
     sceneManager.pushScene(config.defaultScene);
@@ -229,7 +231,6 @@ const sceneManager = {
    */
   pushScene(sceneKey) {
     const sceneObj = sceneManager.sceneDict[sceneKey]();
-    console.log(sceneObj);
     const scene = _wrapInSceneHelpers(sceneObj);
     scene.start(engine.app.stage);
   },

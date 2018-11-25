@@ -13,12 +13,14 @@
          :className "relative"
          :ref (partial (:setRef props) "gameView")}])
 
-(defn storeFn [props] {:dispatch (fn [action] 
+(defn storeFn [props] {:dispatch (fn [action]
+                                   (prn "hi")
+                                   (prn action)
                                    (-> (case (.-type action)
                                          "GAME-ENGINE-PUSH-LOCATION" (not (.setToken 
                                                                             (:history props) 
                                                                             (goog.object/getValueByKeys action #js ["payload" "path"])))
-                                         (js->clj action))
+                                         (js->clj  action))
                                        ((fn [action] (if action (rf/dispatch [(get action "type") (get action "payload")]))))))
                        :select (fn [ks] (get-in @rfdb/app-db (map #(keyword %) ks)))})
 

@@ -12,7 +12,7 @@
 (def routesMap
   {:home ["/" MainMenu] 
    :main-loading-page ["/loading/main" MainLoadingPage]
-   :level-one ["level-one" LevelOne]
+   :level-one ["/level-one" LevelOne]
    :default ["*" (fn [props] [:div])]})
 
 (defn getRouteDefs []

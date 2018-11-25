@@ -1,6 +1,7 @@
 (defproject kf1 "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.10.238"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
+                 [org.clojure/clojurescript "1.10.439"]
+                 [binaryage/oops "0.6.3"]
                  [reagent "0.8.0"]
                  [re-frame "0.10.5"]
                  [secretary "1.2.3"]
