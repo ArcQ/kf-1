@@ -11,6 +11,27 @@
         __wbg_update_f293655a2c60af1d_target(arg0);
     };
 
+    const __wbg_log_c6a78ae4e9683470_target = console.log;
+
+    let cachedTextDecoder = new TextDecoder('utf-8');
+
+    let cachegetUint8Memory = null;
+    function getUint8Memory() {
+        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+        }
+        return cachegetUint8Memory;
+    }
+
+    function getStringFromWasm(ptr, len) {
+        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
+    }
+
+    __exports.__wbg_log_c6a78ae4e9683470 = function(arg0, arg1) {
+        let varg0 = getStringFromWasm(arg0, arg1);
+        __wbg_log_c6a78ae4e9683470_target(varg0);
+    };
+
     const __wbg_log_722bff039eebdf61_target = console.log;
 
     __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
@@ -82,36 +103,28 @@
         }
         /**
         * @param {number} arg0
-        * @param {Uint16Array} arg1
         * @returns {void}
         */
-        get_update(arg0, arg1) {
-            const [ptr1, len1] = passArray16ToWasm(arg1);
+        get_update(arg0) {
+            return wasm.levelone_get_update(this.ptr, arg0);
+        }
+        /**
+        * @param {Uint16Array} arg0
+        * @returns {void}
+        */
+        on_event(arg0) {
+            const [ptr0, len0] = passArray16ToWasm(arg0);
             try {
-                return wasm.levelone_get_update(this.ptr, arg0, ptr1, len1);
+                return wasm.levelone_on_event(this.ptr, ptr0, len0);
 
             } finally {
-                wasm.__wbindgen_free(ptr1, len1 * 2);
+                wasm.__wbindgen_free(ptr0, len0 * 2);
 
             }
 
         }
     }
     __exports.LevelOne = LevelOne;
-
-    let cachedTextDecoder = new TextDecoder('utf-8');
-
-    let cachegetUint8Memory = null;
-    function getUint8Memory() {
-        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-        }
-        return cachegetUint8Memory;
-    }
-
-    function getStringFromWasm(ptr, len) {
-        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-    }
 
     __exports.__wbindgen_throw = function(ptr, len) {
         throw new Error(getStringFromWasm(ptr, len));

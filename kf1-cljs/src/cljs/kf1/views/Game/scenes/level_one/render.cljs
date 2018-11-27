@@ -24,7 +24,6 @@
     (oset! "height" TILE_SIZE)))
 
 (defn createTileMap [gameMap]
-  (prn gameMap)
   (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y)) row))
       (map-indexed gameMap)
       (flatten)))
@@ -35,8 +34,7 @@
         tileMap (doall (->> (createTileMap gameMap)
                      (map #(addChildToStage %1))))]
     (letfn [(charKeysReducer [acc k] 
-              (let [_ (prn "k" k)
-                    sprite ((:sprite (get charactersDict k)) 
+              (let [sprite ((:sprite (get charactersDict k)) 
                             (k initialPos))]
                 (console.log sprite)
                 (addChildToStage sprite)

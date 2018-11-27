@@ -6,6 +6,8 @@ free(): void;
 
  constructor(arg0: any);
 
- get_update(arg0: number, arg1: Uint16Array): void;
+ get_update(arg0: number): void;
+
+ on_event(arg0: Uint16Array): void;
 
 }

@@ -8,6 +8,15 @@ pub enum CharState {
     Attack,
 }
 
+pub struct DestPt {
+    pub x: f32,
+    pub y: f32
+}
+
+impl Component for DestPt {
+    type Storage = VecStorage<Self>;
+}
+
 impl Component for types::Pt {
     type Storage = VecStorage<Self>;
 }
@@ -47,9 +56,9 @@ impl Component for CharStateStore {
 }
 
 #[derive(Debug)]
-pub struct Name(pub i32); 
+pub struct Id(pub i32); 
 
-impl Name {
+impl Id {
     pub fn new(name: i32) -> Name {
         Name(name)
     }

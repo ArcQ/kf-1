@@ -185,7 +185,12 @@ function _wrapInSceneHelpers(sceneObj) {
           setCljsWasmAdapter({ updateFn: sceneObj.update });
           const levelOne = new wasmBindgen.LevelOne(() => console.log);
           const inputDef = Uint16Array.from([250]);
-          levelOne.get_update(0.1, inputDef);
+          console.log('get_update');
+          levelOne.get_update(0.1);
+          levelOne.get_update(0.1);
+          levelOne.get_update(0.1);
+          // levelOne.on_event(inputDef);
+          console.log('done');
           // framesAndEvents$.pipe(
           //   map(combinedRes =>
           //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
