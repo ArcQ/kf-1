@@ -54,6 +54,7 @@
  */
 
 import { Observable, forkJoin, of } from 'rxjs';
+import { mapDOMPosToStage } from 'game/engine/game-loop/render.utils';
 import { concat, map, tap, catchError } from 'rxjs/operators';
 import { curry } from 'ramda';
 
@@ -140,6 +141,9 @@ const _cancelPrevGameLoop$ = new Observable((obs) => {
 });
 
 function setCljsWasmAdapter(props) {
+  if (!(getWindow().game_config)) {
+    getWindow().game_config = {};
+  }
   getWindow().game_config = { ...getWindow().game_config, ...props };
 }
 
@@ -166,36 +170,24 @@ function _wrapInSceneHelpers(sceneObj) {
         ? sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes)
         : {};
 
-      const gameLoopArgs = createGameLoop(
-        // sceneObj.eventSources || undefined,
-        undefined,
-        initialState,
-        _cancelPrevGameLoop$,
-      );
-
-      const {
-        framesAndEvents$,
-      } = gameLoopArgs;
-
       runOnWasmLoad((wasmBindgen) => {
-        if (sceneObj.start) sceneObj.start(gameLoopArgs);
-        if (sceneObj.gameFnNames) {
-          const { update, start } = sceneObj.gameFnNames;
-          window.game_config = {};
-          setCljsWasmAdapter({ updateFn: sceneObj.update });
-          const levelOne = new wasmBindgen.LevelOne(() => console.log);
-          const inputDef = Uint16Array.from([250]);
-          console.log('get_update');
-          levelOne.get_update(0.1);
-          levelOne.get_update(0.1);
-          levelOne.get_update(0.1);
-          // levelOne.on_event(inputDef);
-          console.log('done');
-          // framesAndEvents$.pipe(
-          //   map(combinedRes =>
-          //     wasmBindgen.wasm[update](combinedRes.deltaTime, combinedRes.inputState)),
-          //     // sceneObj.update(framesAndEvents$, combinedRes.deltaTime, combinedRes.inputState)),
-          // ).subscribe();
+        if (sceneObj.start) sceneObj.start();
+        if (sceneObj.update) {
+          setCljsWasmAdapter({
+            updateFn: sceneObj.update
+          });
+          const wasmGame = new wasmBindgen.LevelOne();
+          const updateFn = (dt) => wasmGame.get_update(dt * 1000000);
+          //TODO should subscribe to this instead, set in clojure as event sources
+          // console.log(document.getElementById('mainGameContainer'));
+          document.getElementById('mainGameContainer').addEventListener("click", (event) =>
+            wasmGame.on_event(mapDOMPosToStage([event.offsetX, event.offsetY])), false);
+
+          engine.ticker.add(updateFn);
+          // engine.stopTicker = () => {
+          //   engine.ticker.remove(updateFn)
+          //   engine.ticker.stop();
+          // };
         }
       });
 

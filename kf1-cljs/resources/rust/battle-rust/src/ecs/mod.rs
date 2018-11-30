@@ -6,7 +6,7 @@ use specs::prelude::*;
 
 pub mod components;
 
-use self::components::{Name, CharType, CharStateStore, DestPt};
+use self::components::{Id, CharStateStore, Move, Speed};
 
 pub struct WatchAll;
 
@@ -26,13 +26,12 @@ extern "C" {
 }
     
 impl<'a> System<'a> for WatchAll {
-    type SystemData = (ReadStorage<'a, Name>, 
-                       ReadStorage<'a, CharType>,
+    type SystemData = (ReadStorage<'a, Id>, 
                        ReadStorage<'a, types::Pt>,
                        ReadStorage<'a, CharStateStore>);
 
-    fn run(&mut self, (name, charType, pos, charStateStore): Self::SystemData) {
-        // js_watcher.call3(name, charType, pos, charStateStore);
+    fn run(&mut self, (name, pos, charStateStore): Self::SystemData) {
+        // js_watcher.call3(name, pos, charStateStore);
 
 
 
@@ -45,28 +44,19 @@ impl<'a> System<'a> for WatchAll {
 pub struct UpdateChar;
 
 impl<'a> System<'a> for UpdateChar {
-    type SystemData = (ReadStorage<'a, Name>, 
-                       ReadStorage<'a, CharType>,
-                       ReadStorage<'a, DestPt>,
-                       WriteStorage<'a, types::Pt>,
-                       WriteStorage<'a, CharStateStore>);
+    type SystemData = (ReadStorage<'a, Move>,
+                       ReadStorage<'a, Speed>,
+                       WriteStorage<'a, types::Pt>);
 
-    fn run(&mut self, (name, charType, destPt, mut pos, charStateStore): Self::SystemData) {
+    fn run(&mut self, (move_obj, speed, mut pos): Self::SystemData) {
         use specs::Join;
-        log("Hello");
-
-        for (destPt, pos) in (&destPt, &mut pos).join() {
-            log_u32(destPt.x as u32);
-            log_u32(destPt.y as u32);
+        for (move_obj, speed, pos) in (&move_obj, &speed, &mut pos).join() {
+            let pos_clone = pos.clone();
+            let new_pos = move_obj.next(0.006, &pos_clone, speed.value());
+            pos.x = new_pos.x;
+            pos.y = new_pos.y;
+            log_u32(pos.x as u32);
             log_u32(pos.y as u32);
         }
     }
-    // fn run(&mut self, (name, charType,  mut pos, charStateStore): Self::SystemData) {
-    //     use specs::Join;
-    //     log("Hello");
-    //
-    //     for pos in pos.join() {
-    //         log_u32(pos.y as u32);
-    //     }
-    // }
 }

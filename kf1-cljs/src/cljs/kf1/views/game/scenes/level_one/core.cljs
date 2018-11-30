@@ -5,7 +5,8 @@
             [kf1.views.game.scenes.level-one.render :as render]
             [kf1.views.game.scenes.level-one.events :as events]))
 
-(defn updateFn [args] (prn "updateFn") (prn args))
+;; (defn updateFn [args] (prn "updateFn") (prn args))
+(defn updateFn [args] (identity 1))
 (defn start [args] (prn "start") (prn args))
 
 (defn getLevelOne []

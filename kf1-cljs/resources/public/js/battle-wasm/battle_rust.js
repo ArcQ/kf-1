@@ -11,39 +11,17 @@
         __wbg_update_f293655a2c60af1d_target(arg0);
     };
 
-    const __wbg_log_c6a78ae4e9683470_target = console.log;
-
-    let cachedTextDecoder = new TextDecoder('utf-8');
-
-    let cachegetUint8Memory = null;
-    function getUint8Memory() {
-        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-        }
-        return cachegetUint8Memory;
-    }
-
-    function getStringFromWasm(ptr, len) {
-        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-    }
-
-    __exports.__wbg_log_c6a78ae4e9683470 = function(arg0, arg1) {
-        let varg0 = getStringFromWasm(arg0, arg1);
-        __wbg_log_c6a78ae4e9683470_target(varg0);
-    };
-
     const __wbg_log_722bff039eebdf61_target = console.log;
 
     __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
         __wbg_log_722bff039eebdf61_target(arg0);
     };
 
-    const stack = [];
+    const __wbg_log_306a05c00c31d850_target = console.log;
 
-    function addBorrowedObject(obj) {
-        stack.push(obj);
-        return ((stack.length - 1) << 1) | 1;
-    }
+    __exports.__wbg_log_306a05c00c31d850 = function(arg0) {
+        __wbg_log_306a05c00c31d850_target(arg0);
+    };
 
     let cachegetUint16Memory = null;
     function getUint16Memory() {
@@ -59,18 +37,10 @@
         return [ptr, arg.length];
     }
     /**
-    * @param {any} arg0
     * @returns {void}
     */
-    __exports.level_one_dealloc = function(arg0) {
-        try {
-            return wasm.level_one_dealloc(addBorrowedObject(arg0));
-
-        } finally {
-            stack.pop();
-
-        }
-
+    __exports.level_one_dealloc = function() {
+        return wasm.level_one_dealloc();
     };
 
     function freeLevelOne(ptr) {
@@ -88,18 +58,10 @@
         }
 
         /**
-        * @param {any} arg0
         * @returns {}
         */
-        constructor(arg0) {
-            try {
-                this.ptr = wasm.levelone_new(addBorrowedObject(arg0));
-
-            } finally {
-                stack.pop();
-
-            }
-
+        constructor() {
+            this.ptr = wasm.levelone_new();
         }
         /**
         * @param {number} arg0
@@ -125,6 +87,20 @@
         }
     }
     __exports.LevelOne = LevelOne;
+
+    let cachedTextDecoder = new TextDecoder('utf-8');
+
+    let cachegetUint8Memory = null;
+    function getUint8Memory() {
+        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+        }
+        return cachegetUint8Memory;
+    }
+
+    function getStringFromWasm(ptr, len) {
+        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
+    }
 
     __exports.__wbindgen_throw = function(ptr, len) {
         throw new Error(getStringFromWasm(ptr, len));
