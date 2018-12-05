@@ -1,17 +1,8 @@
-use specs::{Component, VecStorage};
+use specs::{Component, VecStorage, FlaggedStorage};
 use super::types;
 
-pub struct DestPt {
-    pub x: f32,
-    pub y: f32
-}
-
-impl Component for DestPt {
-    type Storage = VecStorage<Self>;
-}
-
 impl Component for types::Pt {
-    type Storage = VecStorage<Self>;
+    type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
 
 #[derive(Debug)]
@@ -46,15 +37,15 @@ impl Component for Speed {
 }
 
 #[derive(Debug)]
-pub struct Id(pub i32); 
+pub struct Key(pub i32); 
 
-impl Id {
-    pub fn new(id: i32) -> Id {
-        Id(id)
+impl Key {
+    pub fn new(k: i32) -> Key {
+        Key(k)
     }
 }
 
-impl Component for Id {
+impl Component for Key {
     type Storage = VecStorage<Self>;
 }
 
@@ -111,5 +102,5 @@ impl Move {
 }
 
 impl Component for Move {
-    type Storage = VecStorage<Self>;
+    type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }

@@ -11,10 +11,82 @@
         __wbg_update_f293655a2c60af1d_target(arg0);
     };
 
+    const __wbg_log_c6a78ae4e9683470_target = console.log;
+
+    let cachedTextDecoder = new TextDecoder('utf-8');
+
+    let cachegetUint8Memory = null;
+    function getUint8Memory() {
+        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+        }
+        return cachegetUint8Memory;
+    }
+
+    function getStringFromWasm(ptr, len) {
+        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
+    }
+
+    __exports.__wbg_log_c6a78ae4e9683470 = function(arg0, arg1) {
+        let varg0 = getStringFromWasm(arg0, arg1);
+        __wbg_log_c6a78ae4e9683470_target(varg0);
+    };
+
     const __wbg_log_722bff039eebdf61_target = console.log;
 
     __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
         __wbg_log_722bff039eebdf61_target(arg0);
+    };
+
+    const __wbg_mapEventsKeyDict_8ffe9fd897dfe9e4_target = (typeof cljs_wasm_adapter === 'undefined' ? null : cljs_wasm_adapter.mapEventsKeyDict || function() {
+        throw new Error(`wasm-bindgen: cljs_wasm_adapter.mapEventsKeyDict does not exist`);
+    }).bind(cljs_wasm_adapter);
+
+    let cachedTextEncoder = new TextEncoder('utf-8');
+
+    function passStringToWasm(arg) {
+
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = wasm.__wbindgen_malloc(buf.length);
+        getUint8Memory().set(buf, ptr);
+        return [ptr, buf.length];
+    }
+
+    let cachegetUint32Memory = null;
+    function getUint32Memory() {
+        if (cachegetUint32Memory === null || cachegetUint32Memory.buffer !== wasm.memory.buffer) {
+            cachegetUint32Memory = new Uint32Array(wasm.memory.buffer);
+        }
+        return cachegetUint32Memory;
+    }
+
+    let cachedGlobalArgumentPtr = null;
+    function globalArgumentPtr() {
+        if (cachedGlobalArgumentPtr === null) {
+            cachedGlobalArgumentPtr = wasm.__wbindgen_global_argument_ptr();
+        }
+        return cachedGlobalArgumentPtr;
+    }
+
+    function getGlobalArgument(arg) {
+        const idx = globalArgumentPtr() / 4 + arg;
+        return getUint32Memory()[idx];
+    }
+
+    __exports.__wbg_mapEventsKeyDict_8ffe9fd897dfe9e4 = function(arg0) {
+        let cbarg0 = function(arg0, arg1) {
+            const [ptr0, len0] = passStringToWasm(arg0);
+            return this.f(this.a, this.b, ptr0, len0, arg1);
+        };
+        cbarg0.f = wasm.__wbg_function_table.get(arg0);
+        cbarg0.a = getGlobalArgument(0);
+        cbarg0.b = getGlobalArgument(0 + 1);
+        try {
+            __wbg_mapEventsKeyDict_8ffe9fd897dfe9e4_target(cbarg0.bind(cbarg0));
+        } finally {
+            cbarg0.a = cbarg0.b = 0;
+
+        }
     };
 
     const __wbg_log_306a05c00c31d850_target = console.log;
@@ -87,20 +159,6 @@
         }
     }
     __exports.LevelOne = LevelOne;
-
-    let cachedTextDecoder = new TextDecoder('utf-8');
-
-    let cachegetUint8Memory = null;
-    function getUint8Memory() {
-        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-        }
-        return cachegetUint8Memory;
-    }
-
-    function getStringFromWasm(ptr, len) {
-        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-    }
 
     __exports.__wbindgen_throw = function(ptr, len) {
         throw new Error(getStringFromWasm(ptr, len));

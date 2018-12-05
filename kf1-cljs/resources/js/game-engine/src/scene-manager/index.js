@@ -17,6 +17,14 @@
  *   loading: mainLoadingScene,
  *   uiRoute: '/level-one',
  *   assets: ['levelOne', 'goblins'],
+ *   eventSources: [function (cbWrapper) {
+          document.getElementById('mainGameContainer').addEventListener("click", (event) =>
+            cbWrapper(
+              // cbWrapper expects a function that returns and array of u32 that we will pass to rust through on_update
+              () => mapDOMPosToStage([event.offsetX, event.offsetY]),
+            ),
+          )), false);
+ *   }],
  *   willLoad() {
  *     request('/gamemap/generate').subscribe(
  *       (data) => data,
@@ -63,7 +71,7 @@ import { actions as gameEngineActions } from 'utils/store/ducks';
 import engine from 'game/engine';
 import { getWindow } from 'utils/global';
 
-import { createGameLoop } from '../game-loop';
+import { ticker, createGameLoop } from '../game-loop';
 import { runOnWasmLoad } from 'utils/wasm.utils';
 
 /**
@@ -144,7 +152,8 @@ function setCljsWasmAdapter(props) {
   if (!(getWindow().game_config)) {
     getWindow().game_config = {};
   }
-  getWindow().game_config = { ...getWindow().game_config, ...props };
+  getWindow().game_config = {
+    ...getWindow().game_config, ...props };
 }
 
 /**
@@ -174,16 +183,32 @@ function _wrapInSceneHelpers(sceneObj) {
         if (sceneObj.start) sceneObj.start();
         if (sceneObj.update) {
           setCljsWasmAdapter({
-            updateFn: sceneObj.update
+            updateFn: sceneObj.update,
+            // encode the keys into integers to make passing to rust more efficient
+            mapEventsKeyDict: (fn) => Object.keys(getWindow().game_config.eventsKeyDict).map((v, i) => fn(v, i)),
+            eventsKeyDict: Object.keys(sceneObj.eventSources).reduce((acc, k, i) => ({ ...acc, [k]: i }), {}),
           });
+
           const wasmGame = new wasmBindgen.LevelOne();
           const updateFn = (dt) => wasmGame.get_update(dt * 1000000);
-          //TODO should subscribe to this instead, set in clojure as event sources
-          // console.log(document.getElementById('mainGameContainer'));
-          document.getElementById('mainGameContainer').addEventListener("click", (event) =>
-            wasmGame.on_event(mapDOMPosToStage([event.offsetX, event.offsetY])), false);
+          const injectKAndCallRust = (k) => (getEventVal) => wasmGame.on_event([
+            // pass in encoded key (integer)
+            getWindow().game_config.eventsKeyDict[k],
+            ...getEventVal(),
+          ]);
 
-          engine.ticker.add(updateFn);
+          Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k)));
+
+          // engine.ticker.add(updateFn);
+          var fps = 25
+          function tick() {
+            setTimeout(function() {
+              requestAnimationFrame(tick);
+            }, 1000 / fps);
+          }
+
+          tick();
+
           // engine.stopTicker = () => {
           //   engine.ticker.remove(updateFn)
           //   engine.ticker.stop();

@@ -7,4 +7,7 @@ export default (engine) => ({
   getImgSrc: getImgSrc(engine),
   MemoryFactory,
   runOnWasmLoad,
+  mapDOMPosToStage(pos) {
+    return pos.map((v, idx) =>  v / 2 );
+  },
 });

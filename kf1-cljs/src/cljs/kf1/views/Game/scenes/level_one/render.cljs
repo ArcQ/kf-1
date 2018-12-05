@@ -44,14 +44,15 @@
             moveTargetCircle (drawTargetCircle (:moveTargetCircle initialPos))]
         (addChildToStage moveTargetCircle)
         (swap! spriteStore (merge sprites {:moveTargetCircle moveTargetCircle}))))))
+(defn tick [gameState])
 
-(defn render [gameState]
-  (if (or (not (empty? gameState)))
-    (do 
-      (if (get-in gameState [:moveTargetCircle :isShow])
-        (doto (:moveTargetCircle spriteStore)
-          (oset! "visible" true)
-          (setPos!(get-in gameState [:moveTargetCircle :pos])))
-        (set! (.-visible (:moveTargetCircle spriteStore)) false))
-      (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
-      (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
+;; (defn tick [gameState]
+;;   (if (or (not (empty? gameState)))
+;;     (do 
+;;       (if (get-in gameState [:moveTargetCircle :isShow])
+;;         (doto (:moveTargetCircle spriteStore)
+;;           (oset! "visible" true)
+;;           (setPos!(get-in gameState [:moveTargetCircle :pos])))
+;;         (set! (.-visible (:moveTargetCircle spriteStore)) false))
+;;       (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
+;;       (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
