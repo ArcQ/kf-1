@@ -200,14 +200,15 @@ function _wrapInSceneHelpers(sceneObj) {
           Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k)));
 
           // engine.ticker.add(updateFn);
-          var fps = 25
-          function tick() {
+          const fps = 20;
+          function tick(dt) {
             setTimeout(function() {
               requestAnimationFrame(tick);
+              updateFn(dt);
             }, 1000 / fps);
           }
 
-          tick();
+          tick(0.1);
 
           // engine.stopTicker = () => {
           //   engine.ticker.remove(updateFn)

@@ -91,7 +91,8 @@ const engine = {
     }
     engine.app = app;
     engine.ticker = new PIXI.ticker.Ticker();
-    engine.ticker.autoStart = true;
+    engine.ticker.stop();
+    // engine.ticker.autoStart = true;
     engine.ui.dispatch(gameEngineActions.pushLocation({ path: '/' }));
     return engine.app;
   },
