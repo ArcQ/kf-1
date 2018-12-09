@@ -121,7 +121,7 @@ impl LevelOne {
             .name;
         match event_str {
             "click" => if let (Some(move_comp), Some(pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
-                move_comp.calc_new_dest(1.0, pos_comp, [input_def[0] as f32, input_def[1] as f32]);
+                move_comp.calc_new_dest(1.0, pos_comp, [input_def[1] as f32, input_def[2] as f32]);
                 log_f32(input_def[0] as f32);
                 log_f32(input_def[1] as f32);
                 log_f32(input_def[2] as f32);
@@ -134,14 +134,4 @@ impl LevelOne {
 
 #[wasm_bindgen]
 pub fn level_one_dealloc() {
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn internal() {
-        assert_eq!(4, add(2, 2));
-    }
 }

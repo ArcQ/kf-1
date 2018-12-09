@@ -16,7 +16,7 @@ extern "C" {
     type cljs_wasm_adapter;
 
     #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
-    fn update(name: i32);
+    fn update(slice: &mut [f32]);
     
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
@@ -39,7 +39,7 @@ impl<'a> System<'a> for WatchAll {
         // js_watcher.call3(name, pos, charStateStore);
 
         for name in name.join() {
-            cljs_wasm_adapter::update(name.0);
+            // cljs_wasm_adapter::update(name.0);
         }
     }
 }
@@ -74,19 +74,29 @@ impl<'a> System<'a> for UpdateChar {
 
         let mut clear: Vec<u32> = Vec::new();
 
-        for (move_obj, pos, speed, rid) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
+        for (move_obj, pos, speed, event) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
             let pos_clone = pos.clone();
             let nextPosDef = move_obj.next(0.05, &pos_clone, speed.value());
             pos.x = nextPosDef.pt.x;
             pos.y = nextPosDef.pt.y;
             if (nextPosDef.completed == true) {
                 // self.move_required.clear();
-                clear.push(rid);
+                log("finished");
+                clear.push(event);
                 log_u32(*clear.get(0).unwrap());
             }
 
+            log("x");
             log_f32(pos.x as f32);
+            log("y");
             log_f32(pos.y as f32);
+
+            cljs_wasm_adapter::update(&mut [pos.x as f32, pos.y as f32]);
+        }
+
+        for event in clear {
+            log("finished");
+            self.move_required.remove(event);
         }
 
         for (move_obj, speed, pos) in (&move_obj, &speed, &mut pos).join() {

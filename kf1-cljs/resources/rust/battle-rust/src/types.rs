@@ -54,3 +54,15 @@ enum COMMANDS {
     Target,
     UseSkill,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fromSlice() {
+        let testPt = Pt::fromSlice([1.0, 2.0]);
+        assert_eq!(1.0, testPt.x);
+        assert_eq!(2.0, testPt.y);
+    }
+}

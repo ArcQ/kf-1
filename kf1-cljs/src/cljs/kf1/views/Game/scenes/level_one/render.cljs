@@ -55,5 +55,4 @@
 ;;       (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
 
 (defn tick [gameState]
-  ;; (prn gameState)
-  )
+  (prn gameState))
