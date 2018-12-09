@@ -189,7 +189,7 @@ function _wrapInSceneHelpers(sceneObj) {
             eventsKeyDict: Object.keys(sceneObj.eventSources).reduce((acc, k, i) => ({ ...acc, [k]: i }), {}),
           });
 
-          const wasmGame = new wasmBindgen.LevelOne();
+          const wasmGame = new wasmBindgen.LevelOne({ 'click': 0 });
           const updateFn = (dt) => wasmGame.get_update(dt * 1000000);
           const injectKAndCallRust = (k) => (getEventVal) => wasmGame.on_event([
             // pass in encoded key (integer)
@@ -200,11 +200,14 @@ function _wrapInSceneHelpers(sceneObj) {
           Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k)));
 
           // engine.ticker.add(updateFn);
+          let lastTime;
           const fps = 20;
-          function tick(dt) {
+          function tick(curTime) {
             setTimeout(function() {
+              const dt = curTime - lastTime;
               requestAnimationFrame(tick);
               updateFn(dt);
+              lastTime = curTime;
             }, 1000 / fps);
           }
 

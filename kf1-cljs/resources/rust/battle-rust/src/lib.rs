@@ -3,22 +3,18 @@ extern crate js_sys;
 extern crate specs;
 
 use specs::prelude::*;
+use wasm_bindgen::prelude::*;
 
 mod ecs;
 mod types;
 
 use ecs::{UpdateChar, WatchAll};
-
 use ecs::components::{Key, Speed, Move};
-use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
     type cljs_wasm_adapter;
 
-    #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
-    fn mapEventsKeyDict(f: &Fn(String, u32));
-    
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
     
@@ -30,8 +26,8 @@ extern "C" {
 }
 
 struct EventsKeyDef {
-    k: String,
-    name: u32,
+    pub name: String,
+    pub k: u32,
 }
 
 #[wasm_bindgen]
@@ -39,7 +35,9 @@ pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
     world: World,
     assasin: Entity,
-    eventsKeyDict: Box<EventsKeyDef>,
+    // eventsKeyDict: Box<[EventsKeyDef]>,
+    // eventsKeyDict: [EventsKeyDef; 1],
+    events_key_dict: Vec<EventsKeyDef>,
 }
 
 const KEY_GOBLIN:i32 = 0;
@@ -49,7 +47,21 @@ const KEY_TARGET_CIRCLE:i32 = 1;
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> LevelOne {
+    pub fn new(set: &js_sys::Object) -> LevelOne { 
+        let mut events_key_dict: Vec<EventsKeyDef> = Vec::new();
+        js_sys::Object::entries(set).map(&mut |kv: JsValue, i: u32, arr: js_sys::Array| -> JsValue {
+            // let arr = js_sys::Array::from(&kv);
+            // k.clone().unwrap().as_string().unwrap();
+            let kResult: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
+            let vResult: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
+            let eventKeyDef = EventsKeyDef {
+                name: kResult.clone().unwrap().as_string().unwrap(),
+                k: vResult.clone().unwrap().as_f64().unwrap() as u32,
+            };
+            events_key_dict.push(eventKeyDef);
+            JsValue::from(0)
+        });
+
         let mut world: World = World::new();
 
         let mut dispatcher: Dispatcher = DispatcherBuilder::new()
@@ -59,10 +71,6 @@ impl LevelOne {
             .with_thread_local(WatchAll)
             .build();
         dispatcher.setup(&mut world.res);
-        cljs_wasm_adapter::mapEventsKeyDict(&|k: String, i: u32| {
-            log(&String::from(k));
-            log_u32(i);
-        });
 
         // world.register::<Key>();
         // world.register::<types::Pt>();
@@ -89,7 +97,12 @@ impl LevelOne {
         // dispatcher.dispatch(&mut world.res);
         world.maintain();
         
-        LevelOne { dispatcher: dispatcher, world: world, assasin: assasin, eventsKeyDict: Box::new(EventsKeyDef { k: String::from("hi"), name: 1 as u32 }) }
+        LevelOne { 
+            dispatcher: dispatcher, 
+            world: world, 
+            assasin: assasin, 
+            events_key_dict: events_key_dict,
+        }
     }
 
     // pub fn level_one_get_update(&mut self, dt: f32) {
