@@ -27,7 +27,7 @@ extern "C" {
 
 struct EventsKeyDef {
     pub name: String,
-    pub k: u32,
+    pub k: u16,
 }
 
 #[wasm_bindgen]
@@ -56,7 +56,7 @@ impl LevelOne {
             let vResult: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
             let eventKeyDef = EventsKeyDef {
                 name: kResult.clone().unwrap().as_string().unwrap(),
-                k: vResult.clone().unwrap().as_f64().unwrap() as u32,
+                k: vResult.clone().unwrap().as_f64().unwrap() as u16,
             };
             events_key_dict.push(eventKeyDef);
             JsValue::from(0)
@@ -114,8 +114,13 @@ impl LevelOne {
     pub fn on_event(&mut self, input_def: &[u16]) {
         let mut move_storage = self.world.write_storage::<Move>();
         let mut pos_storage = self.world.read_storage::<types::Pt>();
-        match input_def[0] {
-            0 => if let (Some(move_comp), Some(pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
+        let event_str: &str = &self.events_key_dict
+            .iter()
+            .find(|&event_key_def| event_key_def.k == input_def[0])
+            .unwrap()
+            .name;
+        match event_str {
+            "click" => if let (Some(move_comp), Some(pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
                 move_comp.calc_new_dest(1.0, pos_comp, [input_def[0] as f32, input_def[1] as f32]);
                 log_f32(input_def[0] as f32);
                 log_f32(input_def[1] as f32);
