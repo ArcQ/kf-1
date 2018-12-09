@@ -36,7 +36,6 @@
     (letfn [(charKeysReducer [acc k] 
               (let [sprite ((:sprite (get charactersDict k)) 
                             (k initialPos))]
-                (console.log sprite)
                 (addChildToStage sprite)
                 (merge acc {k sprite})))]
       (let [sprites (->> [:goblin :assasin]
@@ -44,8 +43,6 @@
             moveTargetCircle (drawTargetCircle (:moveTargetCircle initialPos))]
         (addChildToStage moveTargetCircle)
         (swap! spriteStore (merge sprites {:moveTargetCircle moveTargetCircle}))))))
-(defn tick [gameState])
-
 ;; (defn tick [gameState]
 ;;   (if (or (not (empty? gameState)))
 ;;     (do 
@@ -56,3 +53,7 @@
 ;;         (set! (.-visible (:moveTargetCircle spriteStore)) false))
 ;;       (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
 ;;       (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
+
+(defn tick [gameState]
+  ;; (prn gameState)
+  )

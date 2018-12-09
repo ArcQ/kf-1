@@ -24,6 +24,9 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_u32(a: u32);
+    
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_f32(a: f32);
 }
 
 impl<'a> System<'a> for WatchAll {
@@ -46,9 +49,8 @@ pub struct UpdateChar {
     // These keep track of where you left off in the event channel.
     pub reader_id: Option<ReaderId<ComponentEvent>>,
 
-    // The bitsets you want to populate with modification/insertion events.
-    pub modified: BitSet,
-    pub inserted: BitSet,
+    // The bitsets where destination got modified and requires a move.next()
+    pub move_required: BitSet,
 }
 
 impl<'a> System<'a> for UpdateChar {
@@ -59,26 +61,32 @@ impl<'a> System<'a> for UpdateChar {
     fn run(&mut self, (move_obj, speed, mut pos): Self::SystemData) {
         use specs::Join;
 
-        self.modified.clear();
-        self.inserted.clear();
-
         if let Some(r_id) = self.reader_id.as_mut() {
             let events = move_obj.channel()
                 .read(r_id);
             for event in events {
                 match event {
-                    ComponentEvent::Modified(id) => { self.modified.add(*id); },
-                    ComponentEvent::Inserted(id) => { self.inserted.add(*id); },
+                    ComponentEvent::Modified(id) => { self.move_required.add(*id); },
                     _ => { },
                 };
             }
         }
 
-        for (move_obj, pos, _) in (&move_obj, &mut pos, &self.modified).join() {
-            // let pos_clone = pos.clone();
-            // let new_pos = move_obj.next(0.006, &pos_clone, speed.value());
-            // pos.x = new_pos.x;
-            // pos.y = new_pos.y;
+        let mut clear: Vec<u32> = Vec::new();
+
+        for (move_obj, pos, speed, rid) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
+            let pos_clone = pos.clone();
+            let nextPosDef = move_obj.next(0.05, &pos_clone, speed.value());
+            pos.x = nextPosDef.pt.x;
+            pos.y = nextPosDef.pt.y;
+            if (nextPosDef.completed == true) {
+                // self.move_required.clear();
+                clear.push(rid);
+                log_u32(*clear.get(0).unwrap());
+            }
+
+            log_f32(pos.x as f32);
+            log_f32(pos.y as f32);
         }
 
         for (move_obj, speed, pos) in (&move_obj, &speed, &mut pos).join() {
@@ -89,7 +97,6 @@ impl<'a> System<'a> for UpdateChar {
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
         self.reader_id = Some(WriteStorage::<Move>::fetch(&res).register_reader());
-        self.modified = BitSet::new();
-        self.inserted = BitSet::new();
+        self.move_required = BitSet::new();
     }
 }

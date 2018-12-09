@@ -49,6 +49,11 @@ impl Component for Key {
     type Storage = VecStorage<Self>;
 }
 
+pub struct NextPosDef {
+    pub pt: types::Pt,
+    pub completed: bool,
+}
+
 pub struct Move {
     pub diff: types::Pt,
     normalized: types::Pt,
@@ -86,18 +91,18 @@ impl Move {
         let rad = (self.diff.y / self.diff.x).atan(); 
         self.multipliers = types::Pt::new(rad.cos(), rad.sin());
     }
-    pub fn next(&self, dt: f32, curPos: &types::Pt, speed: f32) -> types::Pt {
+    pub fn next(&self, dt: f32, curPos: &types::Pt, speed: f32) -> NextPosDef {
         let dist = speed * dt * 5.0;
         let moveDiff = self.multipliers.mapWith(&self.normalized, |multipliersProp, normalizedProp, _| {
             multipliersProp * normalizedProp * dist
         });
         let nextPt = curPos.add(&moveDiff);
-        let finalPt = if self.check_if_past(&nextPt) {
-            self.destination.clone()
+        let nextPosDef = if self.check_if_past(&nextPt) {
+            NextPosDef { completed: true, pt: self.destination.clone() }
         } else {
-            nextPt
+            NextPosDef { completed: false, pt: nextPt }
         };
-        finalPt
+        nextPosDef
     }
 }
 

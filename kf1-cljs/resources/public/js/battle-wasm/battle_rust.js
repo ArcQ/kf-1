@@ -11,6 +11,12 @@
         __wbg_update_f293655a2c60af1d_target(arg0);
     };
 
+    const __wbg_log_722bff039eebdf61_target = console.log;
+
+    __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
+        __wbg_log_722bff039eebdf61_target(arg0);
+    };
+
     const __wbg_log_306a05c00c31d850_target = console.log;
 
     __exports.__wbg_log_306a05c00c31d850 = function(arg0) {
