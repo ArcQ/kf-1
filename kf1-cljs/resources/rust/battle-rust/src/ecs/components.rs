@@ -93,15 +93,15 @@ impl Move {
     fn greater_than_zero(d: f32) -> bool { 
         d > 0.0 
     }
-    fn check_if_past(& self, nextPt: &types::Pt) -> bool {
-        let isPastPtStruct = self.diff.mapWith(&nextPt, |diffProp, nextPtProp, k| -> f32 {
-            if Move::greater_than_zero(self.destination.getKeyString(k) - nextPtProp) != Move::greater_than_zero(diffProp) 
+    fn check_if_past(& self, next_pt: &types::Pt) -> bool {
+        let is_past_pt_struct = self.diff.map_with(&next_pt, |diff_prop, next_pt_prop, k| -> f32 {
+            if Move::greater_than_zero(self.destination.get_key_string(k) - next_pt_prop) != Move::greater_than_zero(diff_prop) 
             { -1.0 } else  { 0.0 }
         });
-        (isPastPtStruct.x < 0.0 || isPastPtStruct.y < 0.0)
+        (is_past_pt_struct.x < 0.0 || is_past_pt_struct.y < 0.0)
     }
-    pub fn calc_new_dest(&mut self, speed: f32, pos: &types::Pt, destinationSlice: [f32; 2]) {
-        self.destination = types::Pt::fromSlice(destinationSlice);
+    pub fn calc_new_dest(&mut self, speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
+        self.destination = types::Pt::from_slice(destination_slice);
         log_f32(self.destination.x);
         log_f32(self.destination.y);
         self.diff = self.destination.sub(&pos);
@@ -109,18 +109,18 @@ impl Move {
         let rad = (self.diff.y / self.diff.x).atan(); 
         self.multipliers = types::Pt::new(rad.cos(), rad.sin());
     }
-    pub fn next(&self, dt: f32, curPos: &types::Pt, speed: f32) -> NextPosDef {
+    pub fn next(&self, dt: f32, cur_pos: &types::Pt, speed: f32) -> NextPosDef {
         let dist = speed * dt * 20.0;
-        let moveDiff = self.multipliers.mapWith(&self.normalized, |multipliersProp, normalizedProp, _| {
-            multipliersProp * normalizedProp * dist
+        let move_diff = self.multipliers.map_with(&self.normalized, |multipliers_prop, normalized_prop, _| {
+            multipliers_prop * normalized_prop * dist
         });
-        let nextPt = curPos.add(&moveDiff);
-        let nextPosDef = if self.check_if_past(&nextPt) {
+        let next_pt = cur_pos.add(&move_diff);
+        let next_pos_def = if self.check_if_past(&next_pt) {
             NextPosDef { completed: true, pt: self.destination.clone() }
         } else {
-            NextPosDef { completed: false, pt: nextPt }
+            NextPosDef { completed: false, pt: next_pt }
         };
-        nextPosDef
+        next_pos_def
     }
 }
 

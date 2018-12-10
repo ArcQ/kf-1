@@ -90,7 +90,7 @@ impl LevelOne {
             .with(Speed::new(10.0))
             .build();
 
-        let mut clickCircle = world.create_entity()
+        let mut click_circle = world.create_entity()
             .with(Key::new(KEY_TARGET_CIRCLE))
             .with(types::Pt { x: 0.0, y: 0.0 })
             .build();

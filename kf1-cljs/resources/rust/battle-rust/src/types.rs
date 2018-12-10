@@ -12,15 +12,15 @@ impl Pt {
         Pt { x: 0.0, y: 0.0 }
     }
     pub fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
-    pub fn fromSlice(ptSlice: [f32;2]) -> Pt {
-        Pt { x: ptSlice[0 as usize],  y: ptSlice[1 as usize] }
+    pub fn from_slice(pt_slice: [f32;2]) -> Pt {
+        Pt { x: pt_slice[0 as usize],  y: pt_slice[1 as usize] }
     }
 
     // pub fn toSlice(self) -> &mut f32 {
     //     &mut [self.x, self.y]
     // }
     /// get x or y based on a string key of x or y
-    pub fn getKeyString(&self, k: &str) -> f32 {
+    pub fn get_key_string(&self, k: &str) -> f32 {
         match k {
             "x" => self.x,
             "y" => self.y,
@@ -28,31 +28,21 @@ impl Pt {
         }
     }
     /// maps over x and y, runs the handler fn(self.x|y , x|y) on each and returns a new pt
-    pub fn map<F>(&self, handler: F) -> Pt where F: Fn(f32, &str) -> f32 {
-       Pt::new(handler(self.x, "x"), handler(self.y, "y"))
-    }
+    // pub fn map<F>(&self, handler: F) -> Pt where F: Fn(f32, &str) -> f32 {
+    //    Pt::new(handler(self.x, "x"), handler(self.y, "y"))
+    // }
     /// map, but just run f with anther pt, handler fn(self.x|y , x|y)
-    pub fn mapWith<F>(&self, pt2: &Pt, handler: F) -> Pt where F: Fn(f32, f32, &str) -> f32 {
+    pub fn map_with<F>(&self, pt2: &Pt, handler: F) -> Pt where F: Fn(f32, f32, &str) -> f32 {
        Pt::new(handler(self.x, pt2.x, "x"), handler(self.y, pt2.y, "y"))
     }
     /// add this point with another point x+x y+y
     pub fn add(&self, diff: &Pt) -> Pt {
-        self.mapWith(&diff, |s, d, _| { s + d })
+        self.map_with(&diff, |s, d, _| { s + d })
     }
     ///  another point subctract from this point x-x y-y
     pub fn sub(&self, diff: &Pt) -> Pt {
-        self.mapWith(&diff, |s, d, _| { s - d })
+        self.map_with(&diff, |s, d, _| { s - d })
     }
-}
-
-/// game specific config
-pub struct Config {}
-pub struct GameState { }
-
-enum COMMANDS {
-    Move,
-    Target,
-    UseSkill,
 }
 
 #[cfg(test)]
@@ -60,8 +50,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn fromSlice() {
-        let testPt = Pt::fromSlice([1.0, 2.0]);
+    fn from_slice() {
+        let testPt = Pt::from_slice([1.0, 2.0]);
         assert_eq!(1.0, testPt.x);
         assert_eq!(2.0, testPt.y);
     }

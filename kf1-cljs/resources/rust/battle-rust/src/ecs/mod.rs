@@ -35,8 +35,8 @@ impl<'a> System<'a> for WatchAll {
         ReadStorage<'a, types::Pt>,
         ReadStorage<'a, CharStateStore>);
 
-    fn run(&mut self, (name, pos, charStateStore): Self::SystemData) {
-        // js_watcher.call3(name, pos, charStateStore);
+    fn run(&mut self, (name, pos, char_state_store): Self::SystemData) {
+        // js_watcher.call3(name, pos, char_state_store);
 
         for name in name.join() {
             // cljs_wasm_adapter::update(name.0);
@@ -59,8 +59,6 @@ impl<'a> System<'a> for UpdateChar {
                        WriteStorage<'a, types::Pt>);
 
     fn run(&mut self, (move_obj, speed, mut pos): Self::SystemData) {
-        use specs::Join;
-
         if let Some(r_id) = self.reader_id.as_mut() {
             let events = move_obj.channel()
                 .read(r_id);
@@ -74,12 +72,12 @@ impl<'a> System<'a> for UpdateChar {
 
         let mut clear: Vec<u32> = Vec::new();
 
-        for (move_obj, pos, speed, event) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
+        for (_move_obj, pos, _speed, event) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
             let pos_clone = pos.clone();
-            let nextPosDef = move_obj.next(0.05, &pos_clone, speed.value());
-            pos.x = nextPosDef.pt.x;
-            pos.y = nextPosDef.pt.y;
-            if (nextPosDef.completed == true) {
+            let next_pos_def = _move_obj.next(0.05, &pos_clone, _speed.value());
+            pos.x = next_pos_def.pt.x;
+            pos.y = next_pos_def.pt.y;
+            if next_pos_def.completed {
                 // self.move_required.clear();
                 log("finished");
                 clear.push(event);
@@ -99,7 +97,7 @@ impl<'a> System<'a> for UpdateChar {
             self.move_required.remove(event);
         }
 
-        for (move_obj, speed, pos) in (&move_obj, &speed, &mut pos).join() {
+        for (_move_obj, _speed, _pos) in (&move_obj, &speed, &mut pos).join() {
             // log_u32(pos.x as u32);
             // log_u32(pos.y as u32);
         }
