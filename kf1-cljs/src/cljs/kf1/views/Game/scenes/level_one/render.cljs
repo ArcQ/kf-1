@@ -1,6 +1,6 @@
 (ns kf1.views.game.scenes.level-one.render
   (:require [kfGameEngine :as engine]
-            [oops.core :refer [oset!]]
+            [oops.core :refer [oset! ocall! oget]]
             [kf1.views.Game.scenes.level-one.api :refer [nonUiState]]
             [kf1.views.game.scenes.level-one.items.characters :refer [charactersDict]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
@@ -55,4 +55,5 @@
 ;;       (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
 
 (defn tick [gameState]
-  (prn gameState))
+  (prn (aget gameState 1))
+  (prn (aget gameState 2)))

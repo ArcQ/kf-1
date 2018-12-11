@@ -183,11 +183,17 @@ function _wrapInSceneHelpers(sceneObj) {
         if (sceneObj.start) sceneObj.start();
         if (sceneObj.update) {
           setCljsWasmAdapter({
-            updateFn: sceneObj.update,
+            updateFn: (args) => {
+              const buffer = new Float32Array(wasmBindgen.wasm.memory.buffer, args);
+              const stateDiff = buffer.slice(0, (parseInt(buffer[0])) + 1);
+              // console.log(stateDiff);
+              sceneObj.update(stateDiff);
+            },
             // encode the keys into integers to make passing to rust more efficient
             mapEventsKeyDict: (fn) => Object.keys(getWindow().game_config.eventsKeyDict).map((v, i) => fn(v, i)),
             eventsKeyDict: Object.keys(sceneObj.eventSources).reduce((acc, k, i) => ({ ...acc, [k]: i }), {}),
           });
+
 
           const wasmGame = new wasmBindgen.LevelOne({ 'click': 0 });
           const updateFn = (dt) => wasmGame.get_update(dt * 1000000);

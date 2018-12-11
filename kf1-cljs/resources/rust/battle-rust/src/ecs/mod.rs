@@ -3,6 +3,8 @@ System, WriteStorage, ReaderId};
 use specs::storage::ComponentEvent;
 use super::types;
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
+use js_sys;
 use specs::prelude::*;
 
 pub mod components;
@@ -16,14 +18,13 @@ extern "C" {
     type cljs_wasm_adapter;
 
     #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
-    fn update(slice: &mut [f32]);
+    fn update(arr: Box<[f32]>);
     
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 
 
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_u32(a: u32);
+    #[wasm_bindgen(js_namespace = console, js_name = log)] fn log_u32(a: u32);
     
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_f32(a: f32);
@@ -88,8 +89,12 @@ impl<'a> System<'a> for UpdateChar {
             log_f32(pos.x as f32);
             log("y");
             log_f32(pos.y as f32);
+            let state_diff_ptr: Box<[f32]> = vec![2.0, pos.x as f32, pos.y as f32].into_boxed_slice();
+            cljs_wasm_adapter::update(state_diff_ptr);
+            // let memory_buffer = wasm_bindgen::memory().dyn_into::<js_sys::WebAssembly::Memory>().unwrap().buffer();
+            // let vert_array = js_sys::Float32Array::new_with_byte_offset(&memory_buffer, vertices.as_ptr() as u32).as_ref();
+            // cljs_wasm_adapter::update(vert_array);
 
-            cljs_wasm_adapter::update(&mut [pos.x as f32, pos.y as f32]);
         }
 
         for event in clear {

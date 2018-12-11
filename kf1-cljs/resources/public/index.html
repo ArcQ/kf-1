@@ -21,8 +21,8 @@
     <script>
       window.game_config = {};
       window.cljs_wasm_adapter = {
-        update(name) {
-          window.game_config.updateFn(name);
+        update(arg) {
+          window.game_config.updateFn(arg);
         },
         mapEventsKeyDict(name) {
           window.game_config.mapEventsKeyDict(name);
