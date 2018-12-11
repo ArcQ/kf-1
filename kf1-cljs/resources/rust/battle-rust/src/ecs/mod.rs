@@ -3,8 +3,6 @@ System, WriteStorage, ReaderId};
 use specs::storage::ComponentEvent;
 use super::types;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast;
-use js_sys;
 use specs::prelude::*;
 
 pub mod components;

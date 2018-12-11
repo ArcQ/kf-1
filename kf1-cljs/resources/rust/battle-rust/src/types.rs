@@ -11,7 +11,6 @@ impl Pt {
     pub fn origin() -> Pt {
         Pt { x: 0.0, y: 0.0 }
     }
-    pub fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
     pub fn from_slice(pt_slice: [f32;2]) -> Pt {
         Pt { x: pt_slice[0 as usize],  y: pt_slice[1 as usize] }
     }
@@ -45,14 +44,87 @@ impl Pt {
     }
 }
 
+impl Clone for Pt {
+    fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
+}
+
+
+
+
+
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    
+    #[test]
+    fn pt_new() {
+        let test_pt = Pt::new(1.0, 2.0);
+        assert_eq!(1.0, test_pt.x);
+        assert_eq!(2.0, test_pt.y);
+    }
+    
+    #[test]
+    fn pt_origin() {
+        let test_pt = Pt::origin();
+        assert_eq!(0.0, test_pt.x);
+        assert_eq!(0.0, test_pt.y);
+    }
 
     #[test]
-    fn from_slice() {
-        let testPt = Pt::from_slice([1.0, 2.0]);
-        assert_eq!(1.0, testPt.x);
-        assert_eq!(2.0, testPt.y);
+    fn pt_from_slice() {
+        let test_pt = Pt::from_slice([1.0, 2.0]);
+        assert_eq!(1.0, test_pt.x);
+        assert_eq!(2.0, test_pt.y);
+    }
+    
+    #[test]
+    fn pt_clone() {
+        let mut test_pt = Pt::new(1.0, 2.0);
+        let test_pt_cloned = test_pt.clone();
+        test_pt.x = 2.0;
+        assert_eq!(2.0, test_pt.x);
+        assert_eq!(1.0, test_pt_cloned.x);
+    }
+    
+    #[test]
+    fn pt_get_key_string() {
+        let test_pt = Pt::new(1.0, 2.0);
+        
+        assert_eq!(1.0, test_pt.get_key_string("x"));
+        assert_eq!(2.0, test_pt.get_key_string("y"));
+    }
+    
+    #[test]
+    fn pt_map_with() {
+        let test_pt = Pt::new(1.0, 2.0);
+        let test_pt_two = Pt::new(3.0, 4.0);
+        let mapped = test_pt.map_with(&test_pt_two, |p1, p2, k| -> f32 {
+            (p1 + p2) / test_pt.get_key_string(&k)
+        });
+        
+        assert_eq!(4.0, mapped.x);
+        assert_eq!(3.0, mapped.y);
+    }
+    
+    #[test]
+    fn pt_add() {
+        let test_pt = Pt::new(1.0, 2.0);
+        let test_pt_two = Pt::new(3.0, 4.0);
+        let added = test_pt.add(&test_pt_two);
+        
+        assert_eq!(4.0, added.x);
+        assert_eq!(6.0, added.y);
+    }
+    
+    #[test]
+    fn pt_sub() {
+        let test_pt = Pt::new(1.0, 2.0);
+        let test_pt_two = Pt::new(3.0, 4.0);
+        let subbed = test_pt.sub(&test_pt_two);
+        
+        assert_eq!(-2.0, subbed.x);
+        assert_eq!(-2.0, subbed.y);
     }
 }

@@ -52,13 +52,13 @@ impl LevelOne {
         js_sys::Object::entries(set).map(&mut |kv: JsValue, i: u32, arr: js_sys::Array| -> JsValue {
             // let arr = js_sys::Array::from(&kv);
             // k.clone().unwrap().as_string().unwrap();
-            let kResult: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
-            let vResult: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
-            let eventKeyDef = EventsKeyDef {
-                name: kResult.clone().unwrap().as_string().unwrap(),
-                k: vResult.clone().unwrap().as_f64().unwrap() as u16,
+            let k_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
+            let v_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
+            let event_key_def = EventsKeyDef {
+                name: k_result.clone().unwrap().as_string().unwrap(),
+                k: v_result.clone().unwrap().as_f64().unwrap() as u16,
             };
-            events_key_dict.push(eventKeyDef);
+            events_key_dict.push(event_key_def);
             JsValue::from(0)
         });
 
