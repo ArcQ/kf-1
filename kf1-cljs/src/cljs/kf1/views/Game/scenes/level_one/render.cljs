@@ -32,7 +32,7 @@
   (let [initialPos {:goblin [100 100] :assasin [300 100] :moveTargetCircle [0 0]}
         gameMap (:gameMap @nonUiState)
         tileMap (doall (->> (createTileMap gameMap)
-                     (map #(addChildToStage %1))))]
+                            (map #(addChildToStage %1))))]
     (letfn [(charKeysReducer [acc k] 
               (let [sprite ((:sprite (get charactersDict k)) 
                             (k initialPos))]
@@ -42,18 +42,21 @@
                          (reduce charKeysReducer {}))
             moveTargetCircle (drawTargetCircle (:moveTargetCircle initialPos))]
         (addChildToStage moveTargetCircle)
-        (swap! spriteStore (merge sprites {:moveTargetCircle moveTargetCircle}))))))
-;; (defn tick [gameState]
-;;   (if (or (not (empty? gameState)))
-;;     (do 
-;;       (if (get-in gameState [:moveTargetCircle :isShow])
-;;         (doto (:moveTargetCircle spriteStore)
-;;           (oset! "visible" true)
-;;           (setPos!(get-in gameState [:moveTargetCircle :pos])))
-;;         (set! (.-visible (:moveTargetCircle spriteStore)) false))
-;;       (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
-;;       (setPos! (:assasin spriteStore) (get-in gameState [:assasin :pos])))))
+        (swap! spriteStore merge sprites {:moveTargetCircle moveTargetCircle})))))
 
-(defn tick [gameState]
-  (prn (aget gameState 1))
-  (prn (aget gameState 2)))
+(defn tick [gameStateByteArray]
+  ;; (if (or (not (empty? gameState)))
+  ;; (do 
+  ;; (if (get-in gameState [:moveTargetCircle :isShow])
+  ;;   (doto (:moveTargetCircle spriteStore)
+  ;;     (oset! "visible" true)
+  ;;     (setPos!(get-in gameState [:moveTargetCircle :pos])))
+  ;;   (set! (.-visible (:moveTargetCircle spriteStore)) false))
+  ;; (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
+
+  ;; (let [gameState (ocall! gameStateByteArray :values)]
+  ;;   (prn (type (ocall! gameStateByteArray))))
+  ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
+  (setPos! (:assasin @spriteStore) [(aget gameStateByteArray 1) (aget gameStateByteArray 2)])
+  ;; )
+  )

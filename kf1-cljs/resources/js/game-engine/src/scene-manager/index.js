@@ -207,7 +207,7 @@ function _wrapInSceneHelpers(sceneObj) {
 
           // engine.ticker.add(updateFn);
           let lastTime;
-          const fps = 20;
+          const fps = 40;
           function tick(curTime) {
             setTimeout(function() {
               const dt = curTime - lastTime;
