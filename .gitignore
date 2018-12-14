@@ -23,3 +23,4 @@ spritesheets
 .shadow-cljs
 lib/battleground/target
 **/.nrepl-port
+**/dist

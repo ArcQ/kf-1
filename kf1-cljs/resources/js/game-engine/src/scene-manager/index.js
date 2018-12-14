@@ -196,7 +196,7 @@ function _wrapInSceneHelpers(sceneObj) {
 
 
           const wasmGame = new wasmBindgen.LevelOne({ 'click': 0 });
-          const updateFn = (dt) => wasmGame.get_update(dt * 1000000);
+          const updateFn = (dt) => wasmGame.get_update(dt);
           const injectKAndCallRust = (k) => (getEventVal) => wasmGame.on_event([
             // pass in encoded key (integer)
             getWindow().game_config.eventsKeyDict[k],
@@ -212,7 +212,7 @@ function _wrapInSceneHelpers(sceneObj) {
             setTimeout(function() {
               const dt = curTime - lastTime;
               requestAnimationFrame(tick);
-              updateFn(dt);
+              updateFn(dt / 1000);
               lastTime = curTime;
             }, 1000 / fps);
           }

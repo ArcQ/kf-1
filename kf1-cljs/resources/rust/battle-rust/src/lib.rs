@@ -10,6 +10,7 @@ mod types;
 
 use ecs::{UpdateChar, WatchAll};
 use ecs::components::{Key, Speed, Move};
+use ecs::resources::{DeltaTime};
 
 #[wasm_bindgen]
 extern "C" {
@@ -35,6 +36,7 @@ pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
     world: World,
     assasin: Entity,
+    click_circle: Entity,
     // eventsKeyDict: Box<[EventsKeyDef]>,
     // eventsKeyDict: [EventsKeyDef; 1],
     events_key_dict: Vec<EventsKeyDef>,
@@ -42,7 +44,7 @@ pub struct LevelOne {
 
 const KEY_GOBLIN:i32 = 0;
 const KEY_ASSASIN:i32 = 1;
-const KEY_TARGET_CIRCLE:i32 = 1;
+const KEY_TARGET_CIRCLE:i32 = 2;
 
 #[wasm_bindgen]
 impl LevelOne {
@@ -68,7 +70,7 @@ impl LevelOne {
             // .with(MapInputs, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(UpdateChar::default(), "update_char", &[])
-            .with_thread_local(WatchAll)
+            .with_thread_local(WatchAll::default())
             .build();
         dispatcher.setup(&mut world.res);
 
@@ -76,6 +78,8 @@ impl LevelOne {
         // world.register::<types::Pt>();
         // world.register::<Move>();
         // world.register::<Speed>();
+        //
+        world.add_resource(DeltaTime(0.05)); 
 
         world.create_entity()
             .with(Key::new(KEY_GOBLIN))
@@ -101,30 +105,44 @@ impl LevelOne {
             dispatcher: dispatcher, 
             world: world, 
             assasin: assasin, 
+            click_circle: click_circle, 
             events_key_dict: events_key_dict,
         }
     }
 
     // pub fn level_one_get_update(&mut self, dt: f32) {
     pub fn get_update(&mut self, dt: f32) {
+        {
+            let mut delta = self.world.write_resource::<DeltaTime>();
+            *delta = DeltaTime(dt);
+        }
         self.dispatcher.dispatch(&mut self.world.res);
     }
 
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
-        let mut move_storage = self.world.write_storage::<Move>();
-        let mut pos_storage = self.world.read_storage::<types::Pt>();
         let event_str: &str = &self.events_key_dict
             .iter()
             .find(|&event_key_def| event_key_def.k == input_def[0])
             .unwrap()
             .name;
         match event_str {
-            "click" => if let (Some(move_comp), Some(pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
-                move_comp.calc_new_dest(1.0, pos_comp, [input_def[1] as f32, input_def[2] as f32]);
-                // log_f32(input_def[0] as f32);
-                // log_f32(input_def[1] as f32);
-                // log_f32(input_def[2] as f32);
+            "click" => {
+                {
+                    let char_height = 84;
+                    let mut move_storage = self.world.write_storage::<Move>();
+                    let mut pos_storage = self.world.read_storage::<types::Pt>();
+                    if let (Some(assasin_move_comp), Some(assasin_pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
+                        assasin_move_comp.calc_new_dest(1.0, assasin_pos_comp, [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
+                    } 
+                } 
+                {
+                    let mut mut_pos_storage = self.world.write_storage::<types::Pt>();
+                    if let (Some(circle_pos_comp)) = (mut_pos_storage.get_mut(self.click_circle)) {
+                        circle_pos_comp.x = input_def[1] as f32;
+                        circle_pos_comp.y = input_def[2] as f32;
+                    }
+                }
             }
             _ => (),
         }

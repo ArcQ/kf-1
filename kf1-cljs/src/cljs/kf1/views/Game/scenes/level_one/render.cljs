@@ -29,7 +29,7 @@
       (flatten)))
 
 (defn initialRender []
-  (let [initialPos {:goblin [100 100] :assasin [300 100] :moveTargetCircle [0 0]}
+  (let [initialPos {:goblin [100 100] :assasin [200 200] :moveTargetCircle [0 0]}
         gameMap (:gameMap @nonUiState)
         tileMap (doall (->> (createTileMap gameMap)
                             (map #(addChildToStage %1))))]
@@ -57,6 +57,10 @@
   ;; (let [gameState (ocall! gameStateByteArray :values)]
   ;;   (prn (type (ocall! gameStateByteArray))))
   ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
-  (setPos! (:assasin @spriteStore) [(aget gameStateByteArray 1) (aget gameStateByteArray 2)])
+  (prn gameStateByteArray)
+  ;; (doseq [v gameStateByteArray]
+  ;;   (prn v))
+  ;; (setPos! (:moveTargetCircle @spriteStore) [(aget gameStateByteArray ) (aget gameStateByteArray 2)])
+  ;; (setPos! (:assasin @spriteStore) [(aget gameStateByteArray ) (aget gameStateByteArray 2)])
   ;; )
   )

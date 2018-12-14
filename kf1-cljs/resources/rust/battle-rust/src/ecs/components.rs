@@ -12,7 +12,6 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 
-
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_u32(a: u32);
     
@@ -75,10 +74,10 @@ pub struct NextPosDef {
 }
 
 pub struct Move {
-    pub diff: types::Pt,
+    diff: types::Pt,
     normalized: types::Pt,
     multipliers: types::Pt,
-    destination: types::Pt,
+    pub destination: types::Pt,
 }
 
 impl Move {
@@ -90,12 +89,9 @@ impl Move {
             destination: types::Pt::origin() 
         }
     }
-    fn greater_than_zero(d: f32) -> bool { 
-        d > 0.0 
-    }
     fn check_if_past(& self, next_pt: &types::Pt) -> bool {
         let is_past_pt_struct = self.diff.map_with(&next_pt, |diff_prop, next_pt_prop, k| -> f32 {
-            if Move::greater_than_zero(self.destination.get_key_string(k) - next_pt_prop) != Move::greater_than_zero(diff_prop) 
+            if (self.destination.get_key_string(k) - next_pt_prop).signum() != (diff_prop).signum() 
             { -1.0 } else  { 0.0 }
         });
         (is_past_pt_struct.x < 0.0 || is_past_pt_struct.y < 0.0)
@@ -110,7 +106,7 @@ impl Move {
         self.multipliers = types::Pt::new(rad.cos(), rad.sin());
     }
     pub fn next(&self, dt: f32, cur_pos: &types::Pt, speed: f32) -> NextPosDef {
-        let dist = speed * dt * 20.0;
+        let dist = speed *  dt * 10.0;
         let move_diff = self.multipliers.map_with(&self.normalized, |multipliers_prop, normalized_prop, _| {
             multipliers_prop * normalized_prop * dist
         });

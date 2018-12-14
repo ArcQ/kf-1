@@ -26,10 +26,6 @@
         console.log(varg0);
     };
 
-    __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
-        console.log(arg0);
-    };
-
     __exports.__wbg_log_306a05c00c31d850 = function(arg0) {
         console.log(arg0);
     };
@@ -109,7 +105,7 @@ __exports.__wbg_map_294373a5ee228032 = function(arg0, arg1, arg2) {
         }
 
     };
-    cbarg1.f = wasm.__wbg_function_table.get(160);
+    cbarg1.f = wasm.__wbg_function_table.get(159);
     cbarg1.a = arg1;
     cbarg1.b = arg2;
     try {
