@@ -73,12 +73,12 @@ impl<'a> System<'a> for WatchAll {
             };
         }
         let state_vec_len = state_vec.len();
-        state_vec.insert(0 as usize, state_vec_len as f32);
-        self.modified.clear();
         if state_vec.len() > 0 {
+            state_vec.insert(0 as usize, state_vec_len as f32);
             let state_diff_ptr: Box<[f32]> = state_vec.into_boxed_slice();
             cljs_wasm_adapter::update(state_diff_ptr);
         }
+        self.modified.clear();
     }
 
     fn setup(&mut self, res: &mut Resources) {

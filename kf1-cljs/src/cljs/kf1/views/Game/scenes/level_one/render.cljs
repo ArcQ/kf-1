@@ -44,6 +44,17 @@
         (addChildToStage moveTargetCircle)
         (swap! spriteStore merge sprites {:moveTargetCircle moveTargetCircle})))))
 
+(defn decodeSubState [subState]
+  (prn subState))
+
+(defn decodeByteArray [gameStateByteArray]
+  (loop [i 1]
+    (when (< i (aget gameStateByteArray 0))
+      (let [subStateLen (aget gameStateByteArray i)
+            subStateEndI (+ i subStateLen)]
+        (decodeSubState (ocall! gameStateByteArray :slice i subStateEndI))
+        (recur subStateEndI)))))
+
 (defn tick [gameStateByteArray]
   ;; (if (or (not (empty? gameState)))
   ;; (do 
@@ -57,7 +68,8 @@
   ;; (let [gameState (ocall! gameStateByteArray :values)]
   ;;   (prn (type (ocall! gameStateByteArray))))
   ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
-  (prn gameStateByteArray)
+  (if (not (nil? gameStateByteArray))
+    (decodeByteArray gameStateByteArray))
   ;; (doseq [v gameStateByteArray]
   ;;   (prn v))
   ;; (setPos! (:moveTargetCircle @spriteStore) [(aget gameStateByteArray ) (aget gameStateByteArray 2)])
