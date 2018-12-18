@@ -7,7 +7,7 @@
 (defn addChildToStage [sprite]
   (ocall! kfGameEngine ["default" "app" "stage" "addChild"] sprite))
 
-(defn setPos! [sprite, pos]
+(defn setPos! [sprite pos]
   (doto sprite
     (oset! "x" (pos 0))
     (oset! "y" (pos 1))))

@@ -44,35 +44,47 @@
         (addChildToStage moveTargetCircle)
         (swap! spriteStore merge sprites {:moveTargetCircle moveTargetCircle})))))
 
+(def KEY_GOBLIN 0)
+(def KEY_ASSASIN 1)
+(def KEY_TARGET_CIRCLE 2)
+(def KEY_SET_SPRITE_POS 3)
+
+(defn setSpritePos! [nextPosState]
+  (condp = (aget nextPosState 0)
+    KEY_TARGET_CIRCLE (do (setPos! (:moveTargetCircle @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)]))
+    KEY_ASSASIN (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
+
 (defn decodeSubState [subState]
-  (prn subState))
+  (let [subStateLen (aget subState 0)
+        k (aget subState 1)]
+    (condp = k
+      KEY_SET_SPRITE_POS (setSpritePos! 
+                           (ocall! subState :slice 2))))
+  )
 
 (defn decodeByteArray [gameStateByteArray]
   (loop [i 1]
     (when (< i (aget gameStateByteArray 0))
       (let [subStateLen (aget gameStateByteArray i)
-            subStateEndI (+ i subStateLen)]
+            subStateEndI (+ i subStateLen 2)]
         (decodeSubState (ocall! gameStateByteArray :slice i subStateEndI))
         (recur subStateEndI)))))
 
 (defn tick [gameStateByteArray]
-  ;; (if (or (not (empty? gameState)))
-  ;; (do 
-  ;; (if (get-in gameState [:moveTargetCircle :isShow])
-  ;;   (doto (:moveTargetCircle spriteStore)
-  ;;     (oset! "visible" true)
-  ;;     (setPos!(get-in gameState [:moveTargetCircle :pos])))
-  ;;   (set! (.-visible (:moveTargetCircle spriteStore)) false))
-  ;; (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
-
-  ;; (let [gameState (ocall! gameStateByteArray :values)]
-  ;;   (prn (type (ocall! gameStateByteArray))))
-  ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
   (if (not (nil? gameStateByteArray))
     (decodeByteArray gameStateByteArray))
-  ;; (doseq [v gameStateByteArray]
-  ;;   (prn v))
-  ;; (setPos! (:moveTargetCircle @spriteStore) [(aget gameStateByteArray ) (aget gameStateByteArray 2)])
-  ;; (setPos! (:assasin @spriteStore) [(aget gameStateByteArray ) (aget gameStateByteArray 2)])
+  ;; (do 
+    ;; (if (get-in gameState [:moveTargetCircle :isShow])
+    ;;   (doto (:moveTargetCircle spriteStore)
+    ;;     (oset! "visible" true)
+    ;;     (setPos!(get-in gameState [:moveTargetCircle :pos])))
+    ;;   (set! (.-visible (:moveTargetCircle spriteStore)) false))
+    ;; (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
+
+    ;; (let [gameState (ocall! gameStateByteArray :values)]
+    ;;   (prn (type (ocall! gameStateByteArray))))
+    ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
+    ;; (doseq [v gameStateByteArray]
+    ;;   (prn v))
   ;; )
-  )
+)

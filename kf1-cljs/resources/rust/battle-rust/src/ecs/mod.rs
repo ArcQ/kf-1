@@ -13,6 +13,7 @@ use self::components::{Key, Move, Speed};
 const KEY_GOBLIN:i32 = 0;
 const KEY_ASSASIN:i32 = 1;
 const KEY_TARGET_CIRCLE:i32 = 2;
+const KEY_SET_SPRITE_POS:i32 = 3;
 
 #[wasm_bindgen]
 extern "C" {
@@ -58,7 +59,8 @@ impl<'a> System<'a> for WatchAll {
         //TODO should come up with a method to do this automatically
         for (_key, _pos, _) in (&key, &pos, &self.modified).join() {
             if _key.0 == KEY_ASSASIN {
-                state_vec.push(3.0);
+                state_vec.push(5.0);
+                state_vec.push(KEY_POS as f32);
                 state_vec.push(KEY_ASSASIN as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
@@ -66,7 +68,8 @@ impl<'a> System<'a> for WatchAll {
             if _key.0 == KEY_TARGET_CIRCLE {
                 log("TARGET");
                 log_f32(KEY_TARGET_CIRCLE as f32);
-                state_vec.push(3.0);
+                state_vec.push(5.0);
+                state_vec.push(KEY_POS as f32);
                 state_vec.push(KEY_TARGET_CIRCLE as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
