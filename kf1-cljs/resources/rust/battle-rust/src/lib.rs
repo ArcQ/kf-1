@@ -8,6 +8,8 @@ use wasm_bindgen::prelude::*;
 mod ecs;
 mod types;
 
+use types::{CoderKeyMapping};
+
 use ecs::{UpdateChar, WatchAll};
 use ecs::components::{Key, Speed, Move};
 use ecs::resources::{DeltaTime};
@@ -26,20 +28,13 @@ extern "C" {
     fn log_f32(a: f32);
 }
 
-struct EventsKeyDef {
-    pub name: String,
-    pub k: u16,
-}
-
 #[wasm_bindgen]
 pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
     world: World,
     assasin: Entity,
     click_circle: Entity,
-    // eventsKeyDict: Box<[EventsKeyDef]>,
-    // eventsKeyDict: [EventsKeyDef; 1],
-    events_key_dict: Vec<EventsKeyDef>,
+    events_key_dict: CoderKeyMapping
 }
 
 const KEY_GOBLIN:i32 = 0;
@@ -49,28 +44,16 @@ const KEY_TARGET_CIRCLE:i32 = 2;
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
-    pub fn new(set: &js_sys::Object) -> LevelOne { 
-        let mut events_key_dict: Vec<EventsKeyDef> = Vec::new();
-        js_sys::Object::entries(set).map(&mut |kv: JsValue, i: u32, arr: js_sys::Array| -> JsValue {
-            // let arr = js_sys::Array::from(&kv);
-            // k.clone().unwrap().as_string().unwrap();
-            let k_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
-            let v_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
-            let event_key_def = EventsKeyDef {
-                name: k_result.clone().unwrap().as_string().unwrap(),
-                k: v_result.clone().unwrap().as_f64().unwrap() as u16,
-            };
-            events_key_dict.push(event_key_def);
-            JsValue::from(0)
-        });
+    pub fn new(renderKeys: &js_sys::Object, eventKeys: &js_sys::Object) -> LevelOne { 
+        let mut events_key_dict: CoderKeyMapping = CoderKeyMapping::new(eventKeys);
+        let mut render_state_key_dict: CoderKeyMapping = CoderKeyMapping::new(renderKeys);
 
         let mut world: World = World::new();
-
         let mut dispatcher: Dispatcher = DispatcherBuilder::new()
             // .with(MapInputs, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(UpdateChar::default(), "update_char", &[])
-            .with_thread_local(WatchAll::default())
+            .with_thread_local(WatchAll::new(render_state_key_dict))
             .build();
         dispatcher.setup(&mut world.res);
 
@@ -121,14 +104,11 @@ impl LevelOne {
 
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
-        let event_str: &str = &self.events_key_dict
-            .iter()
-            .find(|&event_key_def| event_key_def.k == input_def[0])
-            .unwrap()
-            .name;
+        let event_str: &str = self.events_key_dict.decode(input_def[0]);
         match event_str {
             "click" => {
                 {
+                    log("click");
                     let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut pos_storage = self.world.read_storage::<types::Pt>();

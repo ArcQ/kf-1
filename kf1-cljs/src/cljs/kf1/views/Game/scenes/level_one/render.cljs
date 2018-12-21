@@ -41,6 +41,7 @@
       (let [sprites (->> [:goblin :assasin]
                          (reduce charKeysReducer {}))
             moveTargetCircle (drawTargetCircle (:moveTargetCircle initialPos))]
+        (oset! moveTargetCircle :visible false)
         (addChildToStage moveTargetCircle)
         (swap! spriteStore merge sprites {:moveTargetCircle moveTargetCircle})))))
 
@@ -49,9 +50,12 @@
 (def KEY_TARGET_CIRCLE 2)
 (def KEY_SET_SPRITE_POS 3)
 
+;; reduce #(split) {cur dict} [restbytes]
 (defn setSpritePos! [nextPosState]
   (condp = (aget nextPosState 0)
-    KEY_TARGET_CIRCLE (do (setPos! (:moveTargetCircle @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)]))
+    KEY_TARGET_CIRCLE (doto (:moveTargetCircle @spriteStore)
+                        (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
+                        (oset! :visible true))
     KEY_ASSASIN (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
 
 (defn decodeSubState [subState]
@@ -66,25 +70,11 @@
   (loop [i 1]
     (when (< i (aget gameStateByteArray 0))
       (let [subStateLen (aget gameStateByteArray i)
-            subStateEndI (+ i subStateLen 2)]
+            subStateEndI (+ i subStateLen)]
         (decodeSubState (ocall! gameStateByteArray :slice i subStateEndI))
         (recur subStateEndI)))))
 
-(defn tick [gameStateByteArray]
-  (if (not (nil? gameStateByteArray))
-    (decodeByteArray gameStateByteArray))
-  ;; (do 
-    ;; (if (get-in gameState [:moveTargetCircle :isShow])
-    ;;   (doto (:moveTargetCircle spriteStore)
-    ;;     (oset! "visible" true)
-    ;;     (setPos!(get-in gameState [:moveTargetCircle :pos])))
-    ;;   (set! (.-visible (:moveTargetCircle spriteStore)) false))
-    ;; (setPos! (:goblin spriteStore) (get-in gameState [:goblin :pos]))
-
-    ;; (let [gameState (ocall! gameStateByteArray :values)]
-    ;;   (prn (type (ocall! gameStateByteArray))))
-    ;; (setPos! (:assasin spriteStore) [(aget gameState 1) (aget gameState 2)])
-    ;; (doseq [v gameStateByteArray]
-    ;;   (prn v))
-  ;; )
-)
+(defn tick [renderKeys]
+  (fn [gameStateByteArray] 
+    (if (not (nil? gameStateByteArray))
+      (decodeByteArray gameStateByteArray))))

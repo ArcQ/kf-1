@@ -155,13 +155,15 @@ class LevelOne {
 
     /**
     * @param {any} arg0
+    * @param {any} arg1
     * @returns {}
     */
-    constructor(arg0) {
+    constructor(arg0, arg1) {
         try {
-            this.ptr = wasm.levelone_new(addBorrowedObject(arg0));
+            this.ptr = wasm.levelone_new(addBorrowedObject(arg0), addBorrowedObject(arg1));
 
         } finally {
+            heap[stack_pointer++] = undefined;
             heap[stack_pointer++] = undefined;
 
         }

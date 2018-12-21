@@ -1,3 +1,19 @@
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern "C" {
+    type cljs_wasm_adapter;
+
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+    
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_u32(a: u32);
+
+    #[wasm_bindgen(js_namespace = console, js_name = log)]
+    fn log_f32(a: f32);
+}
+
 /// base types
 pub struct Pt {
     pub x: f32,
@@ -46,6 +62,40 @@ impl Pt {
 
 impl Clone for Pt {
     fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
+}
+
+pub struct CoderKeyMapping {
+    pub keys: Vec<String>,
+}
+
+impl CoderKeyMapping {
+    pub fn new(js_dict: &js_sys::Object) -> CoderKeyMapping {
+        let mut key_mapping: Vec<String> = vec![];
+        js_sys::Object::entries(js_dict).map(&mut |kv: JsValue, _i: u32, _arr: js_sys::Array| -> JsValue {
+            let k_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
+            let v_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
+            log(&k_result.clone().unwrap().as_string().unwrap());
+            log_f32(v_result.clone().unwrap().as_f64().unwrap() as f32);
+            key_mapping.insert(
+                v_result.clone().unwrap().as_f64().unwrap() as usize,
+                k_result.clone().unwrap().as_string().unwrap(),
+            );
+            JsValue::from(0)
+        });
+
+        CoderKeyMapping {
+            keys: key_mapping,
+        }
+    }
+    pub fn encode(&self, find_k: &str) -> i32 {
+        self.keys
+            .iter()
+            .position(|k| k == find_k)
+            .unwrap() as i32
+    }
+    pub fn decode(&self, num: u16) -> &str {
+        &self.keys[num as usize]
+    }
 }
 
 

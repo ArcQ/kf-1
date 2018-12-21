@@ -10,11 +10,6 @@ pub mod resources;
 
 use self::components::{Key, Move, Speed};
 
-const KEY_GOBLIN:i32 = 0;
-const KEY_ASSASIN:i32 = 1;
-const KEY_TARGET_CIRCLE:i32 = 2;
-const KEY_SET_SPRITE_POS:i32 = 3;
-
 #[wasm_bindgen]
 extern "C" {
     type cljs_wasm_adapter;
@@ -25,17 +20,27 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)] fn log_u32(a: u32);
+    #[wasm_bindgen(js_namespace = console, js_name = log)] 
+    fn log_u32(a: u32);
 
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_f32(a: f32);
 }
 
-#[derive(Default)]
 pub struct WatchAll {
     pub reader_id: Option<ReaderId<ComponentEvent>>,
     pub modified: BitSet,
+    pub render_state_key_dict: types::CoderKeyMapping,
+}
+
+impl WatchAll {
+    pub fn new(render_state_key_dict: types::CoderKeyMapping) -> WatchAll {
+        WatchAll {
+            reader_id: Option::default(),
+            modified: BitSet::default(),
+            render_state_key_dict: render_state_key_dict
+        }
+    }
 }
 
 impl<'a> System<'a> for WatchAll {
@@ -58,19 +63,21 @@ impl<'a> System<'a> for WatchAll {
         let mut state_vec = Vec::new();
         //TODO should come up with a method to do this automatically
         for (_key, _pos, _) in (&key, &pos, &self.modified).join() {
-            if _key.0 == KEY_ASSASIN {
+            let key_set_sprite_pos = self.render_state_key_dict.encode("KEY_SET_SPRITE_POS");
+            log_f32(key_set_sprite_pos as f32);
+            let key_assasin = self.render_state_key_dict.encode("KEY_ASSASIN");
+            let key_target_circle = self.render_state_key_dict.encode("KEY_TARGET_CIRCLE");
+            if _key.0 == key_assasin {
                 state_vec.push(5.0);
-                state_vec.push(KEY_POS as f32);
-                state_vec.push(KEY_ASSASIN as f32);
+                state_vec.push(key_set_sprite_pos as f32);
+                state_vec.push(key_assasin as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
             }
-            if _key.0 == KEY_TARGET_CIRCLE {
-                log("TARGET");
-                log_f32(KEY_TARGET_CIRCLE as f32);
+            if _key.0 == key_target_circle {
                 state_vec.push(5.0);
-                state_vec.push(KEY_POS as f32);
-                state_vec.push(KEY_TARGET_CIRCLE as f32);
+                state_vec.push(key_set_sprite_pos as f32);
+                state_vec.push(key_target_circle as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
             };

@@ -194,8 +194,10 @@ function _wrapInSceneHelpers(sceneObj) {
             eventsKeyDict: Object.keys(sceneObj.eventSources).reduce((acc, k, i) => ({ ...acc, [k]: i }), {}),
           });
 
+          window.renderKeys = sceneObj.renderKeys;
+          window.eventKeys = sceneObj.eventKeys;
 
-          const wasmGame = new wasmBindgen.LevelOne({ 'click': 0 });
+          const wasmGame = new wasmBindgen.LevelOne(sceneObj.renderKeys, sceneObj.eventKeys);
           const updateFn = (dt) => wasmGame.get_update(dt);
           const injectKAndCallRust = (k) => (getEventVal) => wasmGame.on_event([
             // pass in encoded key (integer)

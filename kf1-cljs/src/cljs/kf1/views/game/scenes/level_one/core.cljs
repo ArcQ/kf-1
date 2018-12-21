@@ -7,8 +7,18 @@
 ;; (defn updateFn [args] (prn "updateFn") (prn args))
 (defn start [args] (prn "start") (prn args))
 
+(def eventKeys { "click" 0 })
+
+(def renderKeys { 
+              "KEY_GOBLIN" 0
+              "KEY_ASSASIN" 1
+              "KEY_TARGET_CIRCLE" 2
+              "KEY_SET_SPRITE_POS" 3})
+
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
+            :eventKeys eventKeys
+            :renderKeys renderKeys
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
             :assets ["goblins" "chars" "levelOne"]
@@ -18,5 +28,5 @@
                     :start "level_one_init"
                     :update "level_one_tick" } 
             :start render/initialRender
-            :update render/tick
+            :update (render/tick renderKeys)
             }))
