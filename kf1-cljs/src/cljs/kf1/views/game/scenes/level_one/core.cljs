@@ -1,36 +1,27 @@
 (ns kf1.views.game.scenes.level-one.core
   (:require [kf1.views.Game.scenes.level-one.api :as api]
             [kf1.views.game.scenes.loading.main :as mainLoadingScene]
-            [kf1.views.Game.scenes.level-one.event-sources :as eventSources]
+            [kf1.views.Game.scenes.level-one.event-listeners :as eventListeners]
             [kf1.views.game.scenes.level-one.render :as render]))
 
-;; (defn updateFn [args] (prn "updateFn") (prn args))
-(defn start [args] (prn "start") (prn args))
-
-(def eventKeys { 
-                "MOVE" 0 
-                "JUMP" 1 
-                "ATTACK" 2 
-                })
-
-(def renderKeys { 
-              "KEY_GOBLIN" 0
-              "KEY_ASSASIN" 1
-              "KEY_TARGET_CIRCLE" 2
-              "KEY_SET_SPRITE_POS" 3})
+(def encoderKeys { 
+                 "MOVE" 0 
+                 "JUMP" 1 
+                 "ATTACK" 2 
+                 "KEY_GOBLIN" 3
+                 "KEY_ASSASIN" 4
+                 "KEY_TARGET_CIRCLE" 5
+                 "KEY_SET_SPRITE_POS" 6})
 
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
-            :eventKeys eventKeys
-            :renderKeys renderKeys
+            :encoderKeys encoderKeys
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
             :assets ["goblins" "chars" "levelOne"]
             :willLoad api/generateGameMap
-            :eventSources (eventSources/getEventsMap renderKeys)
-            :gameFnNames {
-                    :start "level_one_init"
-                    :update "level_one_tick" } 
-            :start render/initialRender
-            :update (render/tick renderKeys)
+            :start (fn [] 
+                                (render/initialRender)
+                                (eventListeners/watchEvents encoderKeys))
+            :update (render/tick encoderKeys)
             }))

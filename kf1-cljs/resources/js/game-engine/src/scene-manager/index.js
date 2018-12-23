@@ -180,7 +180,6 @@ function _wrapInSceneHelpers(sceneObj) {
         : {};
 
       runOnWasmLoad((wasmBindgen) => {
-        if (sceneObj.start) sceneObj.start();
         if (sceneObj.update) {
           setCljsWasmAdapter({
             updateFn: (args) => {
@@ -190,21 +189,17 @@ function _wrapInSceneHelpers(sceneObj) {
             },
             // encode the keys into integers to make passing to rust more efficient
             mapEventsKeyDict: (fn) => Object.keys(getWindow().game_config.eventsKeyDict).map((v, i) => fn(v, i)),
-            eventsKeyDict: Object.keys(sceneObj.eventSources).reduce((acc, k, i) => ({ ...acc, [k]: i }), {}),
           });
 
-          window.renderKeys = sceneObj.renderKeys;
-          window.eventKeys = sceneObj.eventKeys;
+          window.encoderKeys = sceneObj.encoderKeys;
 
-          const wasmGame = new wasmBindgen.LevelOne(sceneObj.renderKeys, sceneObj.eventKeys);
+          const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys);
           const updateFn = (dt) => wasmGame.get_update(dt);
-          const injectKAndCallRust = (k) => (getEventVal) => wasmGame.on_event([
-            // pass in encoded key (integer)
-            getWindow().game_config.eventsKeyDict[k],
-            ...getEventVal(),
-          ]);
+          const wasmUpdate = (a) => console.log(a) || wasmGame.on_event(a);
 
-          setTimeout(() => Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k))), 500);
+          engine.wasmUpdate = wasmUpdate;
+          // wait on mount of ui elements
+          if (sceneObj.start) setTimeout(() => sceneObj.start(), 500);
 
           // engine.ticker.add(updateFn);
           let lastTime;

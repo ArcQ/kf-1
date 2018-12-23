@@ -34,7 +34,7 @@ pub struct LevelOne {
     world: World,
     assasin: Entity,
     click_circle: Entity,
-    events_key_dict: CoderKeyMapping
+    encoder_keys_dict: CoderKeyMapping
 }
 
 const KEY_GOBLIN:i32 = 0;
@@ -44,16 +44,16 @@ const KEY_TARGET_CIRCLE:i32 = 2;
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
-    pub fn new(renderKeys: &js_sys::Object, eventKeys: &js_sys::Object) -> LevelOne { 
-        let mut events_key_dict: CoderKeyMapping = CoderKeyMapping::new(eventKeys);
-        let mut render_state_key_dict: CoderKeyMapping = CoderKeyMapping::new(renderKeys);
+    pub fn new(encoderKeys: &js_sys::Object) -> LevelOne { 
+        let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
+        let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
 
         let mut world: World = World::new();
         let mut dispatcher: Dispatcher = DispatcherBuilder::new()
             // .with(MapInputs, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(UpdateChar::default(), "update_char", &[])
-            .with_thread_local(WatchAll::new(render_state_key_dict))
+            .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
             .build();
         dispatcher.setup(&mut world.res);
 
@@ -89,7 +89,7 @@ impl LevelOne {
             world: world, 
             assasin: assasin, 
             click_circle: click_circle, 
-            events_key_dict: events_key_dict,
+            encoder_keys_dict: encoder_keys_dict,
         }
     }
 
@@ -104,7 +104,7 @@ impl LevelOne {
 
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
-        let event_str: &str = self.events_key_dict.decode(input_def[0]);
+        let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
         match event_str {
             "MOVE" => {
                 {

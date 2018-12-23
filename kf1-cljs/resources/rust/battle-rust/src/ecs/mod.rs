@@ -30,15 +30,15 @@ extern "C" {
 pub struct WatchAll {
     pub reader_id: Option<ReaderId<ComponentEvent>>,
     pub modified: BitSet,
-    pub render_state_key_dict: types::CoderKeyMapping,
+    pub encoder_keys_dict: types::CoderKeyMapping,
 }
 
 impl WatchAll {
-    pub fn new(render_state_key_dict: types::CoderKeyMapping) -> WatchAll {
+    pub fn new(encoder_keys_dict: types::CoderKeyMapping) -> WatchAll {
         WatchAll {
             reader_id: Option::default(),
             modified: BitSet::default(),
-            render_state_key_dict: render_state_key_dict
+            encoder_keys_dict: encoder_keys_dict
         }
     }
 }
@@ -63,10 +63,10 @@ impl<'a> System<'a> for WatchAll {
         let mut state_vec = Vec::new();
         //TODO should come up with a method to do this automatically
         for (_key, _pos, _) in (&key, &pos, &self.modified).join() {
-            let key_set_sprite_pos = self.render_state_key_dict.encode("KEY_SET_SPRITE_POS");
+            let key_set_sprite_pos = self.encoder_keys_dict.encode("KEY_SET_SPRITE_POS");
             log_f32(key_set_sprite_pos as f32);
-            let key_assasin = self.render_state_key_dict.encode("KEY_ASSASIN");
-            let key_target_circle = self.render_state_key_dict.encode("KEY_TARGET_CIRCLE");
+            let key_assasin = self.encoder_keys_dict.encode("KEY_ASSASIN");
+            let key_target_circle = self.encoder_keys_dict.encode("KEY_TARGET_CIRCLE");
             if _key.0 == key_assasin {
                 state_vec.push(5.0);
                 state_vec.push(key_set_sprite_pos as f32);
