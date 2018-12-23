@@ -5,6 +5,8 @@
             [kf1.views.game.scenes.level-one.items.characters :refer [charactersDict]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
 
+(def RENDER_KEYS (atom {}))
+
 (def TILE_SIZE 60)
 
 (def GAMEMAP_TO_TEXTURE [
@@ -45,25 +47,20 @@
         (addChildToStage moveTargetCircle)
         (swap! spriteStore merge sprites {:moveTargetCircle moveTargetCircle})))))
 
-(def KEY_GOBLIN 0)
-(def KEY_ASSASIN 1)
-(def KEY_TARGET_CIRCLE 2)
-(def KEY_SET_SPRITE_POS 3)
-
 ;; reduce #(split) {cur dict} [restbytes]
 (defn setSpritePos! [nextPosState]
   (condp = (aget nextPosState 0)
-    KEY_TARGET_CIRCLE (doto (:moveTargetCircle @spriteStore)
-                        (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
-                        (oset! :visible true))
-    KEY_ASSASIN (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
+    (get @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
+                                             (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
+                                             (oset! :visible true))
+    (get @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
 
 (defn decodeSubState [subState]
   (let [subStateLen (aget subState 0)
         k (aget subState 1)]
     (condp = k
-      KEY_SET_SPRITE_POS (setSpritePos! 
-                           (ocall! subState :slice 2))))
+      (get @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
+                                                (ocall! subState :slice 2))))
   )
 
 (defn decodeByteArray [gameStateByteArray]
@@ -75,6 +72,7 @@
         (recur subStateEndI)))))
 
 (defn tick [renderKeys]
+  (swap! RENDER_KEYS merge renderKeys)
   (fn [gameStateByteArray] 
     (if (not (nil? gameStateByteArray))
       (decodeByteArray gameStateByteArray))))

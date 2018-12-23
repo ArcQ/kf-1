@@ -7,7 +7,11 @@
 ;; (defn updateFn [args] (prn "updateFn") (prn args))
 (defn start [args] (prn "start") (prn args))
 
-(def eventKeys { "click" 0 })
+(def eventKeys { 
+                "MOVE" 0 
+                "JUMP" 1 
+                "ATTACK" 2 
+                })
 
 (def renderKeys { 
               "KEY_GOBLIN" 0
@@ -23,7 +27,7 @@
             :uiRoute "/level-one"
             :assets ["goblins" "chars" "levelOne"]
             :willLoad api/generateGameMap
-            :eventSources eventSources/eventsMap
+            :eventSources (eventSources/getEventsMap renderKeys)
             :gameFnNames {
                     :start "level_one_init"
                     :update "level_one_tick" } 

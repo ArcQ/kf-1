@@ -12,7 +12,6 @@
        :reagent-render 
        (fn [] 
          [:div { :class "app"}
-          [:div {:class "ui"}
-           [ui/view props]]
+          (ui/view props)
           [:div {:class "game"}
            [game/view props]]]) })))

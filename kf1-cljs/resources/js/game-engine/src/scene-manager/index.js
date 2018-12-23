@@ -186,7 +186,6 @@ function _wrapInSceneHelpers(sceneObj) {
             updateFn: (args) => {
               const buffer = new Float32Array(wasmBindgen.wasm.memory.buffer, args);
               const stateDiff = buffer.slice(0, (parseInt(buffer[0])) + 1);
-              // console.log(stateDiff);
               sceneObj.update(stateDiff);
             },
             // encode the keys into integers to make passing to rust more efficient
@@ -205,7 +204,7 @@ function _wrapInSceneHelpers(sceneObj) {
             ...getEventVal(),
           ]);
 
-          Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k)));
+          setTimeout(() => Object.entries(sceneObj.eventSources).map(([k, fn]) => fn(injectKAndCallRust(k))), 500);
 
           // engine.ticker.add(updateFn);
           let lastTime;

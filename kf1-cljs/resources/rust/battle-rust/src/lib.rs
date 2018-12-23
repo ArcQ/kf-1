@@ -106,9 +106,9 @@ impl LevelOne {
     pub fn on_event(&mut self, input_def: &[u16]) {
         let event_str: &str = self.events_key_dict.decode(input_def[0]);
         match event_str {
-            "click" => {
+            "MOVE" => {
                 {
-                    log("click");
+                    log("MOVE");
                     let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut pos_storage = self.world.read_storage::<types::Pt>();
