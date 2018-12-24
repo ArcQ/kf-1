@@ -37,10 +37,6 @@ pub struct LevelOne {
     encoder_keys_dict: CoderKeyMapping
 }
 
-const KEY_GOBLIN:i32 = 0;
-const KEY_ASSASIN:i32 = 1;
-const KEY_TARGET_CIRCLE:i32 = 2;
-
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
@@ -65,20 +61,20 @@ impl LevelOne {
         world.add_resource(DeltaTime(0.05)); 
 
         world.create_entity()
-            .with(Key::new(KEY_GOBLIN))
+            .with(Key::new(encoder_keys_dict.encode("KEY_GOBLIN")))
             .with(types::Pt { x: 100.0, y: 100.0 })
             .with(Move::new())
             .with(Speed::new(10.0))
             .build();
         let mut assasin = world.create_entity()
-            .with(Key::new(KEY_ASSASIN))
+            .with(Key::new(encoder_keys_dict.encode("KEY_ASSASIN")))
             .with(types::Pt { x: 200.0, y: 200.0 })
             .with(Move::new())
             .with(Speed::new(10.0))
             .build();
 
         let mut click_circle = world.create_entity()
-            .with(Key::new(KEY_TARGET_CIRCLE))
+            .with(Key::new(encoder_keys_dict.encode("KEY_TARGET_CIRCLE")))
             .with(types::Pt { x: 0.0, y: 0.0 })
             .build();
         // dispatcher.dispatch(&mut world.res);

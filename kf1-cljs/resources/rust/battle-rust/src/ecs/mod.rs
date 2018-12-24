@@ -64,7 +64,7 @@ impl<'a> System<'a> for WatchAll {
         //TODO should come up with a method to do this automatically
         for (_key, _pos, _) in (&key, &pos, &self.modified).join() {
             let key_set_sprite_pos = self.encoder_keys_dict.encode("KEY_SET_SPRITE_POS");
-            log_f32(key_set_sprite_pos as f32);
+            // log_f32(key_set_sprite_pos as f32);
             let key_assasin = self.encoder_keys_dict.encode("KEY_ASSASIN");
             let key_target_circle = self.encoder_keys_dict.encode("KEY_TARGET_CIRCLE");
             if _key.0 == key_assasin {

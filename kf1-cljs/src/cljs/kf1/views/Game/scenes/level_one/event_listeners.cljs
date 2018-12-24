@@ -5,17 +5,17 @@
 
 (defn handleEvents [evt renderKeys & args] 
   (let [k ((vec args) 0)]
-    (letfn [(wasmUpdate [arr] (prn arr) (if (not (nil? arr)) 
-                                          (ocall! 
-                                            kfGameEngine 
-                                            "default.wasmUpdate" 
-                                            (clj->js (concat [(get renderKeys k)] arr)))))] 
+    (letfn [(wasmUpdate [arr] (ocall! 
+                                kfGameEngine 
+                                "default.wasmUpdate" 
+                                (clj->js (concat [(get renderKeys k)] arr))))] 
       (-> (case ((vec args) 0) 
             "MOVE" (ocall! 
                      kfGameEngine 
                      "default.utils.mapDOMPosToStage"
                      (array (oget evt "offsetX") (oget evt "offsetY")))
-            "ATTACK" (-> (ocall! evt :stopPropagation))  
+            "ATTACK" (fn [] 
+                       (ocall! evt :stopPropagation))  
             ;; "SET_TARGET" (-> (ocall! 
             ;;                    kfGameEngine 
             ;;                    "default.utils.mapDOMPosToStage"

@@ -73,6 +73,8 @@
 
 (defn tick [renderKeys]
   (swap! RENDER_KEYS merge renderKeys)
+  (prn renderKeys)
   (fn [gameStateByteArray] 
+    (prn gameStateByteArray)
     (if (not (nil? gameStateByteArray))
       (decodeByteArray gameStateByteArray))))
