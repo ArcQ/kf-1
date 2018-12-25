@@ -24,3 +24,9 @@ spritesheets
 lib/battleground/target
 **/.nrepl-port
 **/dist
+
+/*.log
+/target
+/*-init.clj
+/resources/public/js/compiled
+out
