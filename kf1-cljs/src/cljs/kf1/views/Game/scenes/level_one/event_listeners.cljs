@@ -4,18 +4,20 @@
 ;; not done yet
 
 (defn handleEvents [evt renderKeys & args] 
-  (let [k ((vec args) 0)]
+  (let [eventArgs (vec args)
+        k (eventArgs 0)]
     (letfn [(wasmUpdate [arr] (ocall! 
                                 kfGameEngine 
                                 "default.wasmUpdate" 
                                 (clj->js (concat [(get renderKeys k)] arr))))] 
-      (-> (case ((vec args) 0) 
+      (-> (case k 
             "MOVE" (ocall! 
                      kfGameEngine 
                      "default.utils.mapDOMPosToStage"
                      (array (oget evt "offsetX") (oget evt "offsetY")))
-            "ATTACK" (fn [] 
-                       (ocall! evt :stopPropagation))  
+            "SPOT_ATTACK" (do
+                       (ocall! evt :preventDefault)
+                       (array (eventArgs 1)))  
             ;; "SET_TARGET" (-> (ocall! 
             ;;                    kfGameEngine 
             ;;                    "default.utils.mapDOMPosToStage"
@@ -34,7 +36,7 @@
       (ocall! :addEventListener 
               "click" 
               (fn [evt] 
-                (handleEvents evt renderKeys "ATTACK" 1)
+                (handleEvents evt renderKeys "SPOT_ATTACK" 1)
                 (ocall! evt :stopPropagation))
               false)))
 

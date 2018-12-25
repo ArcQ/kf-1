@@ -7,7 +7,7 @@
 (def encoderKeys { 
                  "MOVE" 0 
                  "JUMP" 1 
-                 "ATTACK" 2 
+                 "SPOT_ATTACK" 2 
                  "KEY_GOBLIN" 3
                  "KEY_ASSASIN" 4
                  "KEY_TARGET_CIRCLE" 5

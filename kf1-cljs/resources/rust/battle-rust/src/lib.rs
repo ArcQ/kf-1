@@ -101,6 +101,7 @@ impl LevelOne {
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
         let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
+        log(event_str);
         match event_str {
             "MOVE" => {
                 {
@@ -120,6 +121,7 @@ impl LevelOne {
                     }
                 }
             }
+            "SPOT_ATTACK" => {}
             _ => (),
         }
     }
