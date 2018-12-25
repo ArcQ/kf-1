@@ -11,12 +11,12 @@
      {:sprite "" :speed 10 :pos pos})
    :sprite
    (fn sprite [pos]
-     (let [frames (->> (range 6)
+     (let [frames (->> (range 7)
                        (map-indexed 
                          (fn [_ i] (ocall! 
                                      engine 
                                      "default.PIXI.Texture.fromFrame"
-                                     (gstring/format "1_GOBLIN_WALK_00%d.png" i)))))
+                                     (gstring/format "_IDLE/_IDLE_00%dknight.png" i)))))
            AnimatedSprite (oget
                             engine 
                             "default.PIXI.extras.AnimatedSprite")
@@ -89,7 +89,7 @@
                          (fn [_ i] (ocall! 
                                      engine 
                                      "default.PIXI.Texture.fromFrame"
-                                     (gstring/format "2_WALK_00%dassasin.png" i)))))
+                                     (gstring/format "1_IDLE_00%dassasin.png" i)))))
            AnimatedSprite (oget
                             engine 
                             "default.PIXI.extras.AnimatedSprite")
@@ -103,6 +103,4 @@
          (ocall! "play"))))})
 
 (def charactersDict {:goblin goblin
-                     :demon demon
-                     :wizard wizard
                      :assasin assasin })

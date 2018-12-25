@@ -7,7 +7,7 @@ import chars from './chars.json';
 export default {
   main,
   mainLoading,
-  goblins,
+  // goblins,
   chars,
   levelOne,
 };

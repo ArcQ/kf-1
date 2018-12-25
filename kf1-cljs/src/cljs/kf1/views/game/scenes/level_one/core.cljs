@@ -18,7 +18,7 @@
             :encoderKeys encoderKeys
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
-            :assets ["goblins" "chars" "levelOne"]
+            :assets ["chars" "levelOne"]
             :willLoad api/generateGameMap
             :start (fn [] 
                                 (render/initialRender)
