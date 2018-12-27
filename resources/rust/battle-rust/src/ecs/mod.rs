@@ -1,5 +1,5 @@
 use specs::{ReadStorage,
-System, WriteStorage, ReaderId};
+System, WriteStorage, ReaderId, Entities};
 use specs::storage::ComponentEvent;
 use super::types;
 use wasm_bindgen::prelude::*;
@@ -44,11 +44,13 @@ impl WatchAll {
 }
 
 impl<'a> System<'a> for WatchAll {
-    type SystemData = (ReadStorage<'a, Key>,
-                       ReadStorage<'a, CharStateMachine>,
-                       ReadStorage<'a, types::Pt>);
+    type SystemData = (
+        Entities<'a>,
+        ReadStorage<'a, CharStateMachine>,
+        ReadStorage<'a, Key>,
+        ReadStorage<'a, types::Pt>);
 
-    fn run(&mut self, (key, char_state, pos): Self::SystemData) {
+    fn run(&mut self, (entities, char_state_storage, key, pos): Self::SystemData) {
         // TODO create a parent class that does this without doing it over and over
         if let Some(r_id) = self.reader_id.as_mut() {
             let events = pos.channel()
@@ -61,34 +63,36 @@ impl<'a> System<'a> for WatchAll {
             }
         }
 
-        let mut state_vec = Vec::new();
+        let mut state_vec = vec![];
         //TODO should come up with a method to do this automatically
-        for (_key, _pos, char_state, _) in (&key, &pos, &char_state, &self.modified).join() {
+        for (entity, _key, _pos, _) in (&entities, &key, &pos, &self.modified).join() {
+            let mut sub_state_vec = vec![];
             let key_set_sprite_pos = self.encoder_keys_dict.encode("KEY_SET_SPRITE_POS");
-            // log_f32(key_set_sprite_pos as f32);
-            let key_char_state = self.encoder_keys_dict.encode(&char_state.state.to_string());
+            let char_state: Option<& CharStateMachine> = char_state_storage.get(entity);
             let key_assasin = self.encoder_keys_dict.encode("KEY_ASSASIN");
             let key_target_circle = self.encoder_keys_dict.encode("KEY_TARGET_CIRCLE");
+            // log_f32(key_set_sprite_pos as f32);
 
-            if _key.0 == key_assasin {
-                state_vec.push(key_char_state as f32);
-                state_vec.push(key_set_sprite_pos as f32);
-                state_vec.push(key_assasin as f32);
-                state_vec.push(_pos.x);
-                state_vec.push(_pos.y);
+            sub_state_vec.push(key_set_sprite_pos as f32);
+            sub_state_vec.push(_key.0 as f32);
+
+            if let Some(char_state) = char_state {
+                let key_char_state = self.encoder_keys_dict.encode(&char_state.state.to_string());
+                sub_state_vec.push(key_char_state as f32);
             }
-            if _key.0 == key_target_circle {
-                state_vec.push(key_char_state as f32);
-                state_vec.push(key_set_sprite_pos as f32);
-                state_vec.push(key_assasin as f32);
-                state_vec.push(key_target_circle as f32);
-                state_vec.push(_pos.x);
-                state_vec.push(_pos.y);
-            };
+
+            sub_state_vec.push(_pos.x);
+            sub_state_vec.push(_pos.y);
+            
+            let sub_state_vec_len = sub_state_vec.len();
+            if sub_state_vec.len() > 0 {
+                sub_state_vec.insert(0 as usize, (sub_state_vec_len + 1) as f32);
+                state_vec.append(&mut sub_state_vec);
+            }
         }
         let state_vec_len = state_vec.len();
         if state_vec.len() > 0 {
-            state_vec.insert(0 as usize, state_vec_len as f32);
+            state_vec.insert(0 as usize, (state_vec_len + 1) as f32);
             let state_diff_ptr: Box<[f32]> = state_vec.into_boxed_slice();
             cljs_wasm_adapter::update(state_diff_ptr);
         }

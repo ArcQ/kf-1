@@ -53,13 +53,11 @@
     (.indexOf @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
                                              (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
                                              (oset! :visible true))
-    (.indexOf @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
+    (.indexOf @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 2) (aget nextPosState 3)])))
 
 (defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
         k (aget subState 1)]
-    (prn @RENDER_KEYS)
-    (prn (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS"))
     (condp = k
       (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
                                                 (ocall! subState :slice 2))))
@@ -70,7 +68,6 @@
     (when (< i (aget gameStateByteArray 0))
       (let [subStateLen (aget gameStateByteArray i)
             subStateEndI (+ i subStateLen)]
-        (prn (aget gameStateByteArray 0))
         (handleSubState (ocall! gameStateByteArray :slice i subStateEndI))
         (recur subStateEndI)))))
 
