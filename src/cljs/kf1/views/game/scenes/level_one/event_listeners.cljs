@@ -9,7 +9,7 @@
     (letfn [(wasmUpdate [arr] (ocall! 
                                 kfGameEngine 
                                 "default.wasmUpdate" 
-                                (clj->js (concat [(get renderKeys k)] arr))))] 
+                                (clj->js (concat [(.indexOf renderKeys k)] arr))))] 
       (-> (case k 
             "MOVE" (ocall! 
                      kfGameEngine 

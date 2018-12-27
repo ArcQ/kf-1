@@ -69,16 +69,14 @@ pub struct CoderKeyMapping {
 }
 
 impl CoderKeyMapping {
-    pub fn new(js_dict: &js_sys::Object) -> CoderKeyMapping {
-        let mut key_mapping: Vec<String> = vec![];
-        js_sys::Object::entries(js_dict).map(&mut |kv: JsValue, _i: u32, _arr: js_sys::Array| -> JsValue {
-            let k_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(0));
-            let v_result: Result<JsValue, JsValue> = js_sys::Reflect::get(&kv, &JsValue::from(1));
-            log(&k_result.clone().unwrap().as_string().unwrap());
-            log_f32(v_result.clone().unwrap().as_f64().unwrap() as f32);
+    pub fn new(js_arr: &js_sys::Array) -> CoderKeyMapping {
+        let mut key_mapping: Vec<String> = Vec::new();
+        js_arr.map(&mut |k: JsValue, i: u32, _arr: js_sys::Array| -> JsValue {
+            log(&k.clone().as_string().unwrap());
+            log_f32(i as f32);
             key_mapping.insert(
-                v_result.clone().unwrap().as_f64().unwrap() as usize,
-                k_result.clone().unwrap().as_string().unwrap(),
+                i as usize,
+                k.clone().as_string().unwrap(),
             );
             JsValue::from(0)
         });

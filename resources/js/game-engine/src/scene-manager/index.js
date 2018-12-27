@@ -192,6 +192,7 @@ function _wrapInSceneHelpers(sceneObj) {
           });
 
           window.encoderKeys = sceneObj.encoderKeys;
+          console.log(sceneObj.encoderKeys);
 
           const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys);
           const updateFn = (dt) => wasmGame.get_update(dt);

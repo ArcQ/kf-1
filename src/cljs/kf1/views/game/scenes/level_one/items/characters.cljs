@@ -29,55 +29,6 @@
          (oset! "animationSpeed" 0.3)
          (ocall! "play"))))})
 
-
-(def demon
-  {:create 
-   (fn [pos]
-     { :sprite "" :speed 10 :pos pos})
-   :sprite
-   (fn sprite [pos]
-     (let [frames (->> (range 6)
-                       (map-indexed 
-                         (fn [_ i] (ocall! 
-                                     engine 
-                                     "default.PIXI.Texture.fromFrame"
-                                     (gstring/format "1_GOBLIN_WALK_00%d.png" i)))))
-           AnimatedSprite (oget
-                            engine 
-                            "default.PIXI.extras.AnimatedSprite")
-           anim (AnimatedSprite. (clj->js frames))]
-       (doto anim 
-         (oset! "height" 100)
-         (oset! "width" 100)
-         (setPos! pos)
-         (ocall! ["anchor" "set"] 0.5)
-         (oset! "animationSpeed" 0.3)
-         (ocall! "play"))))})
-
-(def wizard
-  {:create 
-   (fn [pos]
-     { :sprite "" :speed 10 :pos pos})
-   :sprite
-   (fn sprite [pos]
-     (let [frames (->> (repeat 6 0)
-                       (map-indexed 
-                         (fn [_ i] (ocall! 
-                                     engine 
-                                     "default.PIXI.Texture.fromFrame"
-                                     (gstring/format "1_GOBLIN_WALK_00%d.png" i)))))
-           AnimatedSprite (oget
-                            engine 
-                            "default.PIXI.extras.AnimatedSprite")
-           anim (AnimatedSprite. (clj->js frames))]
-       (doto anim 
-         (oset! "height" 100)
-         (oset! "width" 100)
-         (setPos! pos)
-         (ocall! ["anchor" "set"] 0.5)
-         (oset! "animationSpeed" 0.3)
-         (ocall! "play"))))})
-
 (def assasin
   {:create 
    (fn [pos]

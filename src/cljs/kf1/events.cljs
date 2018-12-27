@@ -14,16 +14,6 @@
 (def simpleSubsMap 
   [:active-route :loading-percentage])
 
-;; (rf/reg-sub
-;;   :active-route
-;;   (fn [db _]
-;;     (:active-route db)))
-;;
-;; (rf/reg-sub
-;;   :GAME-ENGINE-LOADING-PERCENTAGE
-;;   (fn [db _]
-;;     (:loading-percentage db)))
-
 (doall (map (partial apply rf/reg-event-db) eventsMap))
 (doall (map (fn [k] 
               (rf/reg-sub k (fn [db _] (k db)))) simpleSubsMap))

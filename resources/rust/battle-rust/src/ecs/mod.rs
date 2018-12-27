@@ -8,7 +8,7 @@ use specs::prelude::*;
 pub mod components;
 pub mod resources;
 
-use self::components::{Key, Move, Speed};
+use self::components::{Key, Move, Speed, CharState, CharStateMachine};
 
 #[wasm_bindgen]
 extern "C" {
@@ -45,9 +45,10 @@ impl WatchAll {
 
 impl<'a> System<'a> for WatchAll {
     type SystemData = (ReadStorage<'a, Key>,
+                       ReadStorage<'a, CharStateMachine>,
                        ReadStorage<'a, types::Pt>);
 
-    fn run(&mut self, (key, pos): Self::SystemData) {
+    fn run(&mut self, (key, char_state, pos): Self::SystemData) {
         // TODO create a parent class that does this without doing it over and over
         if let Some(r_id) = self.reader_id.as_mut() {
             let events = pos.channel()
@@ -62,21 +63,24 @@ impl<'a> System<'a> for WatchAll {
 
         let mut state_vec = Vec::new();
         //TODO should come up with a method to do this automatically
-        for (_key, _pos, _) in (&key, &pos, &self.modified).join() {
+        for (_key, _pos, char_state, _) in (&key, &pos, &char_state, &self.modified).join() {
             let key_set_sprite_pos = self.encoder_keys_dict.encode("KEY_SET_SPRITE_POS");
             // log_f32(key_set_sprite_pos as f32);
+            let key_char_state = self.encoder_keys_dict.encode(&char_state.state.to_string());
             let key_assasin = self.encoder_keys_dict.encode("KEY_ASSASIN");
             let key_target_circle = self.encoder_keys_dict.encode("KEY_TARGET_CIRCLE");
+
             if _key.0 == key_assasin {
-                state_vec.push(5.0);
+                state_vec.push(key_char_state as f32);
                 state_vec.push(key_set_sprite_pos as f32);
                 state_vec.push(key_assasin as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
             }
             if _key.0 == key_target_circle {
-                state_vec.push(5.0);
+                state_vec.push(key_char_state as f32);
                 state_vec.push(key_set_sprite_pos as f32);
+                state_vec.push(key_assasin as f32);
                 state_vec.push(key_target_circle as f32);
                 state_vec.push(_pos.x);
                 state_vec.push(_pos.y);
@@ -111,9 +115,10 @@ impl<'a> System<'a> for UpdateChar {
     type SystemData = (Read<'a, resources::DeltaTime>,
                        ReadStorage<'a, Move>,
                        ReadStorage<'a, Speed>,
+                       WriteStorage<'a, CharStateMachine>,
                        WriteStorage<'a, types::Pt>);
 
-    fn run(&mut self, (delta, move_obj, speed, mut pos): Self::SystemData) {
+    fn run(&mut self, (delta, move_obj, speed, mut char_state, mut pos): Self::SystemData) {
         if let Some(r_id) = self.reader_id.as_mut() {
             let events = move_obj.channel()
                 .read(r_id);
@@ -128,15 +133,16 @@ impl<'a> System<'a> for UpdateChar {
         let mut clear: Vec<u32> = Vec::new();
         let dt = delta.0;
 
-        for (_move_obj, pos, _speed, event) in (&move_obj, &mut pos, &speed, &self.move_required).join() {
+        for (move_obj, pos, speed, char_state, event) in (&move_obj, &mut pos, &speed, &mut char_state, &self.move_required).join() {
             let pos_clone = pos.clone();
-            let next_pos_def = _move_obj.next(dt, &pos_clone, _speed.value());
+            let next_pos_def = move_obj.next(dt, &pos_clone, speed.value());
             pos.x = next_pos_def.pt.x;
             pos.y = next_pos_def.pt.y;
             if next_pos_def.completed {
-                log("finished");
+                char_state.set_state(CharState::IDLE);
                 clear.push(event);
             }
+            char_state.set_state(CharState::MOVE);
         }
 
         for event in clear {

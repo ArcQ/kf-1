@@ -105,36 +105,13 @@ __exports.__wbg_map_294373a5ee228032 = function(arg0, arg1, arg2) {
         }
 
     };
-    cbarg1.f = wasm.__wbg_function_table.get(159);
+    cbarg1.f = wasm.__wbg_function_table.get(169);
     cbarg1.a = arg1;
     cbarg1.b = arg2;
     try {
         return addHeapObject(getObject(arg0).map(cbarg1.bind(cbarg1)));
     } finally {
         cbarg1.a = cbarg1.b = 0;
-
-    }
-};
-
-__exports.__wbg_entries_01ea134771ed6cb2 = function(arg0) {
-    return addHeapObject(Object.entries(getObject(arg0)));
-};
-
-let cachegetUint32Memory = null;
-function getUint32Memory() {
-    if (cachegetUint32Memory === null || cachegetUint32Memory.buffer !== wasm.memory.buffer) {
-        cachegetUint32Memory = new Uint32Array(wasm.memory.buffer);
-    }
-    return cachegetUint32Memory;
-}
-
-__exports.__wbg_get_e5244e978dedcdd0 = function(arg0, arg1, exnptr) {
-    try {
-        return addHeapObject(Reflect.get(getObject(arg0), getObject(arg1)));
-    } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
 
     }
 };
@@ -201,34 +178,6 @@ __exports.__wbindgen_object_drop_ref = function(i) { dropObject(i); };
 
 __exports.__wbindgen_number_new = function(i) { return addHeapObject(i); };
 
-__exports.__wbindgen_number_get = function(n, invalid) {
-    let obj = getObject(n);
-    if (typeof(obj) === 'number') return obj;
-    getUint8Memory()[invalid] = 1;
-    return 0;
-};
-
-__exports.__wbindgen_is_null = function(idx) {
-    return getObject(idx) === null ? 1 : 0;
-};
-
-__exports.__wbindgen_is_undefined = function(idx) {
-    return getObject(idx) === undefined ? 1 : 0;
-};
-
-__exports.__wbindgen_boolean_get = function(i) {
-    let v = getObject(i);
-    if (typeof(v) === 'boolean') {
-        return v ? 1 : 0;
-    } else {
-        return 2;
-    }
-};
-
-__exports.__wbindgen_is_symbol = function(i) {
-    return typeof(getObject(i)) === 'symbol' ? 1 : 0;
-};
-
 let cachedTextEncoder = new TextEncoder('utf-8');
 
 function passStringToWasm(arg) {
@@ -238,6 +187,14 @@ function passStringToWasm(arg) {
     getUint8Memory().set(buf, ptr);
     WASM_VECTOR_LEN = buf.length;
     return ptr;
+}
+
+let cachegetUint32Memory = null;
+function getUint32Memory() {
+    if (cachegetUint32Memory === null || cachegetUint32Memory.buffer !== wasm.memory.buffer) {
+        cachegetUint32Memory = new Uint32Array(wasm.memory.buffer);
+    }
+    return cachegetUint32Memory;
 }
 
 __exports.__wbindgen_string_get = function(i, len_ptr) {

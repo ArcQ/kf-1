@@ -6,7 +6,7 @@
 (defn getSceneObj [] 
   (clj->js {
    :name "mainLoadingScene"
-   :uiRoute "/loading/main"
+   :uiRoute "/loading"
    :assets ["mainLoading"]
    :onFinishLoad (fn [stage] 
                    (-> (doto (getSprite "mainLoading" "loading-animation")

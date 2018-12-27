@@ -8,7 +8,7 @@
   (let [state (reagent/atom {})] ;; you can include state
     (reagent/create-class
       {:component-will-mount 
-       (fn [] (.replaceToken (:history props) "/" ))
+       (fn [] (prn "hi") (.replaceToken (:history props) "/" ))
        :reagent-render 
        (fn [] 
          [:div { :class "app"}

@@ -5,7 +5,7 @@
             [kf1.views.game.scenes.level-one.items.characters :refer [charactersDict]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
 
-(def RENDER_KEYS (atom {}))
+(def RENDER_KEYS (atom []))
 
 (def TILE_SIZE 60)
 
@@ -50,16 +50,18 @@
 ;; reduce #(split) {cur dict} [restbytes]
 (defn setSpritePos! [nextPosState]
   (condp = (aget nextPosState 0)
-    (get @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
+    (.indexOf @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
                                              (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
                                              (oset! :visible true))
-    (get @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
+    (.indexOf @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 1) (aget nextPosState 2)])))
 
-(defn decodeSubState [subState]
+(defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
         k (aget subState 1)]
+    (prn @RENDER_KEYS)
+    (prn (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS"))
     (condp = k
-      (get @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
+      (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
                                                 (ocall! subState :slice 2))))
   )
 
@@ -68,11 +70,12 @@
     (when (< i (aget gameStateByteArray 0))
       (let [subStateLen (aget gameStateByteArray i)
             subStateEndI (+ i subStateLen)]
-        (decodeSubState (ocall! gameStateByteArray :slice i subStateEndI))
+        (prn (aget gameStateByteArray 0))
+        (handleSubState (ocall! gameStateByteArray :slice i subStateEndI))
         (recur subStateEndI)))))
 
 (defn tick [renderKeys]
-  (swap! RENDER_KEYS merge renderKeys)
+  (swap! RENDER_KEYS concat renderKeys)
   (fn [gameStateByteArray] 
     (if (not (nil? gameStateByteArray))
       (decodeByteArray gameStateByteArray))))

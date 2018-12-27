@@ -2,6 +2,9 @@ use specs::{Component, VecStorage, FlaggedStorage};
 use super::types;
 use wasm_bindgen::prelude::*;
 
+// You need to bring the type into scope to use it!!!
+use std::string::ToString;
+
 #[wasm_bindgen]
 extern "C" {
     type cljs_wasm_adapter;
@@ -24,18 +27,26 @@ impl Component for types::Pt {
     type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
 
-#[derive(Debug)]
+#[derive(Display, Debug)]
 pub enum CharState {
-    Idle,
-    Move,
-    Attack,
+    IDLE,
+    MOVE,
+    BLINK,
+    SPOT_ATTACK,
 }
 
-pub struct CharStateStore {
-    base_state: CharState
+#[derive(Debug)]
+pub struct CharStateMachine {
+    pub state: CharState,
 }
 
-impl Component for CharStateStore {
+impl CharStateMachine {
+    pub fn set_state(&mut self, new_state: CharState ) {
+        self.state = new_state;
+    }
+}
+
+impl Component for CharStateMachine {
     type Storage = VecStorage<Self>;
 }
 
@@ -96,7 +107,7 @@ impl Move {
         });
         (is_past_pt_struct.x < 0.0 || is_past_pt_struct.y < 0.0)
     }
-    pub fn calc_new_dest(&mut self, speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
+    pub fn calc_new_dest(&mut self, _speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
         self.destination = types::Pt::from_slice(destination_slice);
         log_f32(self.destination.x);
         log_f32(self.destination.y);

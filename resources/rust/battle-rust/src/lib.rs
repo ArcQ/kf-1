@@ -1,5 +1,9 @@
 extern crate wasm_bindgen;
 extern crate js_sys;
+extern crate strum;
+
+#[macro_use]
+extern crate strum_macros;
 extern crate specs;
 
 use specs::prelude::*;
@@ -11,7 +15,7 @@ mod types;
 use types::{CoderKeyMapping};
 
 use ecs::{UpdateChar, WatchAll};
-use ecs::components::{Key, Speed, Move};
+use ecs::components::{Key, Speed, Move, CharState, CharStateMachine};
 use ecs::resources::{DeltaTime};
 
 #[wasm_bindgen]
@@ -20,7 +24,7 @@ extern "C" {
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
-    
+
     #[wasm_bindgen(js_namespace = console, js_name = log)]
     fn log_u32(a: u32);
 
@@ -40,11 +44,12 @@ pub struct LevelOne {
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
-    pub fn new(encoderKeys: &js_sys::Object) -> LevelOne { 
+    pub fn new(encoderKeys: &js_sys::Array) -> LevelOne { 
         let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
 
         let mut world: World = World::new();
+        world.register::<CharStateMachine>();
         let mut dispatcher: Dispatcher = DispatcherBuilder::new()
             // .with(MapInputs, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
@@ -53,11 +58,6 @@ impl LevelOne {
             .build();
         dispatcher.setup(&mut world.res);
 
-        // world.register::<Key>();
-        // world.register::<types::Pt>();
-        // world.register::<Move>();
-        // world.register::<Speed>();
-        //
         world.add_resource(DeltaTime(0.05)); 
 
         world.create_entity()
@@ -65,12 +65,14 @@ impl LevelOne {
             .with(types::Pt { x: 100.0, y: 100.0 })
             .with(Move::new())
             .with(Speed::new(10.0))
+            .with(CharStateMachine { state: CharState::IDLE })
             .build();
         let mut assasin = world.create_entity()
             .with(Key::new(encoder_keys_dict.encode("KEY_ASSASIN")))
             .with(types::Pt { x: 200.0, y: 200.0 })
             .with(Move::new())
             .with(Speed::new(10.0))
+            .with(CharStateMachine { state: CharState::IDLE })
             .build();
 
         let mut click_circle = world.create_entity()
@@ -79,7 +81,7 @@ impl LevelOne {
             .build();
         // dispatcher.dispatch(&mut world.res);
         world.maintain();
-        
+
         LevelOne { 
             dispatcher: dispatcher, 
             world: world, 
@@ -108,10 +110,23 @@ impl LevelOne {
                     log("MOVE");
                     let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
+                    let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
                     let mut pos_storage = self.world.read_storage::<types::Pt>();
-                    if let (Some(assasin_move_comp), Some(assasin_pos_comp)) = (move_storage.get_mut(self.assasin), pos_storage.get(self.assasin)) {
-                        assasin_move_comp.calc_new_dest(1.0, assasin_pos_comp, [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
-                    } 
+                    if let (
+                        Some(assasin_char_state_storage), 
+                        Some(assasin_move_comp), 
+                        Some(assasin_pos_comp)
+                        ) = (
+                            char_state_storage.get_mut(self.assasin), 
+                            move_storage.get_mut(self.assasin), 
+                            pos_storage.get(self.assasin)
+                            ) {
+                            assasin_char_state_storage.set_state(CharState::MOVE);
+                            assasin_move_comp.calc_new_dest(
+                                1.0, 
+                                assasin_pos_comp, 
+                                [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
+                        } 
                 } 
                 {
                     let mut mut_pos_storage = self.world.write_storage::<types::Pt>();

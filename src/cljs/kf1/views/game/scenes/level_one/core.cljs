@@ -3,15 +3,18 @@
             [kf1.views.game.scenes.loading.main :as mainLoadingScene]
             [kf1.views.Game.scenes.level-one.event-listeners :as eventListeners]
             [kf1.views.game.scenes.level-one.render :as render]))
-
-(def encoderKeys { 
-                 "MOVE" 0 
-                 "JUMP" 1 
-                 "SPOT_ATTACK" 2 
-                 "KEY_GOBLIN" 3
-                 "KEY_ASSASIN" 4
-                 "KEY_TARGET_CIRCLE" 5
-                 "KEY_SET_SPRITE_POS" 6})
+;; no more significance of keeping track of keys, might as well just make this an array and base it off of indexes
+(def encoderKeys [ 
+                  "NO_CHANGE"
+                  "KEY_GOBLIN"
+                  "KEY_ASSASIN"
+                  "KEY_TARGET_CIRCLE"
+                  "KEY_SET_SPRITE_POS"
+                  "MOVE" 
+                  "IDLE"
+                  "SPOT_ATTACK"
+                  "BLAH"
+                  ])
 
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
