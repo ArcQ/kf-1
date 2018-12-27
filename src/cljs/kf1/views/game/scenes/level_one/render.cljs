@@ -49,11 +49,14 @@
 
 ;; reduce #(split) {cur dict} [restbytes]
 (defn setSpritePos! [nextPosState]
-  (condp = (aget nextPosState 0)
-    (.indexOf @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
-                                             (setPos! [(aget nextPosState 1) (aget nextPosState 2)])
-                                             (oset! :visible true))
-    (.indexOf @RENDER_KEYS "KEY_ASSASIN") (setPos! (:assasin @spriteStore) [(aget nextPosState 2) (aget nextPosState 3)])))
+  (let [jsPos (-> (ocall! nextPosState :slice -2))
+        pos [(aget jsPos 0) (aget jsPos 1)]]
+    (condp = (aget nextPosState 0)
+      (.indexOf @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
+                                                    (setPos! pos)
+                                                    (oset! :visible true))
+      (.indexOf @RENDER_KEYS "KEY_ASSASIN") (do
+                                              (setPos! (:assasin @spriteStore) pos)))))
 
 (defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
