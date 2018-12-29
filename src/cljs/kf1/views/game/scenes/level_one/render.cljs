@@ -1,6 +1,7 @@
 (ns kf1.views.game.scenes.level-one.render
   (:require [kfGameEngine :as engine]
             [oops.core :refer [oset! ocall! oget]]
+            [goog.string :as gstring]
             [kf1.views.Game.scenes.level-one.api :refer [nonUiState]]
             [kf1.views.game.scenes.level-one.items.characters :refer [charactersDict]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
@@ -20,10 +21,10 @@
 
 (defn createTile [v, x, y]
   (doto (getSprite "levelOne" (GAMEMAP_TO_TEXTURE v))
-    (oset! "x" (* x TILE_SIZE))
-    (oset! "y" (* y TILE_SIZE))
-    (oset! "width" TILE_SIZE)
-    (oset! "height" TILE_SIZE)))
+    (oset! :x (* x TILE_SIZE))
+    (oset! :y (* y TILE_SIZE))
+    (oset! :width TILE_SIZE)
+    (oset! :height TILE_SIZE)))
 
 (defn createTileMap [gameMap]
   (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y)) row))
@@ -56,14 +57,25 @@
                                                     (setPos! pos)
                                                     (oset! :visible true))
       (.indexOf @RENDER_KEYS "KEY_ASSASIN") (do
-                                              (setPos! (:assasin @spriteStore) pos)))))
+                                              (let [frames (->> (range 5)
+                                                                (map-indexed 
+                                                                  (fn [_ i] (ocall! 
+                                                                              engine 
+                                                                              "default.PIXI.Texture.fromFrame"
+                                                                              (gstring/format "2_WALK_00%dassasin.png"i)))))
+                                                    AnimatedSprite (oget
+                                                                     engine 
+                                                                     "default.PIXI.extras.AnimatedSprite")]
+                                                (doto (:assasin @spriteStore)
+                                                  (oset! :textures (clj->js frames))
+                                                  (setPos!  pos)))))))
 
 (defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
         k (aget subState 1)]
     (condp = k
       (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
-                                                (ocall! subState :slice 2))))
+                                                     (ocall! subState :slice 2))))
   )
 
 (defn decodeByteArray [gameStateByteArray]

@@ -27,18 +27,49 @@ extern "C" {
     fn log_f32(a: f32);
 }
 
-pub struct WatchAll {
+pub struct SystemTracker {
     pub reader_id: Option<ReaderId<ComponentEvent>>,
-    pub modified: BitSet,
-    pub encoder_keys_dict: types::CoderKeyMapping,
+    pub tracked_i: Vec<i32>,
+    pub modified: Vec<BitSet>
 }
 
-impl WatchAll {
-    pub fn new(encoder_keys_dict: types::CoderKeyMapping) -> WatchAll {
+impl SystemTracker {
+    pub fn new<T>(tracked_i: Vec<i32>, system_data: T) -> SystemTracker {
+        let tracked_i_len = tracked_i.len();
+        SystemTracker {
+            reader_id: Option::default(),
+            tracked_i: tracked_i,
+            modified: vec![BitSet::new(); tracked_i_len],
+        }
+    }
+    pub fn track_storages() -> asdf {
+        if let Some(r_id) = self.reader_id.as_mut() {
+            let events = storage.channel(storage)
+                .read(r_id);
+            for event in events {
+                match event {
+                    ComponentEvent::Modified(id) => { self.modified.get_mut(0).unwrap().add(*id); },
+                    _ => { },
+                };
+            }
+        }
+    }
+}
+
+pub struct WatchAll {
+    pub reader_id: Option<ReaderId<ComponentEvent>>,
+    pub modified: Vec<BitSet>,
+    pub encoderkeys_dict: types::CoderKeyMapping,
+    pub system_tracker: SystemTracker,
+}
+
+impl <'a> WatchAll {
+    pub fn new(encoderkeys_dict: types::CoderKeyMapping) -> WatchAll {
         WatchAll {
             reader_id: Option::default(),
-            modified: BitSet::default(),
-            encoder_keys_dict: encoder_keys_dict
+            modified: vec![],
+            encoderkeys_dict: encoderkeys_dict,
+            system_tracker: SystemTracker::new(vec![1,3], system_data: Self::SystemData),
         }
     }
 }
@@ -50,14 +81,15 @@ impl<'a> System<'a> for WatchAll {
         ReadStorage<'a, Key>,
         ReadStorage<'a, types::Pt>);
 
-    fn run(&mut self, (entities, char_state_storage, key, pos): Self::SystemData) {
+    fn run(&mut self, system_data: Self::SystemData) {
+        let (entities, char_state_storage, key_storage, pos_storage) = system_data;
         // TODO create a parent class that does this without doing it over and over
         if let Some(r_id) = self.reader_id.as_mut() {
-            let events = pos.channel()
+            let events = pos_storage.channel()
                 .read(r_id);
             for event in events {
                 match event {
-                    ComponentEvent::Modified(id) => { self.modified.add(*id); },
+                    ComponentEvent::Modified(id) => { self.system_tracker.modified.get_mut(0).unwrap().add(*id); },
                     _ => { },
                 };
             }
@@ -65,24 +97,26 @@ impl<'a> System<'a> for WatchAll {
 
         let mut state_vec = vec![];
         //TODO should come up with a method to do this automatically
-        for (entity, _key, _pos, _) in (&entities, &key, &pos, &self.modified).join() {
+        for (entity, key, pos, _t) in (&entities, &key_storage, &pos_storage, self.system_tracker.modified.get(0).unwrap()).join() {
             let mut sub_state_vec = vec![];
-            let key_set_sprite_pos = self.encoder_keys_dict.encode("KEY_SET_SPRITE_POS");
+            log_f32(entity.id() as f32);
+            log_f32(_t as f32);
+            let key_set_spritepos = self.encoderkeys_dict.encode("KEY_SET_SPRITE_POS");
             let char_state: Option<& CharStateMachine> = char_state_storage.get(entity);
-            let key_assasin = self.encoder_keys_dict.encode("KEY_ASSASIN");
-            let key_target_circle = self.encoder_keys_dict.encode("KEY_TARGET_CIRCLE");
-            // log_f32(key_set_sprite_pos as f32);
+            let key_assasin = self.encoderkeys_dict.encode("KEY_ASSASIN");
+            let key_target_circle = self.encoderkeys_dict.encode("KEY_TARGET_CIRCLE");
+            // log_f32(key_set_spritepos as f32);
 
-            sub_state_vec.push(key_set_sprite_pos as f32);
-            sub_state_vec.push(_key.0 as f32);
+            sub_state_vec.push(key_set_spritepos as f32);
+            sub_state_vec.push(key.0 as f32);
 
             if let Some(char_state) = char_state {
-                let key_char_state = self.encoder_keys_dict.encode(&char_state.state.to_string());
+                let key_char_state = self.encoderkeys_dict.encode(&char_state.state.to_string());
                 sub_state_vec.push(key_char_state as f32);
             }
 
-            sub_state_vec.push(_pos.x);
-            sub_state_vec.push(_pos.y);
+            sub_state_vec.push(pos.x);
+            sub_state_vec.push(pos.y);
             
             let sub_state_vec_len = sub_state_vec.len();
             if sub_state_vec.len() > 0 {
@@ -96,13 +130,13 @@ impl<'a> System<'a> for WatchAll {
             let state_diff_ptr: Box<[f32]> = state_vec.into_boxed_slice();
             cljs_wasm_adapter::update(state_diff_ptr);
         }
-        self.modified.clear();
+        self.system_tracker.modified.get_mut(0).unwrap().clear();
     }
 
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
         self.reader_id = Some(WriteStorage::<types::Pt>::fetch(&res).register_reader());
-        self.modified = BitSet::new();
+        self.modified.append(&mut vec![BitSet::new(), BitSet::new()]);
     }
 }
 
@@ -139,10 +173,10 @@ impl<'a> System<'a> for UpdateChar {
 
         for (move_obj, pos, speed, char_state, event) in (&move_obj, &mut pos, &speed, &mut char_state, &self.move_required).join() {
             let pos_clone = pos.clone();
-            let next_pos_def = move_obj.next(dt, &pos_clone, speed.value());
-            pos.x = next_pos_def.pt.x;
-            pos.y = next_pos_def.pt.y;
-            if next_pos_def.completed {
+            let nextpos_def = move_obj.next(dt, &pos_clone, speed.value());
+            pos.x = nextpos_def.pt.x;
+            pos.y = nextpos_def.pt.y;
+            if nextpos_def.completed {
                 char_state.set_state(CharState::IDLE);
                 clear.push(event);
             }
@@ -154,9 +188,9 @@ impl<'a> System<'a> for UpdateChar {
             self.move_required.remove(event);
         }
 
-        for _pos in &mut pos.join() {
-            // log_f32(_pos.x as f32);
-            // log_f32(_pos.y as f32);
+        for pos in &mut pos.join() {
+            // log_f32(pos.x as f32);
+            // log_f32(pos.y as f32);
         }
     }
     fn setup(&mut self, res: &mut Resources) {
