@@ -47,7 +47,7 @@ impl CharStateMachine {
 }
 
 impl Component for CharStateMachine {
-    type Storage = VecStorage<Self>;
+    type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
 
 #[derive(Debug)]
