@@ -2,8 +2,8 @@ use specs::{Component, VecStorage, FlaggedStorage};
 use super::types;
 use wasm_bindgen::prelude::*;
 
-// You need to bring the type into scope to use it!!!
-use std::string::ToString;
+// // You need to bring the type into scope to use it!!!
+// use std::string::ToString;
 
 #[wasm_bindgen]
 extern "C" {
@@ -27,6 +27,7 @@ impl Component for types::Pt {
     type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
 
+#[allow(non_camel_case_types)]
 #[derive(Display, Debug)]
 pub enum CharState {
     IDLE,

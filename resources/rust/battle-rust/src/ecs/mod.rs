@@ -38,7 +38,7 @@ pub struct ModifiedTrackerStore {
     reader_id: HashMap<String, Option<ReaderId<ComponentEvent>>>,
     modified: HashMap<String, BitSet>
 }
-
+// TODO let's not unwrap so hastily without proper throwing or default
 impl ModifiedTrackerStore {
     pub fn init(&mut self, mapping_vec: Vec<KeyReaderIdMapping>) {
         for mapping in mapping_vec {
@@ -52,7 +52,24 @@ impl ModifiedTrackerStore {
     pub fn clear(&mut self, k: &str) {
         self.modified.get_mut(k).unwrap().clear();
     }
+    pub fn get_mut(&mut self, k: &str) -> &mut BitSet {
+        self.modified.get_mut(k).unwrap()
+    }
     pub fn track<T>(&mut self, k: &str, storage: &ReadStorage<T>) 
+        where T: Component,
+              T::Storage : Tracked {
+                  if let Some(r_id) = self.reader_id.get_mut(k).unwrap().as_mut() {
+                      let events = storage.channel()
+                          .read(r_id);
+                      for event in events {
+                          match event {
+                              ComponentEvent::Modified(id) => { self.modified.get_mut(k).unwrap().add(*id); },
+                              _ => { },
+                          };
+                      }
+                  }
+              }
+    pub fn track_mut<T>(&mut self, k: &str, storage: &mut WriteStorage<T>) 
         where T: Component,
               T::Storage : Tracked {
                   if let Some(r_id) = self.reader_id.get_mut(k).unwrap().as_mut() {
@@ -96,7 +113,6 @@ impl<'a> System<'a> for WatchAll {
         let mut state_vec = vec![];
         //TODO should come up with a method to do this automatically
         for (entity, key, pos, _t) in (&entities, &key_storage, &pos_storage, self.tracker_store.get("pos")).join() {
-            log("hi");
             let mut sub_state_vec = vec![];
             let key_set_spritepos = self.encoderkeys_dict.encode("KEY_SET_SPRITE_POS");
             let char_state: Option<& CharStateMachine> = char_state_storage.get(entity);
@@ -143,11 +159,7 @@ impl<'a> System<'a> for WatchAll {
 
 #[derive(Default)]
 pub struct UpdateChar {
-    // These keep track of where you left off in the event channel.
-    pub reader_id: Option<ReaderId<ComponentEvent>>,
-
-    // The bitsets where destination got modified and requires a move.next()
-    pub move_required: BitSet,
+    pub tracker_store: ModifiedTrackerStore,
 }
 
 impl<'a> System<'a> for UpdateChar {
@@ -157,42 +169,36 @@ impl<'a> System<'a> for UpdateChar {
                        WriteStorage<'a, CharStateMachine>,
                        WriteStorage<'a, types::Pt>);
 
-    fn run(&mut self, (delta, move_obj, speed, mut char_state, mut pos): Self::SystemData) {
-        if let Some(r_id) = self.reader_id.as_mut() {
-            let events = move_obj.channel()
-                .read(r_id);
-            for event in events {
-                match event {
-                    ComponentEvent::Modified(id) => { self.move_required.add(*id); },
-                    _ => { },
-                };
-            }
-        }
-
+    fn run(&mut self, (delta, move_obj_storage, speed_storage, mut char_state_storage, mut pos_storage): Self::SystemData) {
+        self.tracker_store.track("move", &move_obj_storage);
         let mut clear: Vec<u32> = Vec::new();
         let dt = delta.0;
-
-        for (move_obj, pos, speed, char_state, event) in (&move_obj, &mut pos, &speed, &mut char_state, &self.move_required).join() {
+        for (move_obj, pos, speed, event) 
+            in (
+                &move_obj_storage, 
+                &mut pos_storage, 
+                &speed_storage, 
+                self.tracker_store.get("move")).join() {
             let pos_clone = pos.clone();
             let nextpos_def = move_obj.next(dt, &pos_clone, speed.value());
             pos.x = nextpos_def.pt.x;
             pos.y = nextpos_def.pt.y;
             if nextpos_def.completed {
-                char_state.set_state(CharState::IDLE);
                 clear.push(event);
             }
-            char_state.set_state(CharState::MOVE);
         }
 
         for event in clear {
-            log("finished");
-            self.move_required.remove(event);
+            self.tracker_store.get_mut("pos").remove(event);
         }
 
     }
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
-        self.reader_id = Some(WriteStorage::<Move>::fetch(&res).register_reader());
-        self.move_required = BitSet::new();
+        let move_reader_id = Some(WriteStorage::<Move>::fetch(&res).register_reader());
+        self.tracker_store.init(
+            vec![
+            KeyReaderIdMapping { k: "move", reader_id: move_reader_id },
+        ]);
     }
 }
