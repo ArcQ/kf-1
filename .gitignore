@@ -30,3 +30,4 @@ lib/battleground/target
 /*-init.clj
 /resources/public/js/compiled
 out
+**/*.wasm

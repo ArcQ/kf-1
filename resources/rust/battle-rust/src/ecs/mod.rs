@@ -189,7 +189,7 @@ impl<'a> System<'a> for UpdateChar {
         }
 
         for event in clear {
-            self.tracker_store.get_mut("pos").remove(event);
+            self.tracker_store.get_mut("move").remove(event);
         }
 
     }
