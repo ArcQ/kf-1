@@ -56,27 +56,43 @@
       (.indexOf @RENDER_KEYS "KEY_TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
                                                     (setPos! pos)
                                                     (oset! :visible true))
-      (.indexOf @RENDER_KEYS "KEY_ASSASIN") (do
-                                              (let [frames (->> (range 5)
-                                                                (map-indexed 
-                                                                  (fn [_ i] (ocall! 
-                                                                              engine 
-                                                                              "default.PIXI.Texture.fromFrame"
-                                                                              (gstring/format "2_WALK_00%dassasin.png"i)))))
-                                                    AnimatedSprite (oget
-                                                                     engine 
-                                                                     "default.PIXI.extras.AnimatedSprite")]
-                                                (doto (:assasin @spriteStore)
-                                                  (oset! :textures (clj->js frames))
-                                                  (setPos!  pos)))))))
+      (.indexOf @RENDER_KEYS "KEY_ASSASIN") (doto (:assasin @spriteStore)
+                                              (setPos! pos))
+      )))
+
+(defn runAnimOnSprite [sprite charState]
+  (prn "hi")
+  (let [frames (condp = charState 
+                 (.indexOf @RENDER_KEYS "IDLE") (->> (range 5)
+                                                     (map-indexed 
+                                                       (fn [_ i] (ocall! 
+                                                                   engine 
+                                                                   "default.PIXI.Texture.fromFrame"
+                                                                   (gstring/format "1_IDLE_00%dassasin.png" i)))))
+                 (.indexOf @RENDER_KEYS "MOVE") (->> (range 5)
+                                                     (map-indexed 
+                                                       (fn [_ i] (ocall! 
+                                                                   engine 
+                                                                   "default.PIXI.Texture.fromFrame"
+                                                                   (gstring/format "2_WALK_00%dassasin.png"i))))))
+        AnimatedSprite (oget
+                         engine 
+                         "default.PIXI.extras.AnimatedSprite")]
+    (doto (:assasin @spriteStore)
+      (oset! :textures (clj->js frames))
+      (ocall! :play))))
+
+(defn setSpriteCharState [nextPosState]
+  (condp = (aget nextPosState 0)
+    (.indexOf @RENDER_KEYS "KEY_ASSASIN") (runAnimOnSprite (:assasin @spriteStore) (aget nextPosState 1))))
 
 (defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
-        k (aget subState 1)]
+        k (aget subState 1)
+        data (ocall! subState :slice 2)]
     (condp = k
-      (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
-                                                     (ocall! subState :slice 2))
-      (.indexOf @RENDER_KEYS "KEY_SET_CHAR_STATE") (prn subState)))
+      (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! data)
+      (.indexOf @RENDER_KEYS "KEY_SET_CHAR_STATE") (setSpriteCharState data)))
   )
 
 (defn decodeByteArray [gameStateByteArray]

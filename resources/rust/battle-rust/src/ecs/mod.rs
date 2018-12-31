@@ -156,6 +156,7 @@ impl<'a> System<'a> for WatchAll {
 
         for (char_state, _) in (&char_state_storage, self.tracker_store.get("char_state")).join() {
             self.encoded_message_builder.push_str("KEY_SET_CHAR_STATE");
+            self.encoded_message_builder.push_str("KEY_ASSASIN");
             self.encoded_message_builder.push_str(&char_state.get_state_as_string());
             self.encoded_message_builder.finalize_sub_state();
         }
