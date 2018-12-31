@@ -61,22 +61,22 @@ impl LevelOne {
         world.add_resource(DeltaTime(0.05)); 
 
         world.create_entity()
-            .with(Key::new(encoder_keys_dict.encode("KEY_GOBLIN")))
+            .with(Key(encoder_keys_dict.encode("KEY_GOBLIN")))
             .with(types::Pt { x: 100.0, y: 100.0 })
-            .with(Move::new())
-            .with(Speed::new(10.0))
-            .with(CharStateMachine { state: CharState::IDLE })
+            .with(Move::default())
+            .with(Speed(10.0))
+            .with(CharStateMachine(CharState::IDLE) )
             .build();
         let mut assasin = world.create_entity()
-            .with(Key::new(encoder_keys_dict.encode("KEY_ASSASIN")))
+            .with(Key(encoder_keys_dict.encode("KEY_ASSASIN")))
             .with(types::Pt { x: 200.0, y: 200.0 })
-            .with(Move::new())
-            .with(Speed::new(10.0))
-            .with(CharStateMachine { state: CharState::IDLE })
+            .with(Move::default())
+            .with(Speed(10.0))
+            .with(CharStateMachine(CharState::IDLE) )
             .build();
 
         let mut click_circle = world.create_entity()
-            .with(Key::new(encoder_keys_dict.encode("KEY_TARGET_CIRCLE")))
+            .with(Key(encoder_keys_dict.encode("KEY_TARGET_CIRCLE")))
             .with(types::Pt { x: 0.0, y: 0.0 })
             .build();
         // dispatcher.dispatch(&mut world.res);
@@ -103,7 +103,6 @@ impl LevelOne {
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
         let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
-        log(event_str);
         match event_str {
             "MOVE" => {
                 {
@@ -111,7 +110,7 @@ impl LevelOne {
                     let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
-                    let mut pos_storage = self.world.read_storage::<types::Pt>();
+                    let pos_storage = self.world.read_storage::<types::Pt>();
                     if let (
                         Some(assasin_char_state_storage), 
                         Some(assasin_move_comp), 
@@ -121,7 +120,7 @@ impl LevelOne {
                             move_storage.get_mut(self.assasin), 
                             pos_storage.get(self.assasin)
                             ) {
-                            assasin_char_state_storage.set_state(CharState::MOVE);
+                            assasin_char_state_storage.0 = CharState::MOVE;
                             assasin_move_comp.calc_new_dest(
                                 1.0, 
                                 assasin_pos_comp, 
@@ -130,7 +129,7 @@ impl LevelOne {
                 } 
                 {
                     let mut mut_pos_storage = self.world.write_storage::<types::Pt>();
-                    if let (Some(circle_pos_comp)) = (mut_pos_storage.get_mut(self.click_circle)) {
+                    if let Some(circle_pos_comp) = mut_pos_storage.get_mut(self.click_circle) {
                         circle_pos_comp.x = input_def[1] as f32;
                         circle_pos_comp.y = input_def[2] as f32;
                     }

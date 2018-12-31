@@ -37,13 +37,11 @@ pub enum CharState {
 }
 
 #[derive(Debug)]
-pub struct CharStateMachine {
-    pub state: CharState,
-}
+pub struct CharStateMachine(pub CharState);
 
 impl CharStateMachine {
-    pub fn set_state(&mut self, new_state: CharState ) {
-        self.state = new_state;
+    pub fn get_state_as_string(&self) -> String {
+        self.0.to_string()
     }
 }
 
@@ -52,16 +50,7 @@ impl Component for CharStateMachine {
 }
 
 #[derive(Debug)]
-pub struct Speed(f32); 
-
-impl Speed {
-    pub fn new(speed: f32) -> Speed {
-        Speed(speed)
-    }
-    pub fn value(&self) -> f32 {
-        self.0
-    }
-}
+pub struct Speed(pub f32); 
 
 impl Component for Speed {
     type Storage = VecStorage<Self>;
@@ -69,12 +58,6 @@ impl Component for Speed {
 
 #[derive(Debug)]
 pub struct Key(pub i32); 
-
-impl Key {
-    pub fn new(k: i32) -> Key {
-        Key(k)
-    }
-}
 
 impl Component for Key {
     type Storage = VecStorage<Self>;
@@ -85,22 +68,15 @@ pub struct NextPosDef {
     pub completed: bool,
 }
 
+#[derive(Default)]
 pub struct Move {
     diff: types::Pt,
     normalized: types::Pt,
     multipliers: types::Pt,
-    pub destination: types::Pt,
+    destination: types::Pt,
 }
 
 impl Move {
-    pub fn new() -> Move {
-        Move { 
-            diff: types::Pt::origin(), 
-            normalized: types::Pt::origin(), 
-            multipliers: types::Pt::origin(), 
-            destination: types::Pt::origin() 
-        }
-    }
     fn check_if_past(& self, next_pt: &types::Pt) -> bool {
         let is_past_pt_struct = self.diff.map_with(&next_pt, |diff_prop, next_pt_prop, k| -> f32 {
             if (self.destination.get_key_string(k) - next_pt_prop).signum() != (diff_prop).signum() 
@@ -110,8 +86,6 @@ impl Move {
     }
     pub fn calc_new_dest(&mut self, _speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
         self.destination = types::Pt::from_slice(destination_slice);
-        log_f32(self.destination.x);
-        log_f32(self.destination.y);
         self.diff = self.destination.sub(&pos);
         self.normalized = types::Pt::new(self.diff.x / self.diff.x.abs(), self.diff.x / self.diff.x.abs());
         let rad = (self.diff.y / self.diff.x).atan(); 

@@ -3,6 +3,7 @@ use specs::{ReadStorage,
 System, WriteStorage, ReaderId, Entities, Component, Tracked};
 use specs::storage::ComponentEvent;
 use super::types;
+use super::types::{CoderKeyMapping};
 use wasm_bindgen::prelude::*;
 use specs::prelude::*;
 
@@ -69,79 +70,101 @@ impl ModifiedTrackerStore {
                       }
                   }
               }
-    pub fn track_mut<T>(&mut self, k: &str, storage: &mut WriteStorage<T>) 
-        where T: Component,
-              T::Storage : Tracked {
-                  if let Some(r_id) = self.reader_id.get_mut(k).unwrap().as_mut() {
-                      let events = storage.channel()
-                          .read(r_id);
-                      for event in events {
-                          match event {
-                              ComponentEvent::Modified(id) => { self.modified.get_mut(k).unwrap().add(*id); },
-                              _ => { },
-                          };
-                      }
-                  }
-              }
+}
+
+pub struct EncodedMessageBuilder {
+    pub encoderkeys_dict: CoderKeyMapping,
+    pub state_vec: Vec<f32>,
+    pub sub_state_vec: Vec<f32>,
+}
+
+impl EncodedMessageBuilder {
+    pub fn new(encoderkeys_dict: CoderKeyMapping) -> EncodedMessageBuilder {
+        EncodedMessageBuilder {
+            encoderkeys_dict: encoderkeys_dict,
+            state_vec: vec![],
+            sub_state_vec: vec![]
+        }
+    }
+    pub fn reset(&mut self) {
+        self.state_vec = vec![];
+        self.sub_state_vec = vec![];
+    }
+    pub fn push_str(&mut self, s: &str) {
+        let encoded = self.encoderkeys_dict.encode(s);
+        self.sub_state_vec.push(encoded as f32);
+    }
+    pub fn push_i32(&mut self, num: i32) {
+        self.sub_state_vec.push(num as f32);
+    }
+    pub fn push_pt(&mut self, pt: &types::Pt) {
+        self.sub_state_vec.push(pt.x as f32);
+        self.sub_state_vec.push(pt.y as f32);
+    }
+    pub fn finalize_sub_state(&mut self) {
+        let sub_state_vec_len = self.sub_state_vec.len();
+        if self.sub_state_vec.len() > 0 {
+            self.sub_state_vec.insert(0 as usize, (sub_state_vec_len + 1) as f32);
+            self.state_vec.append(&mut self.sub_state_vec);
+            self.sub_state_vec = vec![];
+        }
+    }
+    pub fn get_finalized_boxed(&mut self) -> Option<Box<[f32]>> {
+        let state_vec_len = self.state_vec.len();
+        if state_vec_len > 0 {
+            self.state_vec.insert(0 as usize, (state_vec_len + 1) as f32);
+            Some(self.state_vec.clone().into_boxed_slice())
+        } else {
+            None
+        }
+    }
 }
 
 pub struct WatchAll {
-    pub encoderkeys_dict: types::CoderKeyMapping,
     pub tracker_store: ModifiedTrackerStore,
+    pub encoded_message_builder: EncodedMessageBuilder,
 }
 
 impl <'a> WatchAll {
-    pub fn new(encoderkeys_dict: types::CoderKeyMapping) -> WatchAll {
+    pub fn new(encoderkeys_dict: CoderKeyMapping) -> WatchAll {
         WatchAll {
-            encoderkeys_dict: encoderkeys_dict,
             tracker_store: ModifiedTrackerStore::default(),
+            encoded_message_builder: EncodedMessageBuilder::new(encoderkeys_dict)
         }
     }
 }
 
 impl<'a> System<'a> for WatchAll {
     type SystemData = (
-        Entities<'a>,
         ReadStorage<'a, CharStateMachine>,
         ReadStorage<'a, Key>,
         ReadStorage<'a, types::Pt>);
 
     fn run(&mut self, system_data: Self::SystemData) {
-        let (entities, char_state_storage, key_storage, pos_storage) = system_data;
+        let (char_state_storage, key_storage, pos_storage) = system_data;
+        self.encoded_message_builder.reset();
         self.tracker_store.track("pos", &pos_storage);
         self.tracker_store.track("char_state", &char_state_storage);
-        let mut state_vec = vec![];
-        //TODO should come up with a method to do this automatically
-        for (entity, key, pos, _t) in (&entities, &key_storage, &pos_storage, self.tracker_store.get("pos")).join() {
-            let mut sub_state_vec = vec![];
-            let key_set_spritepos = self.encoderkeys_dict.encode("KEY_SET_SPRITE_POS");
-            let char_state: Option<& CharStateMachine> = char_state_storage.get(entity);
-            let key_assasin = self.encoderkeys_dict.encode("KEY_ASSASIN");
-            let key_target_circle = self.encoderkeys_dict.encode("KEY_TARGET_CIRCLE");
 
-            sub_state_vec.push(key_set_spritepos as f32);
-            sub_state_vec.push(key.0 as f32);
-
-            if let Some(char_state) = char_state {
-                let key_char_state = self.encoderkeys_dict.encode(&char_state.state.to_string());
-                sub_state_vec.push(key_char_state as f32);
-            }
-
-            sub_state_vec.push(pos.x);
-            sub_state_vec.push(pos.y);
-
-            let sub_state_vec_len = sub_state_vec.len();
-            if sub_state_vec.len() > 0 {
-                sub_state_vec.insert(0 as usize, (sub_state_vec_len + 1) as f32);
-                state_vec.append(&mut sub_state_vec);
-            }
+        // positions
+        for (key, pos, _) in (&key_storage, &pos_storage, self.tracker_store.get("pos")).join() {
+            self.encoded_message_builder.push_str("KEY_SET_SPRITE_POS");
+            self.encoded_message_builder.push_i32(key.0);
+            self.encoded_message_builder.push_pt(pos);
+            self.encoded_message_builder.finalize_sub_state();
         }
-        let state_vec_len = state_vec.len();
-        if state_vec.len() > 0 {
-            state_vec.insert(0 as usize, (state_vec_len + 1) as f32);
-            let state_diff_ptr: Box<[f32]> = state_vec.into_boxed_slice();
-            cljs_wasm_adapter::update(state_diff_ptr);
+
+        for (char_state, _) in (&char_state_storage, self.tracker_store.get("char_state")).join() {
+            self.encoded_message_builder.push_str("KEY_SET_CHAR_STATE");
+            self.encoded_message_builder.push_str(&char_state.get_state_as_string());
+            self.encoded_message_builder.finalize_sub_state();
         }
+
+        if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
+            cljs_wasm_adapter::update(encoded_message);
+        }
+
+        self.tracker_store.clear("char_state");
         self.tracker_store.clear("pos");
     }
 
@@ -153,7 +176,7 @@ impl<'a> System<'a> for WatchAll {
             vec![
             KeyReaderIdMapping { k: "pos", reader_id: pos_reader_id },
             KeyReaderIdMapping { k: "char_state", reader_id: char_reader_id }
-        ]);
+            ]);
     }
 }
 
@@ -163,30 +186,44 @@ pub struct UpdateChar {
 }
 
 impl<'a> System<'a> for UpdateChar {
-    type SystemData = (Read<'a, resources::DeltaTime>,
+    type SystemData = (Entities<'a>,
+                       Read<'a, resources::DeltaTime>,
                        ReadStorage<'a, Move>,
                        ReadStorage<'a, Speed>,
                        WriteStorage<'a, CharStateMachine>,
                        WriteStorage<'a, types::Pt>);
 
-    fn run(&mut self, (delta, move_obj_storage, speed_storage, mut char_state_storage, mut pos_storage): Self::SystemData) {
+    fn run(&mut self, (entities, delta, move_obj_storage, speed_storage, mut char_state_storage, mut pos_storage): Self::SystemData) {
         self.tracker_store.track("move", &move_obj_storage);
         let mut clear: Vec<u32> = Vec::new();
         let dt = delta.0;
-        for (move_obj, pos, speed, event) 
-            in (
+        let mut set_char_state_idle = |entity| {
+            if let Some(char_state) = char_state_storage.get_mut(entity) {
+                char_state.0 = CharState::IDLE;
+            }
+        };
+        for (entity, 
+             move_obj, 
+             pos, 
+             speed,
+             event) 
+            in (&entities,
                 &move_obj_storage, 
                 &mut pos_storage, 
                 &speed_storage, 
                 self.tracker_store.get("move")).join() {
-            let pos_clone = pos.clone();
-            let nextpos_def = move_obj.next(dt, &pos_clone, speed.value());
-            pos.x = nextpos_def.pt.x;
-            pos.y = nextpos_def.pt.y;
-            if nextpos_def.completed {
-                clear.push(event);
+                let pos_clone = pos.clone();
+                let nextpos_def = move_obj.next(dt, &pos_clone, speed.0);
+                pos.x = nextpos_def.pt.x;
+                pos.y = nextpos_def.pt.y;
+                if nextpos_def.completed {
+                    // if let Some(char_state) = char_state_storage.get_mut(entity) {
+                    //     char_state.set_state(CharState::IDLE);
+                    // }
+                    set_char_state_idle(entity);
+                    clear.push(event);
+                }
             }
-        }
 
         for event in clear {
             self.tracker_store.get_mut("move").remove(event);
@@ -199,6 +236,6 @@ impl<'a> System<'a> for UpdateChar {
         self.tracker_store.init(
             vec![
             KeyReaderIdMapping { k: "move", reader_id: move_reader_id },
-        ]);
+            ]);
     }
 }

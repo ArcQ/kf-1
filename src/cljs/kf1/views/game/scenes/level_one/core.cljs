@@ -8,6 +8,7 @@
                   "NO_CHANGE"
                   "KEY_GOBLIN"
                   "KEY_ASSASIN"
+                  "KEY_SET_CHAR_STATE"
                   "KEY_TARGET_CIRCLE"
                   "KEY_SET_SPRITE_POS"
                   "MOVE" 

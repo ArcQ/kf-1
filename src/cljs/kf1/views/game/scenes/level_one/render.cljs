@@ -75,7 +75,8 @@
         k (aget subState 1)]
     (condp = k
       (.indexOf @RENDER_KEYS "KEY_SET_SPRITE_POS") (setSpritePos! 
-                                                     (ocall! subState :slice 2))))
+                                                     (ocall! subState :slice 2))
+      (.indexOf @RENDER_KEYS "KEY_SET_CHAR_STATE") (prn subState)))
   )
 
 (defn decodeByteArray [gameStateByteArray]

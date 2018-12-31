@@ -15,6 +15,7 @@ extern "C" {
 }
 
 /// base types
+#[derive(Default)]
 pub struct Pt {
     pub x: f32,
     pub y: f32
@@ -64,6 +65,8 @@ impl Clone for Pt {
     fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
 }
 
+/// Rust Implementation of the string to key mapping defined in clojurescript used for encoding
+/// keys between the communication of rust to js
 pub struct CoderKeyMapping {
     pub keys: Vec<String>,
 }
@@ -95,11 +98,6 @@ impl CoderKeyMapping {
         &self.keys[num as usize]
     }
 }
-
-
-
-
-
 
 
 #[cfg(test)]
