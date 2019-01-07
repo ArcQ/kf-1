@@ -18,6 +18,8 @@
             "SPOT_ATTACK" (do
                        (ocall! evt :preventDefault)
                        (array (eventArgs 1)))  
+            "FINISH_SPOT_ATTACK" (do 
+                       (array (eventArgs 1)))  
             ;; "SET_TARGET" (-> (ocall! 
             ;;                    kfGameEngine 
             ;;                    "default.utils.mapDOMPosToStage"

@@ -6,15 +6,15 @@
 ;; no more significance of keeping track of keys, might as well just make this an array and base it off of indexes
 (def encoderKeys [ 
                   "NO_CHANGE"
-                  "KEY_GOBLIN"
-                  "KEY_ASSASIN"
-                  "KEY_SET_CHAR_STATE"
-                  "KEY_TARGET_CIRCLE"
-                  "KEY_SET_SPRITE_POS"
+                  "P1"
+                  "P2"
+                  "SET_CHAR_STATE"
+                  "SET_SPRITE_POS"
+                  "CHANGE_ORIENTATION"
                   "MOVE" 
                   "IDLE"
                   "SPOT_ATTACK"
-                  "BLAH"
+                  "FINISH_SPOT_ATTACK"
                   ])
 
 (defn getLevelOne []

@@ -6,9 +6,12 @@
                  [re-frame "0.10.5"]
                  [secretary "1.2.3"]
                  [cljfmt "0.5.1"]
-                 [cljs-http "0.1.45"]]
+                 [cljs-http "0.1.45"]
+                 [garden "1.3.6"]]
 
-  :plugins [[lein-cljsbuild "1.1.7"]]
+  :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-garden "0.3.0"]
+            [lein-cooper "1.2.2"]]
 
   :min-lein-version "2.5.3"
 
@@ -19,6 +22,14 @@
   :figwheel {:css-dirs ["resources/public/css"]
              :ring-handler kf1.dev-server/handler}
 
+  :cooper {"figwheel"  ["lein" "figwheel" "dev"]
+           "garden" ["lein" "garden" "auto"]}
+  
+  :garden {:builds [{:id "screen"
+                     :source-paths ["src/styles"]
+                     :stylesheet kf1.core/styles
+                     :compiler {:output-to "resources/public/css/main.css"
+                                :pretty-print? false}}]}
   :profiles
   {:dev
    {:dependencies [[figwheel-sidecar "0.5.16"]

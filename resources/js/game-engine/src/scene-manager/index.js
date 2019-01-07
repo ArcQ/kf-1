@@ -196,7 +196,7 @@ function _wrapInSceneHelpers(sceneObj) {
 
           const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys);
           const updateFn = (dt) => wasmGame.get_update(dt);
-          const wasmUpdate = (a) => console.log(a) || wasmGame.on_event(a);
+          const wasmUpdate = (a) => wasmGame.on_event(a);
 
           engine.wasmUpdate = wasmUpdate;
           // wait on mount of ui elements

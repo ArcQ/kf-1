@@ -50,6 +50,13 @@ impl Component for CharStateMachine {
 }
 
 #[derive(Debug)]
+pub struct Orientation(pub f32); 
+
+impl Component for Orientation {
+    type Storage = FlaggedStorage<Self, VecStorage<Self>>;
+}
+
+#[derive(Debug)]
 pub struct Speed(pub f32); 
 
 impl Component for Speed {
@@ -68,6 +75,58 @@ pub struct NextPosDef {
     pub completed: bool,
 }
 
+trait CharResource {
+    fn new(max: f32) -> Self;
+    fn set(&mut self, value: f32);
+    fn get(&self) -> f32; 
+    fn get_max(&self) -> f32;
+    fn get_percentage(&self) -> f32 { 
+        self.get()/self.get_max() * 100.0
+    }
+    fn dec(&mut self, val: f32) {
+        let mut new_value = self.get() + val;
+        if (new_value < 0.0) {
+            new_value = 0.0;
+        }
+        self.set(new_value);
+    }
+    fn inc(&mut self, val: f32) {
+        let new_value = self.get() + val;
+        if (new_value > self.get_max()) {
+            self.get_max();
+        }
+        self.set(new_value);
+    }
+}
+
+#[derive(Debug)]
+pub struct  Health{
+    value: f32,
+    max: f32,
+}
+
+impl Component for Health {
+    type Storage = VecStorage<Self>;
+}
+
+impl CharResource for Health {
+    fn new(max: f32) -> Health {
+        Health {
+            value: max,
+            max: max
+        }
+    }
+    fn set(&mut self, value: f32) {
+        self.value = value;
+    }
+    fn get(&self) -> f32 {
+        self.value
+    }
+    fn get_max(&self) -> f32{
+        self.max
+    }
+}
+
 #[derive(Default)]
 pub struct Move {
     diff: types::Pt,
@@ -83,6 +142,10 @@ impl Move {
             { -1.0 } else  { 0.0 }
         });
         (is_past_pt_struct.x < 0.0 || is_past_pt_struct.y < 0.0)
+    }
+    pub fn get_x_direction(&self) -> f32 {
+        if self.diff.x > 0.0 
+            { 1.0 } else  { 2.0 }
     }
     pub fn calc_new_dest(&mut self, _speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
         self.destination = types::Pt::from_slice(destination_slice);
@@ -109,3 +172,4 @@ impl Move {
 impl Component for Move {
     type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
+
