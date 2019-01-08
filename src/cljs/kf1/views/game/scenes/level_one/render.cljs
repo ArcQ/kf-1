@@ -112,10 +112,10 @@
 (defn setSpriteOrientation [nextOrientationState]
   (condp = (aget nextOrientationState 0)
     (.indexOf @RENDER_KEYS "P1")  (->>
-                                             (if (= (aget nextOrientationState 1) 2) 
-                                               -1 1)
-                                             (* (abs (oget (:assasin @spriteStore) [:scale :x])))
-                                             (oset! (:assasin @spriteStore) [:scale :x]))))
+                                    (if (= (aget nextOrientationState 1) 2) 
+                                      -1 1)
+                                    (* (abs (oget (:assasin @spriteStore) [:scale :x])))
+                                    (oset! (:assasin @spriteStore) [:scale :x]))))
 
 (defn handleSubState [subState]
   (let [subStateLen (aget subState 0)
