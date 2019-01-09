@@ -33,36 +33,6 @@ extern "C" {
     fn log_f32(a: f32);
 }
 
-
-// pub fn run_with_storage<T: Component, F>(
-//     storage: Storage<'_, T, specs::shred::FetchMut<'_, specs::storage::MaskedStorage<T>>>, 
-//     entity_opt: Option<&Entity>, cb: F) 
-// where F: Fn(&mut T) {
-//     let mut s = storage;
-//     if let Some(entity) = entity_opt {
-//         if let Some(entity_char_state_storage) = s.get_mut(*entity) { 
-//             cb(entity_char_state_storage);
-//         }
-//     }
-// }
-// // TODO rewrite as macro
-// pub fn run_with_storages_4<T: Component, U: Component, V: Component, W: Component, F>(
-//     storage_1: Storage<'_, T, specs::shred::FetchMut<'_, specs::storage::MaskedStorage<T>>>, 
-//     storage_2: Storage<'_, U, specs::shred::FetchMut<'_, specs::storage::MaskedStorage<U>>>, 
-//     storage_3: Storage<'_, V, specs::shred::FetchMut<'_, specs::storage::MaskedStorage<V>>>, 
-//     storage_4: Storage<'_, W, specs::shred::FetchMut<'_, specs::storage::MaskedStorage<W>>>, 
-//     entity_opt: Option<&Entity>, cb: F) 
-// where F: Fn(&mut T) {
-//     let mut s1 = storage_1;
-//     let mut s2 = storage_1;
-//     let mut s3 = storage_1;
-//     let mut s4 = storage_1;
-//     if let Some(entity) = entity_opt {
-//         if let Some(entity_char_state_storage) = (s.get_mut(*entity)) { 
-//             cb(entity_char_state_storage);
-//         }
-//     }
-// }
 macro_rules! iflet {
     ([$p:pat = $e:expr], $($rest:tt),*) => {
         if let $p = $e {
@@ -75,9 +45,16 @@ macro_rules! iflet {
 }
 
 macro_rules! unpack_storage {
-    ($entity_option:expr, [$some_p:pat = $storage_option_from_hash:expr], $($rest:tt),*) => {
-        if let Some(entity) =$entity_option {
+    ($entity_option:expr, [$some_p:pat = mut $storage_option_from_hash:expr], $($rest:tt),*) => {
+        if let Some(entity) = $entity_option {
             if let $some_p = $storage_option_from_hash.get_mut(*entity) {
+                unpack_storage!($entity_option, $($rest),*);
+            }
+        }
+    };
+    ($entity_option:expr, [$some_p:pat = $storage_option_from_hash:expr], $($rest:tt),*) => {
+        if let Some(entity) = $entity_option {
+            if let $some_p = $storage_option_from_hash.get(*entity) {
                 unpack_storage!($entity_option, $($rest),*);
             }
         }
@@ -158,58 +135,45 @@ impl LevelOne {
                 {
                     log("MOVE");
                     let char_height = 84;
-                    // let mut move_storage = self.world.write_storage::<Move>();
+                    let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
-                    // let mut orientation_storage = self.world.write_storage::<Orientation>();
-                    // let pos_storage = self.world.read_storage::<types::Pt>();
+                    let mut orientation_storage = self.world.write_storage::<Orientation>();
+                    let pos_storage = self.world.read_storage::<types::Pt>();
 
-                    // run_with_storages_4(char_state_storage, orientation_storage, move_storage, pos_storage, self.entities.get("P1"), |entity_char_state_storage| {
-                    //     entity_char_state_storage.0 = CharState::MOVE; 
-                    // });
                     unpack_storage!(
                         self.entities.get("P1"), 
-                        [Some(a) = char_state_storage], 
-                        // [Some(b) = orientation_storage], 
-                        // [Some(c) = move_storage], 
+                        [Some(entity_char_state_storage) = mut char_state_storage], 
+                        [Some(entity_x_orientation_comp) = mut orientation_storage], 
+                        [Some(entity_move_comp) = mut move_storage], 
+                        [Some(entity_pos_comp) = pos_storage], 
                         {
-                        a.0 = CharState::MOVE;
+                            entity_char_state_storage.0 = CharState::MOVE;
+                            entity_move_comp.calc_new_dest(
+                                1.0, 
+                                entity_pos_comp, 
+                                [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
+                            entity_x_orientation_comp.0 = entity_move_comp.get_x_direction();
                     });
-                    // blah(orientation_storage);
-                    // blah(move_storage);
-
-                    // if let (
-                    //     Some(entity_char_state_storage), 
-                    //     Some(entity_x_orientation_comp), 
-                    //     Some(entity_move_comp), 
-                    //     Some(entity_pos_comp)
-                    //     ) = (
-                    //         char_state_storage.get_mut(self.entities.get("P1")), 
-                    //         orientation_storage.get_mut(self.entities.get("P1")), 
-                    //         move_storage.get_mut(self.entities.get("P1")), 
-                    //         pos_storage.get(self.entities.get("P1"))
-                    //         ) {
-                    //         entity_char_state_storage.0 = CharState::MOVE;
-                    //         entity_move_comp.calc_new_dest(
-                    //             1.0, 
-                    //             entity_pos_comp, 
-                    //             [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
-                    //         entity_x_orientation_comp.0 = entity_move_comp.get_x_direction();
-                    //     }
                 } 
             }
-            // "SPOT_ATTACK" => {
-            //     log("SPOT_ATTACK");
-            //     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
-            //     if let Some(entity_char_state_storage) = char_state_storage.get_mut(self.entities.get("P1")) {
-            //         entity_char_state_storage.0 = CharState::SPOT_ATTACK;
-            //     } 
-            // }
-            // "FINISH_SPOT_ATTACK" => {
-            //     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
-            //     if let Some(entity_char_state_storage) = char_state_storage.get_mut(self.entities.get("P1")) {
-            //         entity_char_state_storage.0 = CharState::IDLE;
-            //     } 
-            // }
+            "SPOT_ATTACK" => {
+                let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
+                unpack_storage!(
+                    self.entities.get("P1"), 
+                    [Some(entity_char_state_storage) = mut char_state_storage], 
+                    {
+                        entity_char_state_storage.0 = CharState::SPOT_ATTACK;
+                    });
+            }
+            "FINISH_SPOT_ATTACK" => {
+                let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
+                unpack_storage!(
+                    self.entities.get("P1"), 
+                    [Some(entity_char_state_storage) = mut char_state_storage], 
+                    {
+                        entity_char_state_storage.0 = CharState::IDLE;
+                    });
+            }
             _ => (),
         }
     }

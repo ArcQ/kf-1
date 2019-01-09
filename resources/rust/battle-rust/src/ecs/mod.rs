@@ -169,7 +169,7 @@ impl<'a> System<'a> for WatchAll {
         
         for (orientation, _) in (&orientation_storage, self.tracker_store.get("orientation")).join() {
             self.encoded_message_builder.push_str("CHANGE_ORIENTATION");
-            self.encoded_message_builder.push_str("ASSASIN");
+            self.encoded_message_builder.push_str("P1");
             self.encoded_message_builder.push(orientation.0);
             self.encoded_message_builder.finalize_sub_state();
         }
