@@ -7,7 +7,7 @@
             [kf1.views.Game.scenes.level-one.event-listeners :refer [handleEvents]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
 
-(def RENDER_KEYS (atom []))
+(def encoder (atom {}))
 
 (def TILE_SIZE 60)
 
@@ -17,6 +17,8 @@
                          "waterTexture",
                          "mountainTexture",
                          ])
+
+(defn encode [k] ((@encoder :encode) k))
 
 (def spriteStore (atom {}))
 
@@ -54,10 +56,10 @@
   (let [jsPos (-> (ocall! nextPosState :slice -2))
         pos [(aget jsPos 0) (aget jsPos 1)]]
     (condp = (aget nextPosState 0)
-      (.indexOf @RENDER_KEYS "TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
+      (encode "TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
                                                     (setPos! pos)
                                                     (oset! :visible true))
-      (.indexOf @RENDER_KEYS "P1") (doto (:assasin @spriteStore)
+      (encode "P1") (doto (:assasin @spriteStore)
                                               (setPos! pos))
       )))
 
@@ -66,22 +68,22 @@
   (letfn [(onComplete []
             (prn "FINISH_SPOT_ATTACK")
             (condp = charState
-              (.indexOf @RENDER_KEYS "SPOT_ATTACK") (handleEvents nil @RENDER_KEYS "FINISH_SPOT_ATTACK" "P1"))
+              (encode "SPOT_ATTACK") (handleEvents nil encode "FINISH_SPOT_ATTACK" "P1"))
             )]
     (let [frames (condp = charState 
-                   (.indexOf @RENDER_KEYS "IDLE") (->> (range 5)
+                   (encode "IDLE") (->> (range 5)
                                                        (map-indexed 
                                                          (fn [_ i] (ocall! 
                                                                      engine 
                                                                      "default.PIXI.Texture.fromFrame"
                                                                      (gstring/format "1_IDLE_00%dassasin.png" i)))))
-                   (.indexOf @RENDER_KEYS "MOVE") (->> (range 5)
+                   (encode "MOVE") (->> (range 5)
                                                        (map-indexed 
                                                          (fn [_ i] (ocall! 
                                                                      engine 
                                                                      "default.PIXI.Texture.fromFrame"
                                                                      (gstring/format "2_WALK_00%dassasin.png" i)))))
-                   (.indexOf @RENDER_KEYS "SPOT_ATTACK") (->> (range 9)
+                   (encode "SPOT_ATTACK") (->> (range 9)
                                                               (remove odd?)
                                                               (map-indexed 
                                                                 (fn [_ i] (ocall! 
@@ -94,10 +96,10 @@
       (doto (:assasin @spriteStore)
         (ocall! :stop)
         (oset! :textures (clj->js frames))
-        ((fn [sprite] (if (= charState (.indexOf @RENDER_KEYS "MOVE")) 
+        ((fn [sprite] (if (= charState (encode "MOVE")) 
                         (oset! sprite :loop false) 
                         (oset! sprite :loop true))))
-        ((fn [sprite] (if (= charState (.indexOf @RENDER_KEYS "SPOT_ATTACK")) 
+        ((fn [sprite] (if (= charState (encode "SPOT_ATTACK")) 
                         (oset! sprite :loop false) 
                         (oset! sprite :loop true))))
         ((fn [sprite] (if (not (nil? onComplete)) (oset! sprite :onComplete onComplete))))
@@ -105,13 +107,13 @@
 
 (defn setSpriteCharState [nextPosState]
   (condp = (aget nextPosState 0)
-    (.indexOf @RENDER_KEYS "P1") (runAnimOnSprite (:assasin @spriteStore) (aget nextPosState 1))))
+    (encode "P1") (runAnimOnSprite (:assasin @spriteStore) (aget nextPosState 1))))
 
 (defn abs [n] (max n (- n)))
 
 (defn setSpriteOrientation [nextOrientationState]
   (condp = (aget nextOrientationState 0)
-    (.indexOf @RENDER_KEYS "P1")  (->>
+    (encode "P1")  (->>
                                     (if (= (aget nextOrientationState 1) 2) 
                                       -1 1)
                                     (* (abs (oget (:assasin @spriteStore) [:scale :x])))
@@ -122,9 +124,9 @@
         k (aget subState 1)
         data (ocall! subState :slice 2)]
     (condp = k
-      (.indexOf @RENDER_KEYS "SET_SPRITE_POS") (setSpritePos! data)
-      (.indexOf @RENDER_KEYS "SET_CHAR_STATE") (setSpriteCharState data)
-      (.indexOf @RENDER_KEYS "CHANGE_ORIENTATION") (setSpriteOrientation data)
+      (encode "SET_SPRITE_POS") (setSpritePos! data)
+      (encode "SET_CHAR_STATE") (setSpriteCharState data)
+      (encode "CHANGE_ORIENTATION") (setSpriteOrientation data)
       ))
   )
 
@@ -136,8 +138,8 @@
         (handleSubState (ocall! gameStateByteArray :slice i subStateEndI))
         (recur subStateEndI)))))
 
-(defn tick [renderKeys]
-  (swap! RENDER_KEYS concat renderKeys)
+(defn tick [encode]
+  (swap! encoder merge {:encode encode})
   (fn [gameStateByteArray] 
     (if (not (nil? gameStateByteArray))
       (decodeByteArray gameStateByteArray))))

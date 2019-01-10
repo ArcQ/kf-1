@@ -17,6 +17,9 @@
                   "FINISH_SPOT_ATTACK"
                   ])
 
+(defn encode [k]
+  (.indexOf encoderKeys k))
+
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
             :encoderKeys encoderKeys
@@ -26,6 +29,6 @@
             :willLoad api/generateGameMap
             :start (fn [] 
                                 (render/initialRender)
-                                (eventListeners/watchEvents encoderKeys))
-            :update (render/tick encoderKeys)
+                                (eventListeners/watchEvents encode))
+            :update (render/tick encode)
             }))

@@ -133,6 +133,7 @@ impl LevelOne {
         match event_str {
             "MOVE" => {
                 {
+                    let entity_key = self.encoder_keys_dict.decode(input_def[1]);
                     log("MOVE");
                     let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
@@ -141,7 +142,7 @@ impl LevelOne {
                     let pos_storage = self.world.read_storage::<types::Pt>();
 
                     unpack_storage!(
-                        self.entities.get("P1"), 
+                        self.entities.get(entity_key), 
                         [Some(entity_char_state_storage) = mut char_state_storage], 
                         [Some(entity_x_orientation_comp) = mut orientation_storage], 
                         [Some(entity_move_comp) = mut move_storage], 
@@ -151,7 +152,7 @@ impl LevelOne {
                             entity_move_comp.calc_new_dest(
                                 1.0, 
                                 entity_pos_comp, 
-                                [input_def[1] as f32, (input_def[2] - (char_height / 2)) as f32]);
+                                [input_def[2] as f32, (input_def[3] - (char_height / 2)) as f32]);
                             entity_x_orientation_comp.0 = entity_move_comp.get_x_direction();
                     });
                 } 

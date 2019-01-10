@@ -3,23 +3,25 @@
             [oops.core :refer [oget oset! ocall!]]))
 ;; not done yet
 
-(defn handleEvents [evt renderKeys & args] 
+(defn handleEvents [evt encode & args] 
   (let [eventArgs (vec args)
-        k (eventArgs 0)]
+        k (eventArgs 0)
+        entityKey (encode "P1")]
     (letfn [(wasmUpdate [arr] (ocall! 
                                 kfGameEngine 
                                 "default.wasmUpdate" 
-                                (clj->js (concat [(.indexOf renderKeys k)] arr))))] 
+                                (clj->js (concat [(encode k)] arr))))] 
       (-> (case k 
-            "MOVE" (ocall! 
-                     kfGameEngine 
-                     "default.utils.mapDOMPosToStage"
-                     (array (oget evt "offsetX") (oget evt "offsetY")))
+            "MOVE" (->> (ocall! 
+                          kfGameEngine 
+                          "default.utils.mapDOMPosToStage"
+                          (array (oget evt "offsetX") (oget evt "offsetY")))
+                        (ocall! (array entityKey) :concat ))
             "SPOT_ATTACK" (do
-                       (ocall! evt :preventDefault)
-                       (array (eventArgs 1)))  
+                            (ocall! evt :preventDefault)
+                            (array entityKey (eventArgs 1)))  
             "FINISH_SPOT_ATTACK" (do 
-                       (array (eventArgs 1)))  
+                                   (array entityKey (eventArgs 1)))  
             ;; "SET_TARGET" (-> (ocall! 
             ;;                    kfGameEngine 
             ;;                    "default.utils.mapDOMPosToStage"
@@ -28,17 +30,17 @@
             )
         (wasmUpdate)))))
 
-(defn watchEvents [renderKeys]
+(defn watchEvents [encode]
   (-> (ocall! js/document :getElementById "ui")
       (ocall! :addEventListener 
               "click" 
-              (fn [evt] (handleEvents evt renderKeys "MOVE"))
+              (fn [evt] (handleEvents evt encode "MOVE"))
               false))
   (-> (ocall! js/document :getElementById "attackOneBtn")
       (ocall! :addEventListener 
               "click" 
               (fn [evt] 
-                (handleEvents evt renderKeys "SPOT_ATTACK" 1)
+                (handleEvents evt encode "SPOT_ATTACK" 1)
                 (ocall! evt :stopPropagation))
               false)))
 
