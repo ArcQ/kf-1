@@ -32,7 +32,6 @@ impl Component for types::Pt {
 pub enum CharState {
     IDLE,
     MOVE,
-    BLINK,
     SPOT_ATTACK,
 }
 
@@ -85,14 +84,14 @@ trait CharResource {
     }
     fn dec(&mut self, val: f32) {
         let mut new_value = self.get() + val;
-        if (new_value < 0.0) {
+        if new_value < 0.0 {
             new_value = 0.0;
         }
         self.set(new_value);
     }
     fn inc(&mut self, val: f32) {
         let new_value = self.get() + val;
-        if (new_value > self.get_max()) {
+        if new_value > self.get_max() {
             self.get_max();
         }
         self.set(new_value);

@@ -13,10 +13,12 @@ use std::collections::HashMap;
 mod ecs;
 mod types;
 
-use types::{CoderKeyMapping, GameMap};
+use types::{CoderKeyMapping};
 
 use ecs::{UpdateChar, WatchAll};
-use ecs::components::{Health, Key, Speed, Move, CharState, CharStateMachine, Orientation};
+use ecs::components::{
+    // Health, 
+    Key, Speed, Move, CharState, CharStateMachine, Orientation};
 use ecs::resources::{DeltaTime};
 
 #[wasm_bindgen]
@@ -33,6 +35,7 @@ extern "C" {
     fn log_f32(a: f32);
 }
 
+#[allow(unused_macros)]
 macro_rules! iflet {
     ([$p:pat = $e:expr], $($rest:tt),*) => {
         if let $p = $e {
@@ -78,19 +81,6 @@ macro_rules! js_get {
 }
 
 macro_rules! js_get_in {
-    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
-        js_get!($v, $alias, str $k, {
-            $b
-        });
-    };
-    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
-        js_get!($v, Ok(inner_v), str $k, {
-            js_get_in!(inner_v, $alias, str $k, $($rest),*);
-        });
-    };
-}
-
-macro_rules! js_value_entries {
     ($v:expr, $alias:pat, str $k:expr, $b:block) => {
         js_get!($v, $alias, str $k, {
             $b

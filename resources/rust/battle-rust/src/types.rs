@@ -25,9 +25,9 @@ impl Pt {
     pub fn new(x: f32, y: f32) -> Pt {
         Pt { x: x, y: y }
     }
-    pub fn origin() -> Pt {
-        Pt { x: 0.0, y: 0.0 }
-    }
+    // pub fn origin() -> Pt {
+    //     Pt { x: 0.0, y: 0.0 }
+    // }
     pub fn from_slice(pt_slice: [f32;2]) -> Pt {
         Pt { x: pt_slice[0 as usize],  y: pt_slice[1 as usize] }
     }
@@ -140,7 +140,12 @@ impl GameMap {
             scale: scale,
         }
     }
-    fn get(x: i32, y: i32) {
+    fn get(&self, x: i32, y: i32) -> Option<&i32> {
+        let mut v = None;
+        if let Some(row) = self.map.get(y as usize) {
+            v = row.get(x as usize)
+        };
+        v 
     }
 }
 
