@@ -133,9 +133,15 @@ pub struct Move {
     normalized: types::Pt,
     multipliers: types::Pt,
     destination: types::Pt,
+    game_map: types::GameMap,
 }
 
 impl Move {
+    pub fn new(game_map: types::GameMap) -> Move {
+        let mut move_obj = Move::default();
+        move_obj.game_map = game_map;
+        move_obj
+    }
     fn check_if_past(& self, next_pt: &types::Pt) -> bool {
         let is_past_pt_struct = self.diff.map_with(&next_pt, |diff_prop, next_pt_prop, k| -> f32 {
             if (self.destination.get_key_string(k) - next_pt_prop).signum() != (diff_prop).signum() 

@@ -99,6 +99,50 @@ impl CoderKeyMapping {
     }
 }
 
+#[derive(Default)]
+pub struct GameMap {
+    bounds: [usize;2],
+    scale: f32,
+    map: Vec<Vec<i32>>,
+}
+
+impl GameMap {
+    pub fn clone(&self) -> GameMap {
+        GameMap {
+            map: self.map.clone(), 
+            bounds: self.bounds,
+            scale: self.scale,
+        }
+    }
+    pub fn from_js_array(js_game_map: &wasm_bindgen::JsValue, scale: f32) -> GameMap {
+        let game_map_array: js_sys::Array = js_sys::Array::from(js_game_map);
+        let mut map_vec = vec![];
+        for (i, row_result) in game_map_array.values().into_iter().enumerate() {
+            if let Ok(row) = row_result {
+                let row_arr = js_sys::Array::from(&row);
+                let mut row_vec = vec![]; 
+                for (i, v_result) in row_arr.values().into_iter().enumerate() {
+                    if let Ok(v) = v_result {
+                        row_vec.insert(i, v.as_f64().unwrap() as i32);
+                    }
+                }
+                map_vec.insert(i, row_vec);
+            }
+        }
+        let mut inner_vec_len = 0;
+        let outer_vec_len = map_vec.len();
+        if let Some(inner_vec) = map_vec.get(0) {
+            inner_vec_len = inner_vec.len();
+        };
+        GameMap {
+            map: map_vec, 
+            bounds: [inner_vec_len, outer_vec_len],
+            scale: scale,
+        }
+    }
+    fn get(x: i32, y: i32) {
+    }
+}
 
 #[cfg(test)]
 mod tests {

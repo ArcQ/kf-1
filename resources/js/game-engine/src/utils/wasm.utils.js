@@ -17,7 +17,7 @@ export const MemoryFactory = {
  * whenever you're accessing wasm, should do a safe check for whether it exists/isLoaded, else wait for it to load
  */
 export function runOnWasmLoad(cb) {
-  const _cb = () => cb(getWindow(['wasm_bindgen']))
+  const _cb = () => cb(getWindow(['wasm_bindgen']));
   if (getWindow(['wasmLoaded'])) {
     _cb();
   } else {

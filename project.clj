@@ -7,6 +7,7 @@
                  [secretary "1.2.3"]
                  [cljfmt "0.5.1"]
                  [cljs-http "0.1.45"]
+                 [funcool/promesa "1.9.0"]
                  [garden "1.3.6"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]

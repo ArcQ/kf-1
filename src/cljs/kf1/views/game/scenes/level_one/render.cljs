@@ -7,9 +7,9 @@
             [kf1.views.Game.scenes.level-one.event-listeners :refer [handleEvents]]
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
 
-(def encoder (atom {}))
+(def playerK "P1")
 
-(def TILE_SIZE 60)
+(def encoder (atom {}))
 
 (def GAMEMAP_TO_TEXTURE [
                          "grassTexture",
@@ -22,17 +22,24 @@
 
 (def spriteStore (atom {}))
 
-(defn createTile [v, x, y]
-  (doto (getSprite "levelOne" (GAMEMAP_TO_TEXTURE v))
-    (oset! :x (* x TILE_SIZE))
-    (oset! :y (* y TILE_SIZE))
-    (oset! :width TILE_SIZE)
-    (oset! :height TILE_SIZE)))
+(defn createTile [v, x, y TILE_SIZE]
+    (doto (getSprite "levelOne" (GAMEMAP_TO_TEXTURE v))
+      (oset! :x (* x TILE_SIZE))
+      (oset! :y (* y TILE_SIZE))
+      (oset! :width TILE_SIZE)
+      (oset! :height TILE_SIZE)))
 
 (defn createTileMap [gameMap]
-  (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y)) row))
-      (map-indexed gameMap)
-      (flatten)))
+  (let [GAME_WINDOW_WIDTH (-> 
+                    (.querySelector js/document ".game")
+                    (oget :offsetWidth)
+                    (/ (.-devicePixelRatio js/window)))
+        TILE_SIZE (/ GAME_WINDOW_WIDTH (count (gameMap 0)))] 
+    (prn TILE_SIZE)
+    (prn (.-devicePixelRatio js/window))
+    (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y TILE_SIZE)) row))
+        (map-indexed gameMap)
+        (flatten))))
 
 (defn initialRender []
   (let [initialPos {:goblin [100 100] :assasin [200 200] :moveTargetCircle [0 0]}
@@ -59,7 +66,7 @@
       (encode "TARGET_CIRCLE") (doto (:moveTargetCircle @spriteStore)
                                                     (setPos! pos)
                                                     (oset! :visible true))
-      (encode "P1") (doto (:assasin @spriteStore)
+      (encode playerK) (doto (:assasin @spriteStore)
                                               (setPos! pos))
       )))
 
@@ -68,7 +75,7 @@
   (letfn [(onComplete []
             (prn "FINISH_SPOT_ATTACK")
             (condp = charState
-              (encode "SPOT_ATTACK") (handleEvents nil encode "FINISH_SPOT_ATTACK" "P1"))
+              (encode "SPOT_ATTACK") (handleEvents nil encode "FINISH_SPOT_ATTACK" playerK))
             )]
     (let [frames (condp = charState 
                    (encode "IDLE") (->> (range 5)
@@ -107,13 +114,13 @@
 
 (defn setSpriteCharState [nextPosState]
   (condp = (aget nextPosState 0)
-    (encode "P1") (runAnimOnSprite (:assasin @spriteStore) (aget nextPosState 1))))
+    (encode playerK) (runAnimOnSprite (:assasin @spriteStore) (aget nextPosState 1))))
 
 (defn abs [n] (max n (- n)))
 
 (defn setSpriteOrientation [nextOrientationState]
   (condp = (aget nextOrientationState 0)
-    (encode "P1")  (->>
+    (encode playerK)  (->>
                                     (if (= (aget nextOrientationState 1) 2) 
                                       -1 1)
                                     (* (abs (oget (:assasin @spriteStore) [:scale :x])))

@@ -23,12 +23,13 @@
 (defn getLevelOne []
   (clj->js {:name "level-one-scene"
             :encoderKeys encoderKeys
+            :initConfig { :noChange "change" }
             :loading mainLoadingScene/getSceneObj
             :uiRoute "/level-one"
             :assets ["chars" "levelOne"]
             :willLoad api/generateGameMap
             :start (fn [] 
-                                (render/initialRender)
-                                (eventListeners/watchEvents encode))
+                     (render/initialRender)
+                     (eventListeners/watchEvents encode))
             :update (render/tick encode)
             }))

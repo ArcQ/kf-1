@@ -4,7 +4,7 @@ export function level_one_dealloc(): void;
 export class LevelOne {
 free(): void;
 
- constructor(arg0: any);
+ constructor(arg0: any, arg1: any);
 
  get_update(arg0: number): void;
 

@@ -131,14 +131,14 @@ function _createLoadObs(wrappedScene) {
  * @returns {undefined}
  */
 function _loadScene(wrappedScene) {
-  if (wrappedScene.willLoad) wrappedScene.willLoad();
-
   const loadScene$ = _createLoadObs(wrappedScene);
+  const  obs$ = (wrappedScene.willLoad)
+    ? forkJoin(wrappedScene.willLoad(), loadScene$) : loadScene$;
 
-  loadScene$.subscribe(
-    ([ _, sceneCustomRes]) => { //eslint-disable-line
+  obs$.subscribe(
+    ([initConfig, [_, sceneCustomRes]]) => { //eslint-disable-line
       engine.ui.dispatch(gameEngineActions.pushLocation({ path: wrappedScene.uiRoute }));
-      wrappedScene.onFinishLoad(sceneCustomRes);
+      wrappedScene.onFinishLoad(sceneCustomRes, initConfig);
     },
   );
 }
@@ -174,13 +174,14 @@ function _wrapInSceneHelpers(sceneObj) {
      * @param sceneCustomRes - response form custom load$ observable supplied in scene def
      * @returns {undefined}
      */
-    onFinishLoad(sceneCustomRes) {
+    onFinishLoad(sceneCustomRes, initConfig) {
       const initialState = (sceneObj.onFinishLoad)
         ? sceneObj.onFinishLoad(engine.app.stage, sceneCustomRes)
         : {};
 
       runOnWasmLoad((wasmBindgen) => {
         if (sceneObj.update) {
+          console.log('blah', initConfig);
           setCljsWasmAdapter({
             updateFn: (args) => {
               const buffer = new Float32Array(wasmBindgen.wasm.memory.buffer, args);
@@ -192,9 +193,8 @@ function _wrapInSceneHelpers(sceneObj) {
           });
 
           window.encoderKeys = sceneObj.encoderKeys;
-          console.log(sceneObj.encoderKeys);
-
-          const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys);
+          console.log('blah', initConfig);
+          const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys, initConfig);
           const updateFn = (dt) => wasmGame.get_update(dt);
           const wasmUpdate = (a) => wasmGame.on_event(a);
 

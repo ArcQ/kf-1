@@ -13,7 +13,7 @@ use std::collections::HashMap;
 mod ecs;
 mod types;
 
-use types::{CoderKeyMapping};
+use types::{CoderKeyMapping, GameMap};
 
 use ecs::{UpdateChar, WatchAll};
 use ecs::components::{Health, Key, Speed, Move, CharState, CharStateMachine, Orientation};
@@ -64,6 +64,45 @@ macro_rules! unpack_storage {
     };
 }
 
+macro_rules! js_get {
+    ($js_value:expr, $ok:pat, str $k:expr, $b:block) => {
+        if let $ok = js_sys::Reflect::get($js_value, &wasm_bindgen::JsValue::from($k)) {
+            $b
+        }
+    };
+    ($init_config:expr, $ok:pat, f64 $k:expr, $b:block,*) => {
+        if let $ok = js_sys::Reflect::get(init_config, &wasm_bindgen::JsValue::from($k)) {
+            $b
+        }
+    };
+}
+
+macro_rules! js_get_in {
+    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
+        js_get!($v, $alias, str $k, {
+            $b
+        });
+    };
+    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
+        js_get!($v, Ok(inner_v), str $k, {
+            js_get_in!(inner_v, $alias, str $k, $($rest),*);
+        });
+    };
+}
+
+macro_rules! js_value_entries {
+    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
+        js_get!($v, $alias, str $k, {
+            $b
+        });
+    };
+    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
+        js_get!($v, Ok(inner_v), str $k, {
+            js_get_in!(inner_v, $alias, str $k, $($rest),*);
+        });
+    };
+}
+
 #[wasm_bindgen]
 pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
@@ -75,14 +114,22 @@ pub struct LevelOne {
 #[wasm_bindgen]
 impl LevelOne {
     #[wasm_bindgen(constructor)]
-    pub fn new(encoderKeys: &js_sys::Array) -> LevelOne { 
-        let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
-        let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoderKeys);
+    pub fn new(encoder_keys: &js_sys::Array, init_config: &wasm_bindgen::JsValue) -> LevelOne { 
+        let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
+        let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
+
+        let mut game_map = types::GameMap::default();
+
+        js_get_in!(init_config, Ok(js_game_map), str "gameMap",
+                   { 
+                       game_map = types::GameMap::from_js_array(&js_game_map, 1.0);
+
+                   });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
         let mut dispatcher: Dispatcher = DispatcherBuilder::new()
-            // .with(MapInputs, "input", &[])
+            // .with(MapInpute, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(UpdateChar::default(), "update_char", &[])
             .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
@@ -98,7 +145,7 @@ impl LevelOne {
             entities.insert(k.to_string(), world.create_entity()
                             .with(Key(encoder_keys_dict.encode(k)))
                             .with(types::Pt { x: 200.0, y: 200.0 })
-                            .with(Move::default())
+                            .with(Move::new(game_map.clone()))
                             .with(Speed(10.0))
                             // .with(Health::new(100.0))
                             .with(Orientation(0.0))
@@ -154,7 +201,7 @@ impl LevelOne {
                                 entity_pos_comp, 
                                 [input_def[2] as f32, (input_def[3] - (char_height / 2)) as f32]);
                             entity_x_orientation_comp.0 = entity_move_comp.get_x_direction();
-                    });
+                        });
                 } 
             }
             "SPOT_ATTACK" => {

@@ -140,13 +140,12 @@ impl <'a> WatchAll {
 impl<'a> System<'a> for WatchAll {
     type SystemData = (
         ReadStorage<'a, CharStateMachine>,
-        ReadStorage<'a, Move>,
         ReadStorage<'a, Key>,
         ReadStorage<'a, types::Pt>,
         ReadStorage<'a, Orientation>);
 
     fn run(&mut self, system_data: Self::SystemData) {
-        let (char_state_storage, move_storage, key_storage, pos_storage, orientation_storage) = system_data;
+        let (char_state_storage, key_storage, pos_storage, orientation_storage) = system_data;
         self.encoded_message_builder.reset();
         self.tracker_store.track("pos", &pos_storage);
         self.tracker_store.track("char_state", &char_state_storage);
