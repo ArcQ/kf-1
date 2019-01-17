@@ -164,8 +164,19 @@ impl Move {
         let move_diff = self.multipliers.map_with(&self.normalized, |multipliers_prop, normalized_prop, _| {
             multipliers_prop * normalized_prop * dist
         });
+        
         let next_pt = cur_pos.add(&move_diff);
-        let next_pos_def = if self.check_if_past(&next_pt) {
+
+        if let Some(v) = self.game_map.get_by_pt(&next_pt) {
+            log_u32(*v as u32);
+        }
+        // if let Some(v) = self.game_map.get(1,1) {
+        //     log_u32(*v as u32);
+        // }
+
+        let next_pos_def = if self.game_map.eq_by_pt(&next_pt, 3) {
+            NextPosDef { completed: false, pt: cur_pos.clone() }
+        } else if self.check_if_past(&next_pt) {
             NextPosDef { completed: true, pt: self.destination.clone() }
         } else {
             NextPosDef { completed: false, pt: next_pt }

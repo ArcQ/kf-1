@@ -26,7 +26,8 @@
                  (go (let [response (<! (http/get "http://localhost:7000/gamemap/generate" 
                                                   {:with-credentials? false
                                                    :query-params body}))
-                           gameMap (-> (.parse js/JSON (response :body))
-                                       (js->clj :keywordize-keys true))]
-                       (swap! nonUiState merge gameMap)
-                       (resolve (clj->js gameMap))))))))
+                           jsGameMap (-> (.parse js/JSON (response :body)))]
+                       (swap! 
+                         nonUiState 
+                         merge (js->clj jsGameMap :keywordize-keys true))
+                       (resolve jsGameMap)))))))

@@ -112,8 +112,7 @@ impl LevelOne {
 
         js_get_in!(init_config, Ok(js_game_map), str "gameMap",
                    { 
-                       game_map = types::GameMap::from_js_array(&js_game_map, 1.0);
-
+                       game_map = types::GameMap::from_js_array(&js_game_map, 40.0);
                    });
 
         let mut world: World = World::new();

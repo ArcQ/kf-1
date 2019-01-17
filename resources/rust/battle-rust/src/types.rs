@@ -140,10 +140,22 @@ impl GameMap {
             scale: scale,
         }
     }
+    pub fn eq_by_pt(&self, pos: &Pt, check_v: i32) -> bool {
+        let mut is_eq = false;
+        if let Some(v) = self.get_by_pt(pos) {
+            is_eq = (*v == check_v);
+        }
+        return is_eq;
+    }
+    pub fn get_by_pt(&self, pos: &Pt) -> Option<&i32> {
+        self.get(
+            (pos.x / self.scale ) as i32, 
+            (pos.y / self.scale) as i32)
+    }
     fn get(&self, x: i32, y: i32) -> Option<&i32> {
         let mut v = None;
         if let Some(row) = self.map.get(y as usize) {
-            v = row.get(x as usize)
+            v = row.get(x as usize);
         };
         v 
     }
