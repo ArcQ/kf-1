@@ -241,6 +241,15 @@ __exports.__wbindgen_number_get = function(n, invalid) {
     return 0;
 };
 
+__exports.__wbindgen_boolean_get = function(i) {
+    let v = getObject(i);
+    if (typeof(v) === 'boolean') {
+        return v ? 1 : 0;
+    } else {
+        return 2;
+    }
+};
+
 let cachedTextEncoder = new TextEncoder('utf-8');
 
 function passStringToWasm(arg) {

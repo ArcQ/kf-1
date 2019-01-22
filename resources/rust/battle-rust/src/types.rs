@@ -143,7 +143,7 @@ impl GameMap {
     pub fn eq_by_pt(&self, pos: &Pt, check_v: i32) -> bool {
         let mut is_eq = false;
         if let Some(v) = self.get_by_pt(pos) {
-            is_eq = (*v == check_v);
+            is_eq = *v == check_v;
         }
         return is_eq;
     }

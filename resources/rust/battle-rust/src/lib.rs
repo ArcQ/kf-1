@@ -109,20 +109,31 @@ impl LevelOne {
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
 
         let mut game_map = types::GameMap::default();
+        let mut headless = false;
 
         js_get_in!(init_config, Ok(js_game_map), str "gameMap",
                    { 
                        game_map = types::GameMap::from_js_array(&js_game_map, 40.0);
                    });
+        
+        js_get_in!(init_config, Ok(js_headless), str "headless",
+                   { 
+                       if let Some(headless_unwrapped) = js_headless.as_bool() {
+                           headless = headless_unwrapped;
+                       }
+                   });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
-        let mut dispatcher: Dispatcher = DispatcherBuilder::new()
+        let mut dispatcher_builder: DispatcherBuilder = DispatcherBuilder::new()
             // .with(MapInpute, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
-            .with(UpdateChar::default(), "update_char", &[])
-            .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
-            .build();
+            .with(UpdateChar::default(), "update_char", &[]);
+
+        if headless {
+             dispatcher_builder = dispatcher_builder.with_thread_local(WatchAll::new(encoder_keys_dict_clone));
+        }
+        let mut dispatcher: Dispatcher = dispatcher_builder.build();
         dispatcher.setup(&mut world.res);
 
         world.add_resource(DeltaTime(0.05)); 
