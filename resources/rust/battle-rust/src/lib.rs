@@ -125,15 +125,27 @@ impl LevelOne {
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
-        let mut dispatcher_builder: DispatcherBuilder = DispatcherBuilder::new()
+
+        world.register::<Orientation>();
+        world.register::<Key>();
+
+        let initial_dispatcher_builder: DispatcherBuilder = DispatcherBuilder::new()
             // .with(MapInpute, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(UpdateChar::default(), "update_char", &[]);
 
-        if headless {
-             dispatcher_builder = dispatcher_builder.with_thread_local(WatchAll::new(encoder_keys_dict_clone));
-        }
-        let mut dispatcher: Dispatcher = dispatcher_builder.build();
+        let mut dispatcher: Dispatcher = if headless {
+             initial_dispatcher_builder
+                 .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
+                 .build()
+        } else {
+            // initial_dispatcher_builder
+            //     .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
+            //     .build()
+            initial_dispatcher_builder
+                .build()
+        };
+
         dispatcher.setup(&mut world.res);
 
         world.add_resource(DeltaTime(0.05)); 
