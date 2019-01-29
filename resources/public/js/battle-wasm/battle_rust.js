@@ -204,6 +204,12 @@ class LevelOne {
         return wasm.levelone_get_update(this.ptr, arg0);
     }
     /**
+    * @returns {void}
+    */
+    reset() {
+        return wasm.levelone_reset(this.ptr);
+    }
+    /**
     * @param {Uint16Array} arg0
     * @returns {void}
     */
@@ -239,15 +245,6 @@ __exports.__wbindgen_number_get = function(n, invalid) {
     if (typeof(obj) === 'number') return obj;
     getUint8Memory()[invalid] = 1;
     return 0;
-};
-
-__exports.__wbindgen_boolean_get = function(i) {
-    let v = getObject(i);
-    if (typeof(v) === 'boolean') {
-        return v ? 1 : 0;
-    } else {
-        return 2;
-    }
 };
 
 let cachedTextEncoder = new TextEncoder('utf-8');

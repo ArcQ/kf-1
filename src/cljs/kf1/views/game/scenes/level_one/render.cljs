@@ -8,6 +8,7 @@
             [kf1.utils.engine-interface :refer [drawTargetCircle setPos! addChildToStage getSprite]]))
 
 (def playerK "P1")
+(def player2 "P2")
 
 (def encoder (atom {}))
 
@@ -35,8 +36,6 @@
                     (oget :offsetWidth)
                     (/ (.-devicePixelRatio js/window)))
         TILE_SIZE (/ GAME_WINDOW_WIDTH (count (gameMap 0)))] 
-    (prn TILE_SIZE)
-    (prn (.-devicePixelRatio js/window))
     (-> (fn [y row]  (map-indexed (fn [x v] (createTile v x y TILE_SIZE)) row))
         (map-indexed gameMap)
         (flatten))))
@@ -68,10 +67,12 @@
                                                     (oset! :visible true))
       (encode playerK) (doto (:assasin @spriteStore)
                                               (setPos! pos))
+
+      (encode player2) (doto (:goblin @spriteStore)
+                                              (setPos! pos))
       )))
 
 (defn runAnimOnSprite [sprite charState]
-  (prn "hi")
   (letfn [(onComplete []
             (prn "FINISH_SPOT_ATTACK")
             (condp = charState

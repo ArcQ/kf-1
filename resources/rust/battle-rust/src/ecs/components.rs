@@ -132,7 +132,9 @@ pub struct Move {
     normalized: types::Pt,
     multipliers: types::Pt,
     destination: types::Pt,
+    // TODO should borrow this, not keep seperate copies everywhere
     game_map: types::GameMap,
+    is_stopped: bool,
 }
 
 impl Move {
@@ -153,13 +155,20 @@ impl Move {
             { 1.0 } else  { 2.0 }
     }
     pub fn calc_new_dest(&mut self, _speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
+        self.is_stopped = false;
         self.destination = types::Pt::from_slice(destination_slice);
         self.diff = self.destination.sub(&pos);
         self.normalized = types::Pt::new(self.diff.x / self.diff.x.abs(), self.diff.x / self.diff.x.abs());
         let rad = (self.diff.y / self.diff.x).atan(); 
         self.multipliers = types::Pt::new(rad.cos(), rad.sin());
     }
+    pub fn stop(&mut self) {
+        self.is_stopped = true;
+    }
     pub fn next(&self, dt: f32, cur_pos: &types::Pt, speed: f32) -> NextPosDef {
+        if (self.is_stopped == true) {
+            return NextPosDef { completed: true, pt: cur_pos.clone() }
+        }
         let dist = speed *  dt * 10.0;
         let move_diff = self.multipliers.map_with(&self.normalized, |multipliers_prop, normalized_prop, _| {
             multipliers_prop * normalized_prop * dist
@@ -170,9 +179,6 @@ impl Move {
         if let Some(v) = self.game_map.get_by_pt(&next_pt) {
             log_u32(*v as u32);
         }
-        // if let Some(v) = self.game_map.get(1,1) {
-        //     log_u32(*v as u32);
-        // }
 
         let next_pos_def = if self.game_map.eq_by_pt(&next_pt, 3) {
             NextPosDef { completed: false, pt: cur_pos.clone() }

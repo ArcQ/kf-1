@@ -192,7 +192,6 @@ function _wrapInSceneHelpers(sceneObj) {
           });
 
           window.encoderKeys = sceneObj.encoderKeys;
-          console.log(initConfig, sceneObj.encoderKeys);
           const wasmGame = new wasmBindgen.LevelOne(sceneObj.encoderKeys, initConfig);
           const updateFn = (dt) => wasmGame.get_update(dt);
           const wasmUpdate = (a) => wasmGame.on_event(a);
@@ -214,6 +213,8 @@ function _wrapInSceneHelpers(sceneObj) {
           }
 
           tick(0.1);
+
+          setTimeout(() => wasmGame.reset(), 5000);
 
           // engine.stopTicker = () => {
           //   engine.ticker.remove(updateFn)

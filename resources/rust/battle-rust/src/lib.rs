@@ -15,7 +15,7 @@ mod types;
 
 use types::{CoderKeyMapping};
 
-use ecs::{UpdateChar, WatchAll};
+use ecs::{MoveSystem, WatchAll};
 use ecs::components::{
     // Health, 
     Key, Speed, Move, CharState, CharStateMachine, Orientation};
@@ -93,12 +93,17 @@ macro_rules! js_get_in {
     };
 }
 
+struct InitialCharState {
+    pub pos: types::Pt
+}
+
 #[wasm_bindgen]
 pub struct LevelOne {
     dispatcher: Dispatcher<'static, 'static>,
     world: World,
     entities: HashMap<String, Entity>,
-    encoder_keys_dict: CoderKeyMapping
+    encoder_keys_dict: CoderKeyMapping,
+    initial_char_states: HashMap<String, InitialCharState>
 }
 
 #[wasm_bindgen]
@@ -109,19 +114,17 @@ impl LevelOne {
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
 
         let mut game_map = types::GameMap::default();
-        let mut headless = false;
+        let mut initial_state:&wasm_bindgen::JsValue;
 
         js_get_in!(init_config, Ok(js_game_map), str "gameMap",
                    { 
                        game_map = types::GameMap::from_js_array(&js_game_map, 40.0);
                    });
-        
-        js_get_in!(init_config, Ok(js_headless), str "headless",
-                   { 
-                       if let Some(headless_unwrapped) = js_headless.as_bool() {
-                           headless = headless_unwrapped;
-                       }
-                   });
+
+        // js_get_in!(init_config, Ok(js_initial_state), str "initialState",
+        //            {
+        //                initial_state = js_initial_state
+        //            });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
@@ -129,40 +132,48 @@ impl LevelOne {
         world.register::<Orientation>();
         world.register::<Key>();
 
-        let initial_dispatcher_builder: DispatcherBuilder = DispatcherBuilder::new()
+        let mut dispatcher: Dispatcher = DispatcherBuilder::new()
             // .with(MapInpute, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
-            .with(UpdateChar::default(), "update_char", &[]);
-
-        let mut dispatcher: Dispatcher = if headless {
-             initial_dispatcher_builder
-                 .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
-                 .build()
-        } else {
-            // initial_dispatcher_builder
-            //     .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
-            //     .build()
-            initial_dispatcher_builder
-                .build()
-        };
+            .with(MoveSystem::default(), "update_char", &[])
+            .with_thread_local(WatchAll::new(encoder_keys_dict_clone))
+            .build();
 
         dispatcher.setup(&mut world.res);
 
         world.add_resource(DeltaTime(0.05)); 
+        
+        let mut initial_char_states: HashMap<String, InitialCharState> = HashMap::new();
+
+        initial_char_states.insert(String::from("P2"), InitialCharState { 
+            pos: types::Pt {
+                x: 100.0,
+                y: 100.0,
+            }, 
+        });
+        
+        initial_char_states.insert(String::from("P1"), InitialCharState { 
+            pos: types::Pt {
+                x: 200.0,
+                y: 200.0,
+            }, 
+        });
 
         let entity_keys = vec!["P1", "P2"];
         let mut entities: HashMap<String, Entity> = HashMap::new();
 
         for k in entity_keys.into_iter() {
-            entities.insert(k.to_string(), world.create_entity()
-                            .with(Key(encoder_keys_dict.encode(k)))
-                            .with(types::Pt { x: 200.0, y: 200.0 })
-                            .with(Move::new(game_map.clone()))
-                            .with(Speed(10.0))
-                            // .with(Health::new(100.0))
-                            .with(Orientation(0.0))
-                            .with(CharStateMachine(CharState::IDLE))
-                            .build()); 
+            if let Some(initial_char_state) = initial_char_states.get(k) {
+                entities.insert(k.to_string(), world.create_entity()
+                                .with(Key(encoder_keys_dict.encode(k)))
+                                .with(initial_char_state.pos.clone())
+                                .with(Move::new(game_map.clone()))
+                                .with(Speed(10.0))
+                                // .with(Health::new(100.0))
+                                .with(Orientation(0.0))
+                                .with(CharStateMachine(CharState::IDLE))
+                                .build()); 
+            }
         }
 
         // dispatcher.dispatch(&mut world.res);
@@ -173,6 +184,7 @@ impl LevelOne {
             world: world, 
             entities: entities, 
             encoder_keys_dict: encoder_keys_dict,
+            initial_char_states: initial_char_states,
         }
     }
 
@@ -185,6 +197,27 @@ impl LevelOne {
         self.dispatcher.dispatch(&mut self.world.res);
     }
 
+    pub fn reset(&mut self) {
+        let mut move_storage = self.world.write_storage::<Move>();
+        let mut pos_storage = self.world.write_storage::<types::Pt>();
+
+        let entity_keys = vec!["P1", "P2"];
+        for k in entity_keys.into_iter() {
+            unpack_storage!(
+                self.entities.get(k), 
+                [Some(entity_move_comp) = mut move_storage], 
+                [Some(entity_pos_comp) = mut pos_storage],
+                {
+                    if let Some(initial_char_state) = self.initial_char_states.get(k) {
+                        entity_move_comp.stop();
+                        entity_pos_comp.x = initial_char_state.pos.x;
+                        entity_pos_comp.y = initial_char_state.pos.y;
+                    };
+                });
+        }
+
+    }
+
     // pub fn level_one_get_update(&mut self, dt: f32, input_def: &[f32]) {
     pub fn on_event(&mut self, input_def: &[u16]) {
         let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
@@ -194,7 +227,6 @@ impl LevelOne {
                 {
                     let entity_key = self.encoder_keys_dict.decode(input_def[1]);
                     log("MOVE");
-                    let char_height = 84;
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
                     let mut orientation_storage = self.world.write_storage::<Orientation>();
@@ -211,7 +243,7 @@ impl LevelOne {
                             entity_move_comp.calc_new_dest(
                                 1.0, 
                                 entity_pos_comp, 
-                                [input_def[2] as f32, (input_def[3] - (char_height / 2)) as f32]);
+                                [input_def[2] as f32, input_def[3] as f32]);
                             entity_x_orientation_comp.0 = entity_move_comp.get_x_direction();
                         });
                 } 

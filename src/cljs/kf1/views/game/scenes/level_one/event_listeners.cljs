@@ -3,6 +3,8 @@
             [oops.core :refer [oget oset! ocall!]]))
 ;; not done yet
 
+(def charHeight 42)
+
 (defn handleEvents [evt encode & args] 
   (let [eventArgs (vec args)
         k (eventArgs 0)
@@ -15,7 +17,7 @@
             "MOVE" (->> (ocall! 
                           kfGameEngine 
                           "default.utils.mapDOMPosToStage"
-                          (array (oget evt "offsetX") (oget evt "offsetY")))
+                          (array (oget evt "offsetX") (- (oget evt "offsetY") (/ charHeight 2))))
                         (ocall! (array entityKey) :concat ))
             "SPOT_ATTACK" (do
                             (ocall! evt :preventDefault)

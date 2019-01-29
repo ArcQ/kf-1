@@ -172,13 +172,13 @@ mod tests {
         assert_eq!(2.0, test_pt.y);
     }
     
-    #[test]
-    fn pt_origin() {
-        let test_pt = Pt::origin();
-        assert_eq!(0.0, test_pt.x);
-        assert_eq!(0.0, test_pt.y);
-    }
-
+    // #[test]
+    // fn pt_origin() {
+    //     let test_pt = Pt::origin();
+    //     assert_eq!(0.0, test_pt.x);
+    //     assert_eq!(0.0, test_pt.y);
+    // }
+    //
     #[test]
     fn pt_from_slice() {
         let test_pt = Pt::from_slice([1.0, 2.0]);
