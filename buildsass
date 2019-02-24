@@ -1,3 +1,0 @@
-bundle-scss -m ./src/**/*.scss -d ./resources/public/css/styles.scss
-sass ./resources/public/css/styles.scss:resources/public/css/styles.css
-rm ./resources/public/css/styles.scss
