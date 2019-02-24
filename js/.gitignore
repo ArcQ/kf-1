@@ -6,6 +6,7 @@
 # testing
 /coverage
 
+# production
 build/
 
 # misc
@@ -20,10 +21,3 @@ spritesheets
 .shadow-cljs
 **/.nrepl-port
 **/dist
-
-/*.log
-/target
-/*-init.clj
-/resources/public/js/compiled
-out
-**/*.wasm
