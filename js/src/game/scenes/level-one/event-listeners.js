@@ -7,7 +7,6 @@ function mapDOMPosToStage(pos) {
   return pos.map(v => v / 2);
 }
 
-
 export function handleEvents(formattedEvt, encoder) {
   const [evtK, ...args] = formattedEvt;
   const entityK = encoder.encode('P1');

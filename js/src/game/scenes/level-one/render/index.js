@@ -1,12 +1,15 @@
-import engine, { PIXI } from 'kf-game-engine';
-import { setPos } from 'utils/pixi.utils';
+import engine from 'kf-game-engine';
 import { safeGetIn } from 'utils/dictUtils';
+
+import { setPos } from 'utils/pixi.utils';
+
+import runAnimOnSprite from './anims';
+import { TARGET_CIRCLE, PLAYER_U, PLAYER_2 } from '../constants';
+
 
 import { drawTargetCircle } from '../graphics/draw';
 import createTiledMap from './tile-maps/create-tile-map';
 import characters from '../items/characters';
-import { TARGET_CIRCLE, PLAYER_U, PLAYER_2 } from '../constants';
-import runAnimOnSprite from './anims';
 
 let spriteStore = {};
 
@@ -45,8 +48,6 @@ const stateUpdateHandler = {
   },
   SET_CHAR_STATE: byteData => (encoder) => {
     const handler = spriteCharStateOnChange[encoder.decode(byteData[0])];
-    console.log(encoder.decode(byteData[0]));
-    console.log(handler);
     if (handler) handler(byteData)(encoder);
   },
   CHANGE_ORIENTATION: byteData => (encoder) => {

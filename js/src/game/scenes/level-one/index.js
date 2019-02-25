@@ -1,4 +1,4 @@
-import encoder from 'utils/encoder';
+import engine from 'kf-game-engine';
 
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
@@ -10,7 +10,7 @@ import {
 import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
 
-const encoderKeys = [
+export const encoderKeys = [
   'NO_CHANGE',
   'P1',
   'P2',
@@ -22,6 +22,7 @@ const encoderKeys = [
   'SPOT_ATTACK',
   'FINISH_SPOT_ATTACK',
 ];
+export const levelOneEncoder = engine.encoder(encoderKeys);
 
 const initialGameState = {
   goblin: goblin.create([100, 100]),
@@ -31,8 +32,6 @@ const initialGameState = {
     pos: [100, 100],
   },
 };
-
-const levelOneEncoder = encoder(encoderKeys);
 
 export default function getSceneObj(store) {
   return () => ({
@@ -44,7 +43,6 @@ export default function getSceneObj(store) {
     assets: ['levelOne', 'chars'],
     willLoad: generateGameMap(store),
     start() {
-      console.log('start');
       initAnims(levelOneEncoder);
       initialRender(store, levelOneEncoder, initialGameState);
       watchEvents(levelOneEncoder);
