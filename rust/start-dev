@@ -5,4 +5,4 @@ nodemon --ext rs,json --exec "cargo +nightly build --target wasm32-unknown-unkno
   wasm-bindgen target/wasm32-unknown-unknown/debug/battle_rust.wasm --out-dir ./build --no-modules
   rm ./build/battle_rust.d.ts
   rm ./build/battle_rust_bg.d.ts
-  cp -rf ./build/* ../../kf-1-js/public/battle-wasm/"
+  cp -rf ./build/* ../js/public/battle-wasm/"
