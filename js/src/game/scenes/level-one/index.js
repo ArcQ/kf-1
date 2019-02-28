@@ -3,26 +3,16 @@ import engine from 'kf-game-engine';
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
 import { initAnims } from './render/anims';
+import setup from './setup';
 
 import {
   goblin, assasin,
 } from './items/characters';
+
 import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
 
-export const encoderKeys = [
-  'NO_CHANGE',
-  'P1',
-  'P2',
-  'SET_CHAR_STATE',
-  'SET_SPRITE_POS',
-  'CHANGE_ORIENTATION',
-  'MOVE',
-  'IDLE',
-  'SPOT_ATTACK',
-  'FINISH_SPOT_ATTACK',
-];
-export const levelOneEncoder = engine.encoder(encoderKeys);
+const { encoderKeys, levelOneEncoder } = setup(engine.encoder);
 
 const initialGameState = {
   goblin: goblin.create([100, 100]),
