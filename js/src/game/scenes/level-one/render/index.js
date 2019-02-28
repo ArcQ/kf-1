@@ -36,7 +36,7 @@ const spriteOrientatonOnChange = {
     spriteStore.assasin.scale.x = Math.abs(spriteStore.assasin.scale.x) * multiplier;
   },
 };
-
+// TODO, we should actually update the overall game state, and then set pos in two seperate step, so the nodejs code runs the same as the client code
 const stateUpdateHandler = {
   SET_SPRITE_POS: byteData => (encoder) => {
     const pos = byteData.splice(-2);

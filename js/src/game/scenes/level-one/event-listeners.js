@@ -11,7 +11,7 @@ export function handleEvents(formattedEvt, encoder) {
   const [evtK, ...args] = formattedEvt;
   const entityK = encoder.encode('P1');
   const encoded = [encoder.encode(evtK), entityK, ...args];
-  engine.wasmUpdate(encoded);
+  engine.onEvent(encoded);
 }
 
 const clickEventsById = {
