@@ -110,7 +110,6 @@ pub struct LevelOne {
 impl LevelOne {
     #[wasm_bindgen(constructor)]
     pub fn new(encoder_keys: &js_sys::Array, init_config: &wasm_bindgen::JsValue) -> LevelOne { 
-        log("tart");
         let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
 

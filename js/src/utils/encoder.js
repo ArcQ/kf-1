@@ -25,7 +25,6 @@ export default (encoderKeys) => {
     decode: decode(encoderKeys),
     decodeByteArray(stateUpdateHandler) {
       return (gameStateByteArr) => {
-        console.log(gameStateByteArr);
         splitIntoBlocksOfState({ stateBlocks: [], origByteArr: gameStateByteArr })
           .map(([k, ...data]) =>
             stateUpdateHandler[encoder.decode(k)](data)(encoder));
