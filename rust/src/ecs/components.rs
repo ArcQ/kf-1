@@ -176,10 +176,6 @@ impl Move {
         
         let next_pt = cur_pos.add(&move_diff);
 
-        if let Some(v) = self.game_map.get_by_pt(&next_pt) {
-            log_u32(*v as u32);
-        }
-
         let next_pos_def = if self.game_map.eq_by_pt(&next_pt, 3) {
             NextPosDef { completed: false, pt: cur_pos.clone() }
         } else if self.check_if_past(&next_pt) {
