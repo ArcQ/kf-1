@@ -75,8 +75,8 @@ impl CoderKeyMapping {
     pub fn new(js_arr: &js_sys::Array) -> CoderKeyMapping {
         let mut key_mapping: Vec<String> = Vec::new();
         js_arr.map(&mut |k: JsValue, i: u32, _arr: js_sys::Array| -> JsValue {
-            log(&k.clone().as_string().unwrap());
-            log_f32(i as f32);
+            // log(&k.clone().as_string().unwrap());
+            // log_f32(i as f32);
             key_mapping.insert(
                 i as usize,
                 k.clone().as_string().unwrap(),
