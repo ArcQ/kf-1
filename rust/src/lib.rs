@@ -219,13 +219,13 @@ impl LevelOne {
     }
 
     pub fn on_event(&mut self, input_def: &[u16]) {
-        log_u32(input_def[0] as u32);
+        // log_u32(input_def[0] as u32);
         let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
         match event_str {
             "MOVE" => {
                 {
                     let entity_key = self.encoder_keys_dict.decode(input_def[1]);
-                    log("MOVE");
+                    // log("MOVE");
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
                     let mut orientation_storage = self.world.write_storage::<Orientation>();
