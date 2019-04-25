@@ -30,7 +30,7 @@
     </script>
     <script>
       window.game_config = {};
-      window.cljs_wasm_adapter = {
+      window.js_wasm_adapter = {
         update(arg) {
           window.game_config.update(arg);
         },
@@ -39,7 +39,7 @@
         }
       };
     </script>
-    <script src='/battle-wasm/battle_rust.js'></script>
+    <script src='/game-wasm/battle_rust.js'></script>
     <div id="app"></div>
     <script> 
       // the `wasm_bindgen` global is set to the exports of the Rust module
@@ -53,7 +53,7 @@
         // greet('World');
       }
 
-      wasm_bindgen('battle-wasm/battle_rust_bg.wasm').then(run);
+      wasm_bindgen('game-wasm/battle_rust_bg.wasm').then(run);
     </script>
     <div id="root"></div>
     <!--
