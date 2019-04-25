@@ -3,35 +3,8 @@
     const __exports = {};
 
 
-    __exports.__wbg_update_f293655a2c60af1d = function(arg0) {
-        cljs_wasm_adapter.update(arg0);
-    };
-
-    let cachedTextDecoder = new TextDecoder('utf-8');
-
-    let cachegetUint8Memory = null;
-    function getUint8Memory() {
-        if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
-            cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-        }
-        return cachegetUint8Memory;
-    }
-
-    function getStringFromWasm(ptr, len) {
-        return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-    }
-
-    __exports.__wbg_log_c6a78ae4e9683470 = function(arg0, arg1) {
-        let varg0 = getStringFromWasm(arg0, arg1);
-        console.log(varg0);
-    };
-
-    __exports.__wbg_log_722bff039eebdf61 = function(arg0) {
-        console.log(arg0);
-    };
-
-    __exports.__wbg_log_306a05c00c31d850 = function(arg0) {
-        console.log(arg0);
+    __exports.__wbg_update_ba264709a1d29d62 = function(arg0) {
+        js_wasm_adapter.update(arg0);
     };
 
     const heap = new Array(32);
@@ -233,6 +206,20 @@ __exports.__wbindgen_object_clone_ref = function(idx) {
 };
 
 __exports.__wbindgen_object_drop_ref = function(i) { dropObject(i); };
+
+let cachedTextDecoder = new TextDecoder('utf-8');
+
+let cachegetUint8Memory = null;
+function getUint8Memory() {
+    if (cachegetUint8Memory === null || cachegetUint8Memory.buffer !== wasm.memory.buffer) {
+        cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachegetUint8Memory;
+}
+
+function getStringFromWasm(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
+}
 
 __exports.__wbindgen_string_new = function(p, l) {
     return addHeapObject(getStringFromWasm(p, l));

@@ -23,7 +23,7 @@ use ecs::resources::{DeltaTime};
 
 #[wasm_bindgen]
 extern "C" {
-    type cljs_wasm_adapter;
+    type js_wasm_adapter;
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);

@@ -7,9 +7,9 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 extern "C" {
-    type cljs_wasm_adapter;
+    type js_wasm_adapter;
 
-    #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
+    #[wasm_bindgen(static_method_of = js_wasm_adapter)]
     fn update(name: i32);
     
     #[wasm_bindgen(js_namespace = console)]

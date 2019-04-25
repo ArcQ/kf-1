@@ -14,9 +14,9 @@ use self::components::{Key, Move, Speed, CharState, CharStateMachine, Orientatio
 
 #[wasm_bindgen]
 extern "C" {
-    type cljs_wasm_adapter;
+    type js_wasm_adapter;
 
-    #[wasm_bindgen(static_method_of = cljs_wasm_adapter)]
+    #[wasm_bindgen(static_method_of = js_wasm_adapter)]
     fn update(arr: Box<[f32]>);
 
     #[wasm_bindgen(js_namespace = console)]
@@ -174,7 +174,7 @@ impl<'a> System<'a> for WatchAll {
         }
 
         if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
-            cljs_wasm_adapter::update(encoded_message);
+            js_wasm_adapter::update(encoded_message);
         }
 
         self.tracker_store.clear("char_state");
