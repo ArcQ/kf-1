@@ -4,7 +4,7 @@ import engine from 'kf-game-engine';
 import { CHAR_HEIGHT } from './constants';
 
 function mapDOMPosToStage(pos) {
-  return pos.map(v => v / 2);
+  return pos.map(v => v / window.devicePixelRatio);
 }
 
 export function handleEvents(formattedEvt, encoder) {
