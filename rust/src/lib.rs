@@ -118,7 +118,7 @@ impl LevelOne {
 
         js_get_in!(init_config, Ok(js_game_map), str "gameMap",
                    { 
-                       game_map = types::GameMap::from_js_array(&js_game_map, 40.0);
+                       game_map = types::GameMap::from_js_array(&js_game_map, 60.0);
                    });
 
         // js_get_in!(init_config, Ok(js_initial_state), str "initialState",
