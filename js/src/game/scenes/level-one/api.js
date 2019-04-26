@@ -6,7 +6,6 @@ import { TILE_SIZE } from './constants';
 import { getWindow } from 'utils/global';
 
 export function generateGameMap(store) {
-  console.log(engine.web.screen.bounds);
   return () => request(
     '/gamemap/generate',
     {

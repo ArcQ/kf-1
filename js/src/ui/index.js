@@ -8,7 +8,6 @@ import LevelOne from './routes/level-one';
 import MainLoadingPage from './routes/main-loading-page';
 
 export default function UI(props) {
-  console.log(props);
   return (
     <div id="ui" className="ui-layer full-screen">
       <ConnectedRouter history={props.history}>
