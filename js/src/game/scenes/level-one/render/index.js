@@ -1,7 +1,7 @@
 import engine from 'kf-game-engine';
 import { safeGetIn } from 'utils/dictUtils';
 
-import { setPos } from 'utils/pixi.utils';
+import { setPos, ANCHOR_BM } from 'utils/pixi.utils';
 
 import runAnimOnSprite from './anims';
 import { TARGET_CIRCLE, PLAYER_U, PLAYER_2 } from '../constants';
@@ -43,7 +43,7 @@ const stateUpdateHandler = {
     const handler = spritePosOnChange[encoder.decode(byteData[0])];
     if (handler) {
       const sprite = handler();
-      setPos(sprite, pos);
+      setPos(sprite, pos, ANCHOR_BM);
     }
   },
   SET_CHAR_STATE: byteData => (encoder) => {
