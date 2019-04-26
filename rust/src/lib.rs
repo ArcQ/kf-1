@@ -114,11 +114,18 @@ impl LevelOne {
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
 
         let mut game_map = types::GameMap::default();
+        let mut tile_scale = 60.0;
         let mut initial_state:&wasm_bindgen::JsValue;
+        js_get_in!(init_config, Ok(js_tile_scale), str "tileScale",
+                   {
+                       if let Some(scale) = js_tile_scale.as_f64() {
+                           tile_scale = scale;
+                       }
+                   });
 
         js_get_in!(init_config, Ok(js_game_map), str "gameMap",
                    { 
-                       game_map = types::GameMap::from_js_array(&js_game_map, 60.0);
+                       game_map = types::GameMap::from_js_array(&js_game_map, tile_scale as f32);
                    });
 
         // js_get_in!(init_config, Ok(js_initial_state), str "initialState",
