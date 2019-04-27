@@ -1,5 +1,3 @@
-import { assetManager } from 'kf-game-engine';
-
 export default function getSceneObj() {
   return {
     name: 'mainLoadingScene',

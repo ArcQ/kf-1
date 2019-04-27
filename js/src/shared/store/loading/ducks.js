@@ -1,9 +1,6 @@
 // vendor
-import createHelpers from 'utils/reduxHelpers';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import engine from 'kf-game-engine';
-
-const namespace = 'loading';
 
 export const selectors = {
   loadingPercentage: state => state.loading.percentage,
