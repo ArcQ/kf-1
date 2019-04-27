@@ -9,7 +9,6 @@ import { TARGET_CIRCLE, PLAYER_U, PLAYER_2 } from '../constants';
 
 import { drawTargetCircle } from '../graphics/draw';
 import createTiledMap from './tile-maps/create-tile-map';
-import characters from '../items/characters';
 
 let spriteStore = {};
 
@@ -36,14 +35,15 @@ const spriteOrientatonOnChange = {
     spriteStore.assasin.scale.x = Math.abs(spriteStore.assasin.scale.x) * multiplier;
   },
 };
-// TODO, we should actually update the overall game state, and then set pos in two seperate step, so the nodejs code runs the same as the client code
+// TODO, we should actually update the overall game state,
+// and then set pos in two seperate step, so the nodejs code runs the same as the client code
 const stateUpdateHandler = {
   SET_SPRITE_POS: byteData => (encoder) => {
     const pos = byteData.splice(-2);
     const handler = spritePosOnChange[encoder.decode(byteData[0])];
     if (handler) {
       const sprite = handler();
-      setPos(sprite, pos, ANCHOR_BM);
+      setPos({ sprite, pos, anchor: ANCHOR_BM });
     }
   },
   SET_CHAR_STATE: byteData => (encoder) => {
@@ -62,24 +62,17 @@ export function tick(levelOneEncoder) {
       .decodeByteArray(stateUpdateHandler)(gameStateByteArr);
 }
 
-export function initialRender(store, levelOneEncoder, initialGameState) {
-  const initialPos = {
-    goblin: [100, 100],
-    assasin: [200, 200],
-    moveTargetCircle: [0, 0],
-  };
+export function initialRender(store, initialGameState, characters) {
   const gameMap = safeGetIn(store.getState(), ['levelOne', 'gameMap']);
   const tileMap = createTiledMap(gameMap);
   tileMap.map(tile => engine.app.stage.addChild(tile));
 
-  const charKeys = ['goblin', 'assasin'];
-  const sprites = charKeys.reduce((acc, k) => {
-    const sprite = characters[k].sprite(initialPos[k]);
+  const sprites = Object.entries(characters).reduce((acc, [k, { sprite }]) => {
     engine.app.stage.addChild(sprite);
     return { ...acc, [k]: sprite };
   }, {});
 
-  const moveTargetCircle = drawTargetCircle(initialPos.moveTargetCircle);
+  const moveTargetCircle = drawTargetCircle(initialGameState.moveTargetCircle.pos);
   engine.app.stage.addChild(moveTargetCircle);
 
   spriteStore = { ...sprites, moveTargetCircle };

@@ -5,18 +5,25 @@ import { generateGameMap } from './api';
 import { initAnims } from './render/anims';
 import setup from './setup';
 
-import {
-  goblin, assasin,
-} from './items/characters';
+import createCharacters from './entities/createCharacters';
 
 import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
 
 const { encoderKeys, levelOneEncoder } = setup(engine.encoder);
 
+const charMeta = {
+  goblin: {
+    pos: [100, 100],
+  },
+  assasin: {
+    pos: [200, 400],
+  },
+};
+const characters = createCharacters(charMeta);
 const initialGameState = {
-  goblin: goblin.create([100, 100]),
-  assasin: assasin.create([200, 400]),
+  goblin: characters.goblin.initialState,
+  assasin: characters.assasin.initialState,
   moveTargetCircle: {
     isShow: false,
     pos: [100, 100],
@@ -34,7 +41,7 @@ export default function getSceneObj(store) {
     willLoad: generateGameMap(store),
     start() {
       initAnims(levelOneEncoder);
-      initialRender(store, levelOneEncoder, initialGameState);
+      initialRender(store, initialGameState, characters);
       watchEvents(levelOneEncoder);
       return initialGameState;
     },
