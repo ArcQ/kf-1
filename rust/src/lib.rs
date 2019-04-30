@@ -88,7 +88,20 @@ macro_rules! js_get_in {
     };
     ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
         js_get!($v, Ok(inner_v), str $k, {
-            js_get_in!(inner_v, $alias, str $k, $($rest),*);
+            js_get_in!(inner_v, $($rest),*);
+        });
+    };
+}
+
+macro_rules! js_get_mult {
+    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
+        js_get!($v, $alias, str $k, {
+            $b
+        });
+    };
+    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
+        js_get!($v, $alias, str $k, {
+            js_get_mult!(inner_v, $($rest),*);
         });
     };
 }
@@ -116,7 +129,7 @@ impl LevelOne {
         let mut game_map = types::GameMap::default();
         let mut tile_scale = 60.0;
         let mut initial_state:&wasm_bindgen::JsValue;
-        js_get_in!(init_config, Ok(js_tile_scale), str "tileScale",
+        js_get_mult!(init_config, Ok(js_tile_scale), str "tileScale",
                    {
                        if let Some(scale) = js_tile_scale.as_f64() {
                            tile_scale = scale;
@@ -127,11 +140,6 @@ impl LevelOne {
                    { 
                        game_map = types::GameMap::from_js_array(&js_game_map, tile_scale as f32);
                    });
-
-        // js_get_in!(init_config, Ok(js_initial_state), str "initialState",
-        //            {
-        //                initial_state = js_initial_state
-        //            });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
