@@ -5,7 +5,7 @@ export function drawTargetCircle(pos) {
   const graphics = new PIXI.Graphics();
   graphics.lineStyle(2, 0xFF00FF);
   graphics.drawCircle(0, 0, 20);
-  setPos({ graphics, pos });
+  setPos({ sprite: graphics, pos });
   graphics.endFill();
   return graphics;
 }

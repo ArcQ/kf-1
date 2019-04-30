@@ -27,7 +27,6 @@
     "rxjs": "6",
     "rxjs-compat": "^6.4.0",
     "sanitize.css": "^5.0.0",
-    "scale-to-window-pixi": "^1.2.0",
     "tachyons": "^4.9.0",
     "whatwg-fetch": "^2.0.4"
   },

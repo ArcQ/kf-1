@@ -1,7 +1,9 @@
+import { getWHeight } from 'utils/global';
+
 import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 import engine from 'kf-game-engine';
-import { CHAR_HEIGHT } from './constants';
+import config from 'config.json';
 
 function mapDOMPosToStage(pos) {
   return pos.map(v => v / window.devicePixelRatio);
@@ -16,7 +18,10 @@ export function handleEvents(formattedEvt, encoder) {
 
 const clickEventsById = {
   ui: event => ['MOVE'].concat(
-    mapDOMPosToStage([event.offsetX, event.offsetY - (CHAR_HEIGHT / 2)]),
+    mapDOMPosToStage([
+      event.offsetX,
+      event.offsetY - (config.charHeight * getWHeight() / (2 * config.aspectRatio.y)),
+    ]),
   ),
   attackOneBtn: () => ['SPOT_ATTACK'].concat([1]),
 };

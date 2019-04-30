@@ -5,8 +5,6 @@ import { generateGameMap } from './api';
 import { initAnims } from './render/anims';
 import setup from './setup';
 
-import createCharacters from './entities/createCharacters';
-
 import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
 
@@ -20,10 +18,8 @@ const charMeta = {
     pos: [200, 400],
   },
 };
-const characters = createCharacters(charMeta);
 const initialGameState = {
-  goblin: characters.goblin.initialState,
-  assasin: characters.assasin.initialState,
+  charMeta,
   moveTargetCircle: {
     isShow: false,
     pos: [100, 100],
@@ -41,7 +37,7 @@ export default function getSceneObj(store) {
     willLoad: generateGameMap(store),
     start() {
       initAnims(levelOneEncoder);
-      initialRender(store, initialGameState, characters);
+      initialRender(store, initialGameState, charMeta);
       watchEvents(levelOneEncoder);
       return initialGameState;
     },

@@ -37,8 +37,7 @@ export function setPos({ sprite, pos, anchor }) {
 function createSpriteForChar(spriteSheetArgs, pos) {
   const frames = assetManager.getSpriteSheetFrames(...spriteSheetArgs);
   const anim = new PIXI.extras.AnimatedSprite(frames);
-
-  setPos({ anim, pos });
+  setPos({ sprite: anim, pos });
   anim.height = 100;
   anim.width = 100;
   anim.anchor.set(0.5);

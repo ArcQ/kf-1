@@ -6,6 +6,11 @@
       "x": 9,
       "y": 16
     },
+    "charHeight": 1,
+    "mapSize": {
+      "x": 18,
+      "y": 32
+    },
     "disableResponsive": false,
     "FPS": 30
   }
