@@ -1,14 +1,12 @@
-import engine from 'kf-game-engine';
 import { safeGetIn } from 'utils/dictUtils';
-
 import { setPos, ANCHOR_BM } from 'utils/pixi.utils';
+import engine from 'kf-game-engine';
 
-import runAnimOnSprite from './anims';
 import { TARGET_CIRCLE, PLAYER_U, PLAYER_2 } from '../constants';
-
-
 import { drawTargetCircle } from '../graphics/draw';
+import createCharacters from '../entities/createCharacters';
 import createTiledMap from './tile-maps/create-tile-map';
+import runAnimOnSprite from './anims';
 
 let spriteStore = {};
 
@@ -62,7 +60,8 @@ export function tick(levelOneEncoder) {
       .decodeByteArray(stateUpdateHandler)(gameStateByteArr);
 }
 
-export function initialRender(store, initialGameState, characters) {
+export function initialRender(store, initialGameState, charMeta) {
+  const characters = createCharacters(charMeta);
   const gameMap = safeGetIn(store.getState(), ['levelOne', 'gameMap']);
   const tileMap = createTiledMap(gameMap);
   tileMap.map(tile => engine.app.stage.addChild(tile));

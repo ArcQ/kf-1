@@ -8771,10 +8771,6 @@ sax@^1.2.4, sax@~1.2.1, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
-scale-to-window-pixi@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/scale-to-window-pixi/-/scale-to-window-pixi-1.2.0.tgz#0099989362e8f1307c9ee776e68f129cbb3f93a4"
-
 scheduler@^0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.3.tgz#bed3c5850f62ea9c716a4d781f9daeb9b2a58896"
