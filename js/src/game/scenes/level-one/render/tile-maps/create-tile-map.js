@@ -12,8 +12,8 @@ const GAMEMAP_TO_TEXTUE = [
   'mountainTexture',
 ];
 
-const tileW = getWWidth() / config.game.mapSize.x;
-const tileH = getWWidth() / config.game.mapSize.y;
+export const tileW = getWWidth() / config.game.mapSize.x;
+export const tileH = getWWidth() / config.game.mapSize.y;
 
 function convertRGB(r, g, b) {
   return 65536 * r + 256 * g + b;
