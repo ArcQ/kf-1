@@ -25,7 +25,7 @@ impl Pt {
     pub fn new(x: f32, y: f32) -> Pt {
         Pt { x: x, y: y }
     }
-    pub fn new_from_js(x: JsValue, y: JsValue) -> Pt {
+    pub fn new_from_js(x: &JsValue, y: &JsValue) -> Pt {
         if let (Some(_x), Some(_y)) = (x.as_f64(), y.as_f64()) {
             Pt { x: _x as f32, y: _y as f32}
         } else {
@@ -109,7 +109,8 @@ impl CoderKeyMapping {
 #[derive(Default)]
 pub struct GameMap {
     bounds: [usize;2],
-    scale: f32,
+    w: f32,
+    h: f32,
     map: Vec<Vec<i32>>,
 }
 
@@ -118,10 +119,11 @@ impl GameMap {
         GameMap {
             map: self.map.clone(), 
             bounds: self.bounds,
-            scale: self.scale,
+            w: self.w,
+            h: self.h,
         }
     }
-    pub fn from_js_array(js_game_map: &wasm_bindgen::JsValue, scale: f32) -> GameMap {
+    pub fn from_js_array(js_game_map: &wasm_bindgen::JsValue, js_w: &wasm_bindgen::JsValue, js_h: &wasm_bindgen::JsValue) -> GameMap {
         let game_map_array: js_sys::Array = js_sys::Array::from(js_game_map);
         let mut map_vec = vec![];
         for (i, row_result) in game_map_array.values().into_iter().enumerate() {
@@ -130,7 +132,7 @@ impl GameMap {
             let mut row_vec = vec![]; 
                 for (i, v_result) in row_arr.values().into_iter().enumerate() {
                     if let Ok(v) = v_result {
-                        row_vec.insert(i, v.as_f64().unwrap() as i32);
+                        row_vec.insert(i, v.as_f64().unwrap_or_default() as i32);
                     }
                 }
                 map_vec.insert(i, row_vec);
@@ -144,7 +146,8 @@ impl GameMap {
         GameMap {
             map: map_vec, 
             bounds: [inner_vec_len, outer_vec_len],
-            scale: scale,
+            w: js_w.as_f64().unwrap_or(18.0) as f32,
+            h: js_h.as_f64().unwrap_or(32.0) as f32,
         }
     }
     pub fn eq_by_pt(&self, pos: &Pt, check_v: i32) -> bool {
@@ -156,8 +159,8 @@ impl GameMap {
     }
     pub fn get_by_pt(&self, pos: &Pt) -> Option<&i32> {
         self.get(
-            (pos.x / self.scale ) as i32, 
-            (pos.y / self.scale) as i32)
+            (pos.x / self.w ) as i32, 
+            (pos.y / self.h) as i32)
     }
     fn get(&self, x: i32, y: i32) -> Option<&i32> {
         let mut v = None;

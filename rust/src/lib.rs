@@ -42,14 +42,12 @@ struct InitialCharState {
 }
 
 struct InitialGameState {
-    map: Pt,
     char: HashMap<String, InitialCharState>
 }
 
 impl Default for InitialGameState {
     fn default() -> Self { 
         InitialGameState {
-            map: Pt::new(60.0, 60.0),
             char: HashMap::default(),
         }
     }
@@ -74,22 +72,6 @@ impl LevelOne {
         let mut game_map = types::GameMap::default();
         let mut initial_game_state = InitialGameState::default();
         let mut initial_state:&wasm_bindgen::JsValue;
-        js_get_mult!(
-            init_config, 
-            Ok(js_tile_w), str "map.tileW", 
-            Ok(js_tile_h), str "map.tileH", 
-            Ok(js_assasin_pos_x), str "char.assasin.pos.0",
-            Ok(js_assasin_pos_y), str "char.assasin.pos.1",
-            Ok(js_knight_pos_x), str "char.knight.pos.0",
-            Ok(js_knight_pos_y), str "char.knight.pos.1",
-            Ok(js_game_map), str "map.matrix",
-            {
-                if let Some(scale) = js_tile_scale.as_f64() {
-                    initial_game_state.map = Pt::new_from_js(js_tile_w, js_tile_h);
-                }
-
-                game_map = types::GameMap::from_js_array(&js_game_map, tile_scale as f32);
-            });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
@@ -107,6 +89,16 @@ impl LevelOne {
         dispatcher.setup(&mut world.res);
 
         world.add_resource(DeltaTime(0.05)); 
+
+        js_get_mult!(
+            init_config, 
+            Ok(js_tile_w), str "map.tileW", 
+            Ok(js_tile_h), str "map.tileH", 
+            Ok(js_game_map), str "map.matrix",
+            {
+                game_map = types::GameMap::from_js_array(&js_game_map, &js_tile_w, &js_tile_h);
+            });
+
         
         let mut initial_char_states: HashMap<String, InitialCharState> = HashMap::new();
 
@@ -128,17 +120,23 @@ impl LevelOne {
         let mut entities: HashMap<String, Entity> = HashMap::new();
 
         for k in entity_keys.into_iter() {
-            if let Some(initial_char_state) = initial_char_states.get(k) {
-                entities.insert(k.to_string(), world.create_entity()
-                                .with(Key(encoder_keys_dict.encode(k)))
-                                .with(initial_char_state.pos.clone())
-                                .with(Move::new(game_map.clone()))
-                                .with(Speed(10.0))
-                                // .with(Health::new(100.0))
-                                .with(Orientation(0.0))
-                                .with(CharStateMachine(CharState::IDLE))
-                                .build()); 
-            }
+            js_get_mult!(
+                init_config,
+                Ok(js_pos_x), str "char.P1.pos.0",
+                Ok(js_pos_y), str "char.P1.pos.1",
+                {
+                    entities.insert(k.to_string(), world.create_entity()
+                                    .with(Key(encoder_keys_dict.encode(k)))
+                                    .with(Pt::new_from_js(&js_pos_x, &js_pos_y))
+                                    // game map only has one instance at one time, we should actually
+                                    // just use one and modify that instance if we ever have to change
+                                    .with(Move::new(game_map.clone()))
+                                    .with(Speed(10.0))
+                                    // .with(Health::new(100.0))
+                                    .with(Orientation(0.0))
+                                    .with(CharStateMachine(CharState::IDLE))
+                                    .build()); 
+            })
         }
 
         // dispatcher.dispatch(&mut world.res);
