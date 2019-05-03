@@ -25,6 +25,13 @@ impl Pt {
     pub fn new(x: f32, y: f32) -> Pt {
         Pt { x: x, y: y }
     }
+    pub fn new_from_js(x: JsValue, y: JsValue) -> Pt {
+        if let (Some(_x), Some(_y)) = (x.as_f64(), y.as_f64()) {
+            Pt { x: _x as f32, y: _y as f32}
+        } else {
+            Pt::default() 
+        }
+    }
     // pub fn origin() -> Pt {
     //     Pt { x: 0.0, y: 0.0 }
     // }
@@ -120,7 +127,7 @@ impl GameMap {
         for (i, row_result) in game_map_array.values().into_iter().enumerate() {
             if let Ok(row) = row_result {
                 let row_arr = js_sys::Array::from(&row);
-                let mut row_vec = vec![]; 
+            let mut row_vec = vec![]; 
                 for (i, v_result) in row_arr.values().into_iter().enumerate() {
                     if let Ok(v) = v_result {
                         row_vec.insert(i, v.as_f64().unwrap() as i32);

@@ -39,7 +39,7 @@ export function safeGetFn(keyList, obj) {
  */
 
 /* eslint-disable */
-export function flattenObject(ob) {
+export function flattenObj(ob) {
   let toReturn = {};
   let flatObject;
   for (let i in ob) {
@@ -52,7 +52,7 @@ export function flattenObject(ob) {
     	continue;
     }
     if ((typeof ob[i]) === 'object') {
-      flatObject = flattenObject(ob[i]);
+      flatObject = flattenOb(ob[i]);
       for (let x in flatObject) {
         if (!flatObject.hasOwnProperty(x)) {
           continue;

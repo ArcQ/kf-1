@@ -10,10 +10,11 @@ use specs::prelude::*;
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
+mod utils;
 mod ecs;
 mod types;
 
-use types::{CoderKeyMapping};
+use types::{CoderKeyMapping, Pt};
 
 use ecs::{MoveSystem, WatchAll};
 use ecs::components::{
@@ -35,79 +36,23 @@ extern "C" {
     fn log_f32(a: f32);
 }
 
-#[allow(unused_macros)]
-macro_rules! iflet {
-    ([$p:pat = $e:expr], $($rest:tt),*) => {
-        if let $p = $e {
-            iflet!($($rest),*);
-        }
-    };
-    ($b:block) => {
-        $b
-    };
-}
-
-macro_rules! unpack_storage {
-    ($entity_option:expr, [$some_p:pat = mut $storage_option_from_hash:expr], $($rest:tt),*) => {
-        if let Some(entity) = $entity_option {
-            if let $some_p = $storage_option_from_hash.get_mut(*entity) {
-                unpack_storage!($entity_option, $($rest),*);
-            }
-        }
-    };
-    ($entity_option:expr, [$some_p:pat = $storage_option_from_hash:expr], $($rest:tt),*) => {
-        if let Some(entity) = $entity_option {
-            if let $some_p = $storage_option_from_hash.get(*entity) {
-                unpack_storage!($entity_option, $($rest),*);
-            }
-        }
-    };
-    ($entity:expr, $b:block) => {
-        $b
-    };
-}
-
-macro_rules! js_get {
-    ($js_value:expr, $ok:pat, str $k:expr, $b:block) => {
-        if let $ok = js_sys::Reflect::get($js_value, &wasm_bindgen::JsValue::from($k)) {
-            $b
-        }
-    };
-    ($init_config:expr, $ok:pat, f64 $k:expr, $b:block,*) => {
-        if let $ok = js_sys::Reflect::get(init_config, &wasm_bindgen::JsValue::from($k)) {
-            $b
-        }
-    };
-}
-
-macro_rules! js_get_in {
-    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
-        js_get!($v, $alias, str $k, {
-            $b
-        });
-    };
-    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
-        js_get!($v, Ok(inner_v), str $k, {
-            js_get_in!(inner_v, $($rest),*);
-        });
-    };
-}
-
-macro_rules! js_get_mult {
-    ($v:expr, $alias:pat, str $k:expr, $b:block) => {
-        js_get!($v, $alias, str $k, {
-            $b
-        });
-    };
-    ($v:expr, $alias:pat, str $k:expr, $($rest:tt),*) => {
-        js_get!($v, $alias, str $k, {
-            js_get_mult!(inner_v, $($rest),*);
-        });
-    };
-}
-
+#[derive(Default)]
 struct InitialCharState {
-    pub pos: types::Pt
+    pub pos: Pt
+}
+
+struct InitialGameState {
+    map: Pt,
+    char: HashMap<String, InitialCharState>
+}
+
+impl Default for InitialGameState {
+    fn default() -> Self { 
+        InitialGameState {
+            map: Pt::new(60.0, 60.0),
+            char: HashMap::default(),
+        }
+    }
 }
 
 #[wasm_bindgen]
@@ -127,19 +72,24 @@ impl LevelOne {
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
 
         let mut game_map = types::GameMap::default();
-        let mut tile_scale = 60.0;
+        let mut initial_game_state = InitialGameState::default();
         let mut initial_state:&wasm_bindgen::JsValue;
-        js_get_mult!(init_config, Ok(js_tile_scale), str "tileScale",
-                   {
-                       if let Some(scale) = js_tile_scale.as_f64() {
-                           tile_scale = scale;
-                       }
-                   });
+        js_get_mult!(
+            init_config, 
+            Ok(js_tile_w), str "map.tileW", 
+            Ok(js_tile_h), str "map.tileH", 
+            Ok(js_assasin_pos_x), str "char.assasin.pos.0",
+            Ok(js_assasin_pos_y), str "char.assasin.pos.1",
+            Ok(js_knight_pos_x), str "char.knight.pos.0",
+            Ok(js_knight_pos_y), str "char.knight.pos.1",
+            Ok(js_game_map), str "map.matrix",
+            {
+                if let Some(scale) = js_tile_scale.as_f64() {
+                    initial_game_state.map = Pt::new_from_js(js_tile_w, js_tile_h);
+                }
 
-        js_get_in!(init_config, Ok(js_game_map), str "gameMap",
-                   { 
-                       game_map = types::GameMap::from_js_array(&js_game_map, tile_scale as f32);
-                   });
+                game_map = types::GameMap::from_js_array(&js_game_map, tile_scale as f32);
+            });
 
         let mut world: World = World::new();
         world.register::<CharStateMachine>();
@@ -161,14 +111,14 @@ impl LevelOne {
         let mut initial_char_states: HashMap<String, InitialCharState> = HashMap::new();
 
         initial_char_states.insert(String::from("P2"), InitialCharState { 
-            pos: types::Pt {
+            pos: Pt {
                 x: 100.0,
                 y: 100.0,
             }, 
         });
         
         initial_char_states.insert(String::from("P1"), InitialCharState { 
-            pos: types::Pt {
+            pos: Pt {
                 x: 200.0,
                 y: 200.0,
             }, 
@@ -214,7 +164,7 @@ impl LevelOne {
 
     pub fn reset(&mut self) {
         let mut move_storage = self.world.write_storage::<Move>();
-        let mut pos_storage = self.world.write_storage::<types::Pt>();
+        let mut pos_storage = self.world.write_storage::<Pt>();
 
         let entity_keys = vec!["P1", "P2"];
         for k in entity_keys.into_iter() {
@@ -244,7 +194,7 @@ impl LevelOne {
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
                     let mut orientation_storage = self.world.write_storage::<Orientation>();
-                    let pos_storage = self.world.read_storage::<types::Pt>();
+                    let pos_storage = self.world.read_storage::<Pt>();
 
                     unpack_storage!(
                         self.entities.get(entity_key), 
