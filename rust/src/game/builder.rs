@@ -1,13 +1,22 @@
 use std::collections::HashMap;
-use utils::js_get_mult!;
+use specs::prelude::*;
+
+use types::{GameMap, CoderKeyMapping, Pt};
+use ecs::components::{
+    Key, 
+    Speed, 
+    CharState, 
+    Move, 
+    CharStateMachine, 
+    Orientation };
 
 pub fn build_entities(
     init_config: &wasm_bindgen::JsValue, 
-    world: &World, 
+    world: &mut World, 
     entity_keys: Vec<&str>, 
-    encoder_keys_dict: CoderKeyMapping) -> HashMap<String, Entity> {
+    encoder_keys_dict: &CoderKeyMapping) -> HashMap<String, Entity> {
 
-    let game_map = types::GameMap::from_init_config(&init_config);
+    let game_map = GameMap::from_init_config(&init_config);
 
     let mut entities: HashMap<String, Entity> = HashMap::new();
     for entity_k in entity_keys.into_iter() {
