@@ -52,7 +52,7 @@ export function flattenObj(ob) {
     	continue;
     }
     if ((typeof ob[i]) === 'object') {
-      flatObject = flattenOb(ob[i]);
+      flatObject = flattenObj(ob[i]);
       for (let x in flatObject) {
         if (!flatObject.hasOwnProperty(x)) {
           continue;

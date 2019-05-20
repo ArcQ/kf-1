@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use std::collections::HashMap;
 
 #[wasm_bindgen]
 extern "C" {
@@ -123,6 +124,18 @@ impl GameMap {
             h: self.h,
         }
     }
+    pub fn from_init_config(init_config: &wasm_bindgen::JsValue) {
+        let mut game_map = GameMap::default();
+        js_get_mult!(
+            init_config, 
+            Ok(js_tile_w), str "map.tileW", 
+            Ok(js_tile_h), str "map.tileH", 
+            Ok(js_game_map), str "map.matrix",
+            {
+                game_map = GameMap::from_js_array(&js_game_map, &js_tile_w, &js_tile_h);
+            });
+        game_map
+    }
     pub fn from_js_array(js_game_map: &wasm_bindgen::JsValue, js_w: &wasm_bindgen::JsValue, js_h: &wasm_bindgen::JsValue) -> GameMap {
         let game_map_array: js_sys::Array = js_sys::Array::from(js_game_map);
         let mut map_vec = vec![];
@@ -168,6 +181,23 @@ impl GameMap {
             v = row.get(x as usize);
         };
         v 
+    }
+}
+
+#[derive(Default)]
+pub struct InitialCharState {
+    pub pos: Pt
+}
+
+pub struct InitialGameState {
+    char: HashMap<String, InitialCharState>
+}
+
+impl Default for InitialGameState {
+    fn default() -> Self { 
+        InitialGameState {
+            char: HashMap::default(),
+        }
     }
 }
 
