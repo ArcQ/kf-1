@@ -10,20 +10,20 @@ use specs::prelude::*;
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
-mod utils;
+#[macro_use]
+mod js_macros;
 mod ecs;
 mod types;
 mod game;
 
-use types::{CoderKeyMapping, Pt, InitialGameState, InitialCharState};
+use types::{CoderKeyMapping, Pt};
 use game::builder::build_entities;
 
 use ecs::{MoveSystem, WatchAll};
 use ecs::components::{
     Key, 
-    Speed, 
-    Move, 
     CharState, 
+    Move, 
     CharStateMachine, 
     Orientation };
 use ecs::resources::{DeltaTime};
@@ -76,9 +76,9 @@ impl LevelOne {
 
         let entities: HashMap<String, Entity> = build_entities(
             init_config, 
-            &world, 
+            &mut world, 
             entity_keys, 
-            encoder_keys_dict);
+            &encoder_keys_dict);
 
         // dispatcher.dispatch(&mut world.res);
         world.maintain();
@@ -101,16 +101,13 @@ impl LevelOne {
     }
 
     pub fn reset(&mut self, init_config: &wasm_bindgen::JsValue) {
-        let mut move_storage = self.world.write_storage::<Move>();
-        let mut pos_storage = self.world.write_storage::<Pt>();
-
         let entity_keys = vec!["P1", "P2"];
         
         let entities: HashMap<String, Entity> = build_entities(
             init_config, 
-            &world, 
+            &mut self.world, 
             entity_keys, 
-            encoder_keys_dict);
+            &self.encoder_keys_dict);
 
         self.entities = entities;
     }

@@ -166,7 +166,7 @@ impl Move {
         self.is_stopped = true;
     }
     pub fn next(&self, dt: f32, cur_pos: &types::Pt, speed: f32) -> NextPosDef {
-        if (self.is_stopped == true) {
+        if self.is_stopped == true {
             return NextPosDef { completed: true, pt: cur_pos.clone() }
         }
         let dist = speed *  dt * 10.0;

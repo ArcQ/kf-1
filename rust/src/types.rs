@@ -124,7 +124,7 @@ impl GameMap {
             h: self.h,
         }
     }
-    pub fn from_init_config(init_config: &wasm_bindgen::JsValue) {
+    pub fn from_init_config(init_config: &wasm_bindgen::JsValue) -> GameMap {
         let mut game_map = GameMap::default();
         js_get_mult!(
             init_config, 
