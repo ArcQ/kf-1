@@ -3,7 +3,7 @@
 
 // we'll defer our execution until the wasm is ready to go
 function run() {
-  window['wasmLoaded'] = true;
+  window.wasmLoaded = true;
   const event = new Event('wasm_load');
   document.dispatchEvent(event);
   // greet('World');

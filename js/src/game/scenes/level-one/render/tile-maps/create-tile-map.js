@@ -3,7 +3,7 @@ import config from 'config.json';
 import { assetManager } from 'kf-game-engine';
 import { flatten, map2d } from 'utils/arrUtils';
 
-import { getWWidth } from 'utils/global';
+import { getWWidth, getWHeight } from 'utils/global';
 
 const GAMEMAP_TO_TEXTUE = [
   'grassTexture',
@@ -13,7 +13,7 @@ const GAMEMAP_TO_TEXTUE = [
 ];
 
 export const tileW = getWWidth() / config.game.mapSize.x;
-export const tileH = getWWidth() / config.game.mapSize.y;
+export const tileH = getWHeight() / config.game.mapSize.y;
 
 function convertRGB(r, g, b) {
   return 65536 * r + 256 * g + b;

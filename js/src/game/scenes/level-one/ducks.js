@@ -14,7 +14,10 @@ export const { constants, actions } = createConstantsAndActions(constArr);
 export const selectors = {};
 
 const initialState = fromJS({
-  goblin: createGoblin([200, 200]),
+  goblin: {
+    isShow: false,
+    pos: [200, 200],
+  },
   moveTargetCircle: {
     isShow: false,
     pos: [100, 100],

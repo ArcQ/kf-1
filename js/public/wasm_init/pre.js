@@ -16,5 +16,5 @@ window.js_wasm_adapter = {
   },
   mapEventsKeyDict(name) {
     window.game_config.mapEventsKeyDict(name);
-  }
+  },
 };

@@ -9,7 +9,7 @@ export function generateGameMap(store) {
     config.game.mapSize,
   ).pipe(map((res) => {
     store.dispatch(levelOneActions.setGameMap(res));
-    return (res);
+    return { map: { matrix: res.gameMap } };
   }));
 }
 
