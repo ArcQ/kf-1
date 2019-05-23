@@ -5,7 +5,6 @@ import { generateGameMap } from './api';
 import { initAnims } from './render/anims';
 import { tileW, tileH } from './render/tile-maps/create-tile-map';
 import setup from './setup';
-import { flattenObj } from 'utils/dictUtils';
 
 import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
@@ -32,7 +31,7 @@ export default function getSceneObj(store) {
   return () => ({
     name: 'level-one-scene',
     encoderKeys,
-    initConfig: flattenObj({
+    initConfig: {
       map: {
         tileW, tileH,
       },
@@ -44,7 +43,7 @@ export default function getSceneObj(store) {
           pos: [200, 200],
         },
       },
-    }),
+    },
     loading: mainLoadingScene,
     uiRoute: '/level-one',
     assets: ['levelOne', 'chars'],
