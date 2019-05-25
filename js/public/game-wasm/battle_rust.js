@@ -6,6 +6,10 @@
         js_wasm_adapter.update(arg0);
     };
 
+    __exports.__wbg_log_ff8554de42b5f73d = function(arg0) {
+        console.log(arg0 >>> 0);
+    };
+
     const heap = new Array(32);
 
     heap.fill(undefined);

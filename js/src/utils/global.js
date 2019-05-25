@@ -1,4 +1,6 @@
 // abstract away uses of window in case of ssr
+import engine from 'kf-game-engine';
+import { mapObjIndexed } from 'ramda';
 
 const _window = window;
 const _document = document;
@@ -16,5 +18,9 @@ export const getWHeight = () => ((iOS) ? _window.screen.height : _window.innerHe
   || _document.body.clientHeight);
 
 export const getWDimensions = () => ({ wWidth: getWWidth(), wHeight: getWHeight() });
+
+export const getGameDimensions = () =>
+  mapObjIndexed(v => v * engine.scale,
+    engine.web.screen.bounds);
 
 export const { devicePixelRatio } = _window;

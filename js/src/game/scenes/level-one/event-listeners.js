@@ -20,7 +20,7 @@ const clickEventsById = {
   ui: event => ['MOVE'].concat(
     mapDOMPosToStage([
       event.offsetX,
-      event.offsetY - (config.charHeight * getWHeight() / (2 * config.aspectRatio.y)),
+      event.offsetY - (config.game.charHeight * getWHeight() / (2 * config.game.aspectRatio.y)),
     ]),
   ),
   attackOneBtn: () => ['SPOT_ATTACK'].concat([1]),

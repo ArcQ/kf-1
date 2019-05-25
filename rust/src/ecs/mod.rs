@@ -174,6 +174,7 @@ impl<'a> System<'a> for WatchAll {
         }
 
         if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
+            log_u32(0);
             js_wasm_adapter::update(encoded_message);
         }
 
