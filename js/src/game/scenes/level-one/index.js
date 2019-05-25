@@ -1,9 +1,10 @@
 import engine from 'kf-game-engine';
+import { getWWidth, getWHeight } from 'utils/global';
 
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
 import { initAnims } from './render/anims';
-import { tileW, tileH } from './render/tile-maps/create-tile-map';
+import { getTileDims } from './render/tile-maps/create-tile-map';
 import setup from './setup';
 
 import { initialRender, tick } from './render';
@@ -32,9 +33,7 @@ export default function getSceneObj(store) {
     name: 'level-one-scene',
     encoderKeys,
     initConfig: {
-      map: {
-        tileW, tileH,
-      },
+      map: getTileDims([getWHeight, getWWidth]),
       char: {
         assasin: {
           pos: [100, 100],
