@@ -1,4 +1,5 @@
 import { assetManager } from 'kf-game-engine';
+import { safeGetIn } from 'utils/dictUtils';
 
 import { handleEvents } from '../../event-listeners';
 
@@ -30,9 +31,9 @@ export function initAnims(encoder) {
   };
 }
 
-export default function runAnimOnSprite(k, charState, spriteStore) {
-  const animDef = anims[k][charState];
-  const sprite = spriteStore[k];
+export default function runAnimOnSprite(k, charState, spriteDict) {
+  const animDef = safeGetIn(anims, [k, 'charState']);
+  const sprite = safeGetIn(spriteDict, [k, 'sprite']);
   sprite.stop();
   sprite.textures = animDef.frames();
   if (animDef.spriteHandler) animDef.spriteHandler(sprite);

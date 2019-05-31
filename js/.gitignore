@@ -21,3 +21,6 @@ spritesheets
 .shadow-cljs
 **/.nrepl-port
 **/dist
+
+rust/pkg
+rust/wasm-pack.log

@@ -10,6 +10,10 @@
         console.log(arg0 >>> 0);
     };
 
+    __exports.__wbg_log_f1a05a9e37febda5 = function(arg0) {
+        console.log(arg0);
+    };
+
     const heap = new Array(32);
 
     heap.fill(undefined);
