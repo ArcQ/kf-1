@@ -1,5 +1,6 @@
 import engine from 'kf-game-engine';
 import { getWWidth, getWHeight } from 'utils/global';
+import { mergeWith, merge } from 'ramda';
 
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';
@@ -13,15 +14,28 @@ import watchEvents from './event-listeners';
 const { encoderKeys, levelOneEncoder } = setup(engine.encoder);
 
 const charMeta = {
-  goblin: {
-    pos: [100, 100],
+  game: {
+    P1: {
+      pos: [100, 100],
+    },
+    P2: {
+      pos: [200, 200],
+    },
   },
-  assasin: {
-    pos: [200, 400],
+  render: {
+    P1: {
+      spriteK: 'assasin',
+    },
+    P2: {
+      spriteK: 'knight',
+    },
   },
 };
+
+const merge2ndLevel = mergeWith(merge);
+
 const initialGameState = {
-  charMeta,
+  char: merge2ndLevel(charMeta.game, charMeta.render),
   moveTargetCircle: {
     isShow: false,
     pos: [100, 100],
@@ -34,14 +48,7 @@ export default function getSceneObj(store) {
     encoderKeys,
     initConfig: {
       map: getTileDims([getWHeight, getWWidth]),
-      char: {
-        assasin: {
-          pos: [100, 100],
-        },
-        knight: {
-          pos: [200, 200],
-        },
-      },
+      char: initialGameState.char.game,
     },
     loading: mainLoadingScene,
     uiRoute: '/level-one',
@@ -49,7 +56,7 @@ export default function getSceneObj(store) {
     willLoad: generateGameMap(store),
     start() {
       initAnims(levelOneEncoder);
-      initialRender(store, initialGameState, charMeta);
+      initialRender(store, initialGameState);
       watchEvents(levelOneEncoder);
       return initialGameState;
     },

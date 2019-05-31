@@ -113,7 +113,6 @@ impl LevelOne {
     }
 
     pub fn on_event(&mut self, input_def: &[u16]) {
-        log_u32(input_def[0] as u32);
         let event_str: &str = self.encoder_keys_dict.decode(input_def[0]);
         match event_str {
             "MOVE" => {

@@ -289,8 +289,7 @@ impl<'a> System<'a> for UpdateChar {
                 &mut pos_storage, 
                 &speed_storage, 
                 self.tracker_store.get("move")).join() {
-                let pos_clone = pos.clone();
-                let nextpos_def = move_obj.next(dt, &pos_clone, speed.0);
+                let nextpos_def = move_obj.next(dt, &pos.clone(), speed.0);
                 pos.x = nextpos_def.pt.x;
                 pos.y = nextpos_def.pt.y;
                 if nextpos_def.completed {

@@ -27,7 +27,9 @@ impl Pt {
         Pt { x: x, y: y }
     }
     pub fn new_from_js(x: &JsValue, y: &JsValue) -> Pt {
+        log_f32(x.as_f64().unwrap_or(3.3) as f32);
         if let (Some(_x), Some(_y)) = (x.as_f64(), y.as_f64()) {
+            log_f32(_x as f32);
             Pt { x: _x as f32, y: _y as f32}
         } else {
             Pt::default() 
