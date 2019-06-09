@@ -4,12 +4,18 @@ import { connect } from 'react-redux';
 
 import { selectors as loadingSelectors } from 'shared/store/loading/ducks';
 
-import { getImgSrc } from 'utils/img';
+import engine from 'kf-game-engine';
 
 function MainLoadingScene(props) {
   return (
     <div className="ui-layer">
-      <img alt="logo" src={getImgSrc('framework-images/test-loading-1s-200px.svg')} />
+      <img
+        alt="logo"
+        src={
+          engine.helperMethods
+            && engine.helperMethods.getImgSrc('framework-images/test-loading-1s-200px.svg')
+        }
+      />
       <h1 className="f1">
         {' '}
         Loading...
