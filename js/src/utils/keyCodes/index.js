@@ -1,4 +1,4 @@
-import { swapKV } from 'utils/dictUtils';
+import swapKV from 'utils/swapKV';
 
 import keyNames from './keyNames.json';
 

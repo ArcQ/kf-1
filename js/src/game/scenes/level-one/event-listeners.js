@@ -1,4 +1,4 @@
-import { getWHeight } from 'utils/global';
+import { getWHeight } from 'kf-utils/dist/render/global';
 
 import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';

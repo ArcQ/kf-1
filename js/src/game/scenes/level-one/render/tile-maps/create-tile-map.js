@@ -1,6 +1,7 @@
 import config from 'config.json';
+import { getSprite } from 'kf-utils/dist/pixi/sprite';
 
-import engine, { assetManager } from 'kf-game-engine';
+import engine from 'kf-game-engine';
 import {
   sum,
   divide,
@@ -9,7 +10,7 @@ import {
   memoizeWith,
 } from 'ramda';
 import { flatten, map2d } from 'utils/arrUtils';
-import { getWWidth, getWHeight } from 'utils/global';
+import { getWWidth, getWHeight } from 'kf-utils/dist/render/global';
 
 const GAMEMAP_TO_TEXTUE = [
   'grassTexture',
@@ -42,7 +43,7 @@ function convertRGB(r, g, b) {
 }
 
 function createTile(v, x, y) {
-  const sprite = assetManager.getSprite('levelOne', GAMEMAP_TO_TEXTUE[v]);
+  const sprite = getSprite('levelOne', GAMEMAP_TO_TEXTUE[v]);
   const { tileW, tileH } = getTileDims([getWHeight, getWWidth]);
   sprite.x = x * tileW;
   sprite.y = y * tileH;

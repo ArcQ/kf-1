@@ -10,9 +10,9 @@ import { shouldNeverUpdate } from 'utils/recompose';
 
 import config from 'config.json';
 import assetDicts from 'assets';
-import engine, { sceneManager } from 'kf-game-engine';
+import engine from 'kf-game-engine';
 import getLevelOne from 'game/scenes/level-one';
-import safeGetIn from 'utils/dictUtils';
+import { path } from 'ramda';
 
 /**
  * React Game View
@@ -43,7 +43,7 @@ MainGameView.propTypes = {
 function storeFn(store) {
   return {
     dispatch: store.dispatch,
-    select: ks => safeGetIn(store, ks),
+    select: ks => path(ks, store),
   };
 }
 
@@ -51,7 +51,7 @@ function storeFn(store) {
 function initPixi(mainGameViewRef, store) {
   const sceneDict = { levelOne: getLevelOne(store) };
   engine.start(config.game, mainGameViewRef, storeFn(store), assetDicts);
-  sceneManager.start(config.game, sceneDict, storeFn(store));
+  engine.sceneManager.start(config.game, sceneDict, storeFn(store));
 }
 
 const initPixiOnMount = lifecycle({

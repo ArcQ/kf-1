@@ -1,6 +1,6 @@
 // vendor
 import { LOCATION_CHANGE } from 'react-router-redux';
-import engine from 'kf-game-engine';
+import { constants as storeConstants } from 'kf-game-engine/dist/store/ducks';
 
 export const selectors = {
   loadingPercentage: state => state.loading.percentage,
@@ -17,7 +17,7 @@ const initialState = {
 
 export default function loadingReducer(state = initialState, action) {
   switch (action.type) {
-    case engine.utils.storeConstants.SET_LOAD_PERCENTAGE:
+    case storeConstants.SET_LOAD_PERCENTAGE:
       return {
         ...state,
         percentage: action.payload.percentage / (state.timesLoaded + 1),

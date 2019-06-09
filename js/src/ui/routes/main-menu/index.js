@@ -1,5 +1,5 @@
 import React from 'react';
-import { sceneManager } from 'kf-game-engine';
+import engine from 'kf-game-engine';
 
 export default function MainMenu() {
   return (
@@ -9,7 +9,7 @@ export default function MainMenu() {
       </h2>
       <button
         type="button"
-        onClick={() => sceneManager.pushScene('levelOne')}
+        onClick={() => engine.sceneManager.pushScene('levelOne')}
         className="white border-button f2 pointer"
       >
         Start
