@@ -11,7 +11,7 @@ import { shouldNeverUpdate } from 'utils/recompose';
 import config from 'config.json';
 import assetDicts from 'assets';
 import engine from 'kf-game-engine';
-import getLevelOne from 'game/scenes/level-one';
+import getLevelOne from 'scenes/level-one';
 import { path } from 'ramda';
 
 /**

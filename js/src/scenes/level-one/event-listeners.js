@@ -17,12 +17,14 @@ export function handleEvents(formattedEvt, encoder) {
 }
 
 const clickEventsById = {
-  ui: event => ['MOVE'].concat(
-    mapDOMPosToStage([
-      event.offsetX,
-      event.offsetY - (config.game.charHeight * getWHeight() / (2 * config.game.aspectRatio.y)),
-    ]),
-  ),
+  ui: (event) => {
+    return ['MOVE'].concat(
+      mapDOMPosToStage([
+        event.offsetX,
+        event.offsetY - (config.game.charHeight * getWHeight() / (2 * config.game.aspectRatio.y)),
+      ]),
+    );
+  },
   attackOneBtn: () => ['SPOT_ATTACK'].concat([1]),
 };
 

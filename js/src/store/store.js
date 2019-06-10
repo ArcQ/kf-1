@@ -3,7 +3,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { routerMiddleware } from 'react-router-redux';
 // import { actions as appActions } from 'containers/App/ducks';
 import { getWindow } from 'kf-utils/dist/render/global';
-import rootEpic from 'shared/store/epics';
+import rootEpic from 'store/epics';
 
 import createReducer from './reducers';
 
