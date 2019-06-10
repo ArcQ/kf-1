@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { EnhancedApp } from './index';
+import EnhancedApp from './index';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

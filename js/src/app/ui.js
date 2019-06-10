@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 
-import MainMenu from './routes/main-menu';
-import LevelOne from './routes/level-one';
-import MainLoadingPage from './routes/main-loading-page';
+import MainMenu from 'scenes/main-menu/ui';
+import MainLoadingPage from 'scenes/loading/main/ui';
+import LevelOne from 'scenes/level-one/ui';
 
 export default function UI(props) {
   return (

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { selectors as loadingSelectors } from 'shared/store/loading/ducks';
+import { selectors as loadingSelectors } from 'store/loading/ducks';
 
 import engine from 'kf-game-engine';
 

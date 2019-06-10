@@ -1,7 +1,7 @@
 import request from 'utils/request';
 import config from 'config.json';
 import { map } from 'rxjs/operators';
-import { actions as levelOneActions } from 'shared/store/level-one/ducks';
+import { actions as levelOneActions } from 'store/level-one/ducks';
 
 export function generateGameMap(store) {
   return () => request(

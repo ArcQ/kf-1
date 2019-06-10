@@ -1,7 +1,7 @@
 import { lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 
-import { actions as gameActions, selectors as gameSelectors } from 'shared/store/game/ducks';
+import { actions as gameActions, selectors as gameSelectors } from 'store/game/ducks';
 
 export function shouldNeverUpdate(component) {
   return lifecycle({
