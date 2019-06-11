@@ -1,20 +1,6 @@
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 
-#[wasm_bindgen]
-extern "C" {
-    type js_wasm_adapter;
-
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-    
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_u32(a: u32);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_f32(a: f32);
-}
-
 /// base types
 #[derive(Default)]
 pub struct Pt {
@@ -27,9 +13,7 @@ impl Pt {
         Pt { x: x, y: y }
     }
     pub fn new_from_js(x: &JsValue, y: &JsValue) -> Pt {
-        log_f32(x.as_f64().unwrap_or(3.3) as f32);
         if let (Some(_x), Some(_y)) = (x.as_f64(), y.as_f64()) {
-            log_f32(_x as f32);
             Pt { x: _x as f32, y: _y as f32}
         } else {
             Pt::default() 
@@ -85,8 +69,6 @@ impl CoderKeyMapping {
     pub fn new(js_arr: &js_sys::Array) -> CoderKeyMapping {
         let mut key_mapping: Vec<String> = Vec::new();
         js_arr.map(&mut |k: JsValue, i: u32, _arr: js_sys::Array| -> JsValue {
-            // log(&k.clone().as_string().unwrap());
-            // log_f32(i as f32);
             key_mapping.insert(
                 i as usize,
                 k.clone().as_string().unwrap(),

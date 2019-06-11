@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use specs::prelude::*;
+use js_imports;
 
 use types::{GameMap, CoderKeyMapping, Pt};
 use ecs::components::{
@@ -25,6 +26,8 @@ pub fn build_entities(
             Ok(js_pos_x), str ["char", entity_k, "pos", "0"].join("."),
             Ok(js_pos_y), str ["char", entity_k, "pos", "1"].join("."),
             {
+                let blah = Pt::new_from_js(&js_pos_x, &js_pos_y);
+                js_imports::log_f32(blah.x);
                 entities.insert(entity_k.to_string(), world.create_entity()
                                 .with(Key(encoder_keys_dict.encode(entity_k)))
                                 .with(Pt::new_from_js(&js_pos_x, &js_pos_y))

@@ -22,5 +22,5 @@ spritesheets
 **/.nrepl-port
 **/dist
 
-rust/pkg
-rust/wasm-pack.log
+public/game-wasm
+

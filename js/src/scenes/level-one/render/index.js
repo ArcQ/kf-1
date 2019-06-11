@@ -65,6 +65,7 @@ const stateUpdateHandler = {
 };
 
 export function tick(levelOneEncoder) {
+  console.log(levelOneEncoder);
   return gameStateByteArr =>
     levelOneEncoder
       .decodeByteArray(stateUpdateHandler)(gameStateByteArr);

@@ -1,27 +1,5 @@
 use specs::{Component, VecStorage, FlaggedStorage};
 use super::types;
-use wasm_bindgen::prelude::*;
-
-// // You need to bring the type into scope to use it!!!
-// use std::string::ToString;
-
-#[wasm_bindgen]
-extern "C" {
-    type js_wasm_adapter;
-
-    #[wasm_bindgen(static_method_of = js_wasm_adapter)]
-    fn update(name: i32);
-    
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_u32(a: u32);
-    
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_f32(a: f32);
-}
-
 
 impl Component for types::Pt {
     type Storage = FlaggedStorage<Self, VecStorage<Self>>;

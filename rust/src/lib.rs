@@ -12,6 +12,7 @@ use std::collections::HashMap;
 
 #[macro_use]
 mod js_macros;
+mod js_imports;
 mod ecs;
 mod types;
 mod game;
@@ -27,20 +28,6 @@ use ecs::components::{
     CharStateMachine, 
     Orientation };
 use ecs::resources::{DeltaTime};
-
-#[wasm_bindgen]
-extern "C" {
-    type js_wasm_adapter;
-
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_u32(a: u32);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_f32(a: f32);
-}
 
 #[wasm_bindgen]
 pub struct LevelOne {
@@ -118,7 +105,6 @@ impl LevelOne {
             "MOVE" => {
                 {
                     let entity_key = self.encoder_keys_dict.decode(input_def[1]);
-                    // log("MOVE");
                     let mut move_storage = self.world.write_storage::<Move>();
                     let mut char_state_storage = self.world.write_storage::<CharStateMachine>();
                     let mut orientation_storage = self.world.write_storage::<Orientation>();
