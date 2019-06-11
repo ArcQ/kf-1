@@ -27,3 +27,4 @@ spritesheets
 /resources/public/js/compiled
 out
 **/*.wasm
+rust/pkg
