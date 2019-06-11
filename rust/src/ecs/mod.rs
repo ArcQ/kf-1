@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use wasm_bindgen::prelude::*;
 use specs::{ReadStorage,
 System, WriteStorage, ReaderId, Entities, Component, Tracked};
 use specs::storage::ComponentEvent;
@@ -12,14 +11,6 @@ pub mod components;
 pub mod resources;
 
 use self::components::{Key, Move, Speed, CharState, CharStateMachine, Orientation};
-
-#[wasm_bindgen]
-extern "C" {
-    type js_wasm_adapter;
-
-    #[wasm_bindgen(static_method_of = js_wasm_adapter)]
-    fn update(arr: Box<[f32]>);
-}
 
 pub struct KeyReaderIdMapping <'a>{
     pub k: &'a str,
@@ -166,7 +157,7 @@ impl<'a> System<'a> for WatchAll {
         }
 
         if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
-            js_wasm_adapter::update(encoded_message);
+            js_imports::js_wasm_adapter::update(encoded_message);
         }
 
         self.tracker_store.clear("char_state");

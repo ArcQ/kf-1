@@ -19,6 +19,18 @@ impl Pt {
             Pt::default() 
         }
     }
+    pub fn new_from_js_array(js_arr: &JsValue) -> Pt {
+        let pos_array: js_sys::Array = js_sys::Array::from(&js_arr);
+        if let (Ok(x), Ok(y)) = (
+            js_sys::Reflect::get(js_arr, &wasm_bindgen::JsValue::from(0)),
+            js_sys::Reflect::get(js_arr, &wasm_bindgen::JsValue::from(0)),
+            ) {
+            Pt::new_from_js(&x, &y)
+        } else {
+            Pt::default() 
+        }
+    }
+
     // pub fn origin() -> Pt {
     //     Pt { x: 0.0, y: 0.0 }
     // }
