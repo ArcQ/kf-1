@@ -1,11 +1,12 @@
 use std::collections::HashMap;
+use wasm_bindgen::prelude::*;
 use specs::{ReadStorage,
 System, WriteStorage, ReaderId, Entities, Component, Tracked};
 use specs::storage::ComponentEvent;
 use super::types;
 use super::types::{CoderKeyMapping};
-use wasm_bindgen::prelude::*;
 use specs::prelude::*;
+use super::js_imports;
 
 pub mod components;
 pub mod resources;
@@ -18,15 +19,6 @@ extern "C" {
 
     #[wasm_bindgen(static_method_of = js_wasm_adapter)]
     fn update(arr: Box<[f32]>);
-
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)] 
-    fn log_u32(a: u32);
-
-    #[wasm_bindgen(js_namespace = console, js_name = log)]
-    fn log_f32(a: f32);
 }
 
 pub struct KeyReaderIdMapping <'a>{
@@ -174,7 +166,6 @@ impl<'a> System<'a> for WatchAll {
         }
 
         if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
-            log_u32(0);
             js_wasm_adapter::update(encoded_message);
         }
 
@@ -293,9 +284,6 @@ impl<'a> System<'a> for UpdateChar {
                 pos.x = nextpos_def.pt.x;
                 pos.y = nextpos_def.pt.y;
                 if nextpos_def.completed {
-                    // if let Some(char_state) = char_state_storage.get_mut(entity) {
-                    //     char_state.set_state(CharState::IDLE);
-                    // }
                     set_char_state_idle(entity);
                     clear.push(event);
                 }
