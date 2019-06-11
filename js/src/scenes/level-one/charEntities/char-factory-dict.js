@@ -1,4 +1,4 @@
-import engine from 'kf-game-engine';
+import { getSpriteSheetFrames } from 'kf-utils/dist/pixi/sprite';
 import { handleEvents } from '../event-listeners';
 
 // this needs to be a function, because we are importing the
@@ -13,7 +13,7 @@ export default encoder => ({
       IDLE: ['chars', 'assasins0', '1_IDLE'],
       MOVE: ['chars', 'assasins0', '2_WALK'],
       SPOT_ATTACK: {
-        frames: () => engine.assetManager.getSpriteSheetFrames('chars', 'assasins0', '6_ATTACK2'),
+        frames: () => getSpriteSheetFrames('chars', 'assasins0', '6_ATTACK2'),
         spriteHandler: (sprite) => {
           sprite.loop = false;
         },
