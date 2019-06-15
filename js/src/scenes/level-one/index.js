@@ -10,7 +10,7 @@ import { initialRender, tick } from './render';
 import watchEvents from './event-listeners';
 
 const { initialGameState, encoderKeys, levelOneEncoder } = setup(encoder);
-console.log(initialGameState);
+
 export default function getSceneObj(store) {
   return () => ({
     name: 'level-one-scene',
