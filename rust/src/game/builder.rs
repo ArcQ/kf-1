@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use specs::prelude::*;
-use js_imports;
 
 use types::{GameMap, CoderKeyMapping, Pt};
-use ecs::components::{
+use components::basic::{
     Key, 
     Speed, 
     CharState, 

@@ -1,7 +1,7 @@
 use specs::{Component, VecStorage, FlaggedStorage};
-use super::types;
+use super::types::{Pt, GameMap};
 
-impl Component for types::Pt {
+impl Component for Pt {
     type Storage = FlaggedStorage<Self, VecStorage<Self>>;
 }
 
@@ -48,7 +48,7 @@ impl Component for Key {
 }
 
 pub struct NextPosDef {
-    pub pt: types::Pt,
+    pub pt: Pt,
     pub completed: bool,
 }
 
@@ -106,22 +106,22 @@ impl CharResource for Health {
 
 #[derive(Default)]
 pub struct Move {
-    diff: types::Pt,
-    normalized: types::Pt,
-    multipliers: types::Pt,
-    destination: types::Pt,
+    diff: Pt,
+    normalized: Pt,
+    multipliers: Pt,
+    destination: Pt,
     // TODO should borrow this, not keep seperate copies everywhere
-    game_map: types::GameMap,
+    game_map: GameMap,
     is_stopped: bool,
 }
 
 impl Move {
-    pub fn new(game_map: types::GameMap) -> Move {
+    pub fn new(game_map: GameMap) -> Move {
         let mut move_obj = Move::default();
         move_obj.game_map = game_map;
         move_obj
     }
-    fn check_if_past(& self, next_pt: &types::Pt) -> bool {
+    fn check_if_past(& self, next_pt: &Pt) -> bool {
         let is_past_pt_struct = self.diff.map_with(&next_pt, |diff_prop, next_pt_prop, k| -> f32 {
             if (self.destination.get_key_string(k) - next_pt_prop).signum() != (diff_prop).signum() 
             { -1.0 } else  { 0.0 }
@@ -132,18 +132,18 @@ impl Move {
         if self.diff.x > 0.0 
             { 1.0 } else  { 2.0 }
     }
-    pub fn calc_new_dest(&mut self, _speed: f32, pos: &types::Pt, destination_slice: [f32; 2]) {
+    pub fn calc_new_dest(&mut self, _speed: f32, pos: &Pt, destination_slice: [f32; 2]) {
         self.is_stopped = false;
-        self.destination = types::Pt::from_slice(destination_slice);
+        self.destination = Pt::from_slice(destination_slice);
         self.diff = self.destination.sub(&pos);
-        self.normalized = types::Pt::new(self.diff.x / self.diff.x.abs(), self.diff.x / self.diff.x.abs());
+        self.normalized = Pt::new(self.diff.x / self.diff.x.abs(), self.diff.x / self.diff.x.abs());
         let rad = (self.diff.y / self.diff.x).atan(); 
-        self.multipliers = types::Pt::new(rad.cos(), rad.sin());
+        self.multipliers = Pt::new(rad.cos(), rad.sin());
     }
     pub fn stop(&mut self) {
         self.is_stopped = true;
     }
-    pub fn next(&self, dt: f32, cur_pos: &types::Pt, speed: f32) -> NextPosDef {
+    pub fn next(&self, dt: f32, cur_pos: &Pt, speed: f32) -> NextPosDef {
         if self.is_stopped == true {
             return NextPosDef { completed: true, pt: cur_pos.clone() }
         }
