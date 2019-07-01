@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use specs::{ReadStorage, ReaderId, Component, Tracked};
 use specs::storage::ComponentEvent;
-use types;
-use types::{CoderKeyMapping};
 use specs::prelude::*;
 
 pub struct KeyReaderIdMapping <'a>{
@@ -46,55 +44,4 @@ impl ModifiedTrackerStore {
                       }
                   }
               }
-}
-
-pub struct EncodedMessageBuilder {
-    pub encoderkeys_dict: CoderKeyMapping,
-    pub state_vec: Vec<f32>,
-    pub sub_state_vec: Vec<f32>,
-}
-
-impl EncodedMessageBuilder {
-    pub fn new(encoderkeys_dict: CoderKeyMapping) -> EncodedMessageBuilder {
-        EncodedMessageBuilder {
-            encoderkeys_dict: encoderkeys_dict,
-            state_vec: vec![],
-            sub_state_vec: vec![]
-        }
-    }
-    pub fn reset(&mut self) {
-        self.state_vec = vec![];
-        self.sub_state_vec = vec![];
-    }
-    pub fn push_str(&mut self, s: &str) {
-        let encoded = self.encoderkeys_dict.encode(s);
-        self.sub_state_vec.push(encoded as f32);
-    }
-    pub fn push_i32(&mut self, num: i32) {
-        self.sub_state_vec.push(num as f32);
-    }
-    pub fn push(&mut self, num: f32) {
-        self.sub_state_vec.push(num);
-    }
-    pub fn push_pt(&mut self, pt: &types::Pt) {
-        self.sub_state_vec.push(pt.x as f32);
-        self.sub_state_vec.push(pt.y as f32);
-    }
-    pub fn finalize_sub_state(&mut self) {
-        let sub_state_vec_len = self.sub_state_vec.len();
-        if self.sub_state_vec.len() > 0 {
-            self.sub_state_vec.insert(0 as usize, (sub_state_vec_len + 1) as f32);
-            self.state_vec.append(&mut self.sub_state_vec);
-            self.sub_state_vec = vec![];
-        }
-    }
-    pub fn get_finalized_boxed(&mut self) -> Option<Box<[f32]>> {
-        let state_vec_len = self.state_vec.len();
-        if state_vec_len > 0 {
-            self.state_vec.insert(0 as usize, (state_vec_len + 1) as f32);
-            Some(self.state_vec.clone().into_boxed_slice())
-        } else {
-            None
-        }
-    }
 }
