@@ -1,23 +1,22 @@
 use specs::{ReadStorage,
 System, WriteStorage};
 use types;
-use types::{CoderKeyMapping};
+use utils::js_event_emitter::JsEventEmitter;
 use specs::prelude::*;
-use utils::js_imports;
-use super::utils::{ModifiedTrackerStore, EncodedMessageBuilder, KeyReaderIdMapping};
+use super::utils::{ModifiedTrackerStore, KeyReaderIdMapping};
 
 use components::basic::{Key, CharStateMachine, Orientation};
 
 pub struct BroadcastUpdatesSystem {
     pub tracker_store: ModifiedTrackerStore,
-    pub encoded_message_builder: EncodedMessageBuilder,
+    pub js_event_emitter: JsEventEmitter,
 }
 
 impl <'a> BroadcastUpdatesSystem {
-    pub fn new(encoderkeys_dict: CoderKeyMapping) -> BroadcastUpdatesSystem {
+    pub fn new(js_event_emitter: JsEventEmitter) -> BroadcastUpdatesSystem {
         BroadcastUpdatesSystem {
             tracker_store: ModifiedTrackerStore::default(),
-            encoded_message_builder: EncodedMessageBuilder::new(encoderkeys_dict)
+            js_event_emitter,
         }
     }
 }
@@ -28,39 +27,37 @@ impl<'a> System<'a> for BroadcastUpdatesSystem {
         ReadStorage<'a, Key>,
         ReadStorage<'a, types::Pt>,
         ReadStorage<'a, Orientation>);
-
+    
     fn run(&mut self, system_data: Self::SystemData) {
         let (char_state_storage, key_storage, pos_storage, orientation_storage) = system_data;
-        self.encoded_message_builder.reset();
+        self.js_event_emitter.encoded_message_builder.reset();
         self.tracker_store.track("pos", &pos_storage);
         self.tracker_store.track("char_state", &char_state_storage);
         self.tracker_store.track("orientation", &orientation_storage);
 
         // positions
         for (key, pos, _) in (&key_storage, &pos_storage, self.tracker_store.get("pos")).join() {
-            self.encoded_message_builder.push_str("SET_SPRITE_POS");
-            self.encoded_message_builder.push_i32(key.0);
-            self.encoded_message_builder.push_pt(pos);
-            self.encoded_message_builder.finalize_sub_state();
+            self.js_event_emitter.encoded_message_builder.push_str("SET_SPRITE_POS");
+            self.js_event_emitter.encoded_message_builder.push_i32(key.0);
+            self.js_event_emitter.encoded_message_builder.push_pt(pos);
+            self.js_event_emitter.encoded_message_builder.finalize_sub_state();
         }
 
         for (char_state, _) in (&char_state_storage, self.tracker_store.get("char_state")).join() {
-            self.encoded_message_builder.push_str("SET_CHAR_STATE");
-            self.encoded_message_builder.push_str("P1");
-            self.encoded_message_builder.push_str(&char_state.get_state_as_string());
-            self.encoded_message_builder.finalize_sub_state();
+            self.js_event_emitter.encoded_message_builder.push_str("SET_CHAR_STATE");
+            self.js_event_emitter.encoded_message_builder.push_str("P1");
+            self.js_event_emitter.encoded_message_builder.push_str(&char_state.get_state_as_string());
+            self.js_event_emitter.encoded_message_builder.finalize_sub_state();
         }
         
         for (orientation, _) in (&orientation_storage, self.tracker_store.get("orientation")).join() {
-            self.encoded_message_builder.push_str("CHANGE_ORIENTATION");
-            self.encoded_message_builder.push_str("P1");
-            self.encoded_message_builder.push(orientation.0);
-            self.encoded_message_builder.finalize_sub_state();
+            self.js_event_emitter.encoded_message_builder.push_str("CHANGE_ORIENTATION");
+            self.js_event_emitter.encoded_message_builder.push_str("P1");
+            self.js_event_emitter.encoded_message_builder.push(orientation.0);
+            self.js_event_emitter.encoded_message_builder.finalize_sub_state();
         }
 
-        if let Some(encoded_message) = self.encoded_message_builder.get_finalized_boxed() {
-            js_imports::js_wasm_adapter::update(encoded_message);
-        }
+        self.js_event_emitter.broadcast_to_js(); 
 
         self.tracker_store.clear("char_state");
         self.tracker_store.clear("orientation");

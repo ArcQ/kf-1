@@ -1,12 +1,15 @@
-import { merge } from 'ramda';
+import { pipe, reduce, merge } from 'ramda';
 
 const createCharConfig = (game, render) => ({ game, render });
 
-const getCombinedProps = _charProps => Object.entries(_charProps)
-  .reduce((prev, [k, props]) => ({
-    ...prev,
-    [k]: merge(props.game, props.render),
-  }), {});
+const getCombinedProps = _charProps =>
+  pipe(
+    reduce((prev, [k, props]) => ({
+      ...prev,
+      [k]: merge(props.game, props.render),
+    }), {}),
+    merge({ keys: Object.keys(_charProps) }),
+  )(Object.entries(_charProps))
 
 export default function(encoder) {
   const encoderKeys = [
@@ -45,5 +48,5 @@ export default function(encoder) {
     },
   };
 
-  return { encoderKeys, levelOneEncoder, initialGameState };
+  return { encoderKeys, levelOneEncoder, initialGameState, initialWasmState };
 }

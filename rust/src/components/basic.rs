@@ -80,9 +80,9 @@ impl Move {
         if self.diff.x > 0.0 
             { 1.0 } else  { 2.0 }
     }
-    pub fn calc_new_dest(&mut self, _speed: f32, pos: &Pt, destination_slice: [f32; 2]) {
+    pub fn calc_new_dest(&mut self, _speed: f32, pos: &Pt, destination: Pt) {
         self.is_stopped = false;
-        self.destination = Pt::from_slice(destination_slice);
+        self.destination = destination;
         self.diff = self.destination.sub(&pos);
         self.normalized = Pt::new(self.diff.x / self.diff.x.abs(), self.diff.x / self.diff.x.abs());
         let rad = (self.diff.y / self.diff.x).atan(); 

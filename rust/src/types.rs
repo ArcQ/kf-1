@@ -71,38 +71,6 @@ impl Clone for Pt {
     fn clone(&self) -> Pt { Pt { x: self.x, y: self.y } }
 }
 
-/// Rust Implementation of the string to key mapping defined in rendering app used for encoding
-/// keys between the communication of rust to js
-pub struct CoderKeyMapping {
-    pub keys: Vec<String>,
-}
-
-impl CoderKeyMapping {
-    pub fn new(js_arr: &js_sys::Array) -> CoderKeyMapping {
-        let mut key_mapping: Vec<String> = Vec::new();
-        js_arr.map(&mut |k: JsValue, i: u32, _arr: js_sys::Array| -> JsValue {
-            key_mapping.insert(
-                i as usize,
-                k.clone().as_string().unwrap(),
-            );
-            JsValue::from(0)
-        });
-
-        CoderKeyMapping {
-            keys: key_mapping,
-        }
-    }
-    pub fn encode(&self, find_k: &str) -> i32 {
-        self.keys
-            .iter()
-            .position(|k| k == find_k)
-            .unwrap() as i32
-    }
-    pub fn decode(&self, num: u16) -> &str {
-        &self.keys[num as usize]
-    }
-}
-
 #[derive(Default)]
 pub struct GameMap {
     bounds: [usize;2],
