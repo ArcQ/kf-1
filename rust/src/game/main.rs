@@ -22,7 +22,7 @@ pub struct Kf1GameEnv {
 
 impl GameEnv for Kf1GameEnv {
     fn new(
-        jsEventEmitter: JsEventEmitter, 
+        js_event_emitter: JsEventEmitter, 
         game_map: GameMap, 
         char_dict: HashMap<String, char_dicts::CharInitialConfig>
         ) -> Kf1GameEnv { 
@@ -35,7 +35,7 @@ impl GameEnv for Kf1GameEnv {
             // .with(MapInpute, "input", &[])
             // .with(MakeDecisions, "AiMakeDecisions", &[])
             .with(move_system::MoveSystem::default(), "update_char", &[])
-            .with_thread_local(broadcast_updates_system::BroadcastUpdatesSystem::new(jsEventEmitter))
+            .with_thread_local(broadcast_updates_system::BroadcastUpdatesSystem::new(js_event_emitter))
             .build();
 
         dispatcher.setup(&mut world.res);
@@ -64,8 +64,6 @@ impl GameEnv for Kf1GameEnv {
     }
 
     fn reset(&mut self, game_map: GameMap, char_dict: HashMap<String, char_dicts::CharInitialConfig>) {
-        let entity_keys = vec!["P1", "P2"];
-
         let entities: HashMap<String, Entity> = create_entities(
             &mut self.world,
             game_map,
