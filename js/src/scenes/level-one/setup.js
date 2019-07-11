@@ -8,8 +8,7 @@ const getCombinedProps = _charProps =>
       ...prev,
       [k]: merge(props.game, props.render),
     }), {}),
-    merge({ keys: Object.keys(_charProps) }),
-  )(Object.entries(_charProps))
+  )(Object.entries(_charProps));
 
 export default function(encoder) {
   const encoderKeys = [
@@ -40,13 +39,18 @@ export default function(encoder) {
     }),
   };
 
+  const charEntities = pipe(
+    getCombinedProps,
+    merge({ keys: Object.keys(charProps) }),
+  )(charProps);
+
   const initialGameState = {
-    charEntities: getCombinedProps(charProps),
+    charEntities,
     moveTargetCircle: {
       isShow: false,
       pos: [100, 100],
     },
   };
 
-  return { encoderKeys, levelOneEncoder, initialGameState, initialWasmState };
+  return { encoderKeys, levelOneEncoder, initialGameState };
 }

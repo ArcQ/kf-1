@@ -71,9 +71,9 @@ export function tick(levelOneEncoder) {
 }
 
 export function initialRender(store, initialGameState, levelOneEncoder) {
+  const { keys, ...charConfig } = initialGameState.charEntities;
   const charEntities = createCharEntities(
-    engine,
-    initialGameState.charEntities,
+    charConfig,
     charFactoryDict(levelOneEncoder),
   );
 

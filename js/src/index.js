@@ -13,7 +13,6 @@ import registerServiceWorker from './registerServiceWorker';
 const history = createBrowserHistory();
 const store = configureStore({}, history);
 
-
 ReactDOM.render(
   (<Provider store={store}>
     <App store={store} history={history} />
