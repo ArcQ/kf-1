@@ -1,7 +1,7 @@
 import config from 'config.json';
-import { getSprite } from 'kf-utils/dist/pixi/sprite';
+import { getSprite } from '@kf/game-utils/dist/pixi/sprite';
 
-import engine from 'kf-game-engine';
+import engine from '@kf/game-engine';
 import {
   sum,
   divide,
@@ -10,7 +10,7 @@ import {
   memoizeWith,
 } from 'ramda';
 import { flatten, map2d } from 'utils/arrUtils';
-import { getWWidth, getWHeight } from 'kf-utils/dist/render/global';
+import { getWWidth, getWHeight } from '@kf/game-utils/dist/render/global';
 
 const GAMEMAP_TO_TEXTUE = [
   'grassTexture',

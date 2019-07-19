@@ -4,8 +4,8 @@ import {
   createCharEntities,
   getSpritesFromCharEntities,
   addAllToStage,
-} from 'kf-utils/dist/pixi/sprite';
-import engine from 'kf-game-engine';
+} from '@kf/game-utils/dist/pixi/sprite';
+import engine from '@kf/game-engine';
 import charFactoryDict from 'scenes/level-one/charEntities/char-factory-dict';
 import {
   path,
@@ -72,6 +72,7 @@ export function tick(levelOneEncoder) {
 
 export function initialRender(store, initialGameState, levelOneEncoder) {
   const { keys, ...charConfig } = initialGameState.charEntities;
+  console.log(charConfig);
   const charEntities = createCharEntities(
     charConfig,
     charFactoryDict(levelOneEncoder),

@@ -1,5 +1,5 @@
 import React from 'react';
-import engine from 'kf-game-engine';
+import engine from '@kf/game-engine';
 
 export default function MainMenu() {
   return (

@@ -1,6 +1,6 @@
 // vendor
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { constants as storeConstants } from 'kf-game-engine/dist/store/ducks';
+import { constants as storeConstants } from '@kf/game-engine/dist/store/ducks';
 
 export const selectors = {
   loadingPercentage: state => state.loading.percentage,
