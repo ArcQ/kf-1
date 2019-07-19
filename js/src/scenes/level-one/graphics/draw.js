@@ -1,5 +1,5 @@
-import { PIXI } from 'kf-game-engine';
-import { setPos } from 'kf-utils/dist/pixi/sprite';
+import { PIXI } from '@kf/game-engine';
+import { setPos } from '@kf/game-utils/dist/pixi/sprite';
 
 export function drawTargetCircle(pos) {
   const graphics = new PIXI.Graphics();

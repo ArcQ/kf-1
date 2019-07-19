@@ -1,5 +1,5 @@
-import encoder from 'kf-utils/dist/wasm/encoder';
-import { getWWidth, getWHeight } from 'kf-utils/dist/render/global';
+import encoder from '@kf/game-utils/dist/wasm/encoder';
+import { getWWidth, getWHeight } from '@kf/game-utils/dist/render/global';
 
 import mainLoadingScene from '../loading/main';
 import { generateGameMap } from './api';

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { selectors as loadingSelectors } from 'store/loading/ducks';
 
-import engine from 'kf-game-engine';
+import engine from '@kf/game-engine';
 
 function MainLoadingScene(props) {
   return (

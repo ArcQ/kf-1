@@ -1,8 +1,8 @@
-import { getWHeight } from 'kf-utils/dist/render/global';
+import { getWHeight } from '@kf/game-utils/dist/render/global';
 
 import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
-import engine from 'kf-game-engine';
+import engine from '@kf/game-engine';
 import config from 'config.json';
 
 function mapDOMPosToStage(pos) {

@@ -1,4 +1,4 @@
-import { getSpriteSheetFrames } from 'kf-utils/dist/pixi/sprite';
+import { getSpriteSheetFrames } from '@kf/game-utils/dist/pixi/sprite';
 import { handleEvents } from '../event-listeners';
 
 // this needs to be a function, because we are importing the
