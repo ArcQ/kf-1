@@ -39,13 +39,14 @@ export default function(encoder) {
     }),
   };
 
-  const charEntities = pipe(
+  const charConfig = pipe(
     getCombinedProps,
     merge({ keys: Object.keys(charProps) }),
   )(charProps);
 
   const initialGameState = {
-    charEntities,
+    charConfig,
+    chars: charConfig,
     moveTargetCircle: {
       isShow: false,
       pos: [100, 100],

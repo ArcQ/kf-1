@@ -5,10 +5,10 @@ import { handleEvents } from '../event-listeners';
 // engine signleton and not passing it in, engine is not initiated when this file is imported
 export default encoder => ({
   knight: {
-    spriteSheetArgs: ['chars', 'knights0', '_IDLE/_IDLE'],
+    spriteSheetKs: ['chars', 'knights0', '_IDLE/_IDLE'],
   },
   assasin: {
-    spriteSheetArgs: ['chars', 'assasins0', '1_IDLE'],
+    spriteSheetKs: ['chars', 'assasins0', '1_IDLE'],
     anims: {
       IDLE: ['chars', 'assasins0', '1_IDLE'],
       MOVE: ['chars', 'assasins0', '2_WALK'],

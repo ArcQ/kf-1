@@ -1,12 +1,11 @@
 import {
   setPos,
   ANCHOR_BM,
-  createCharEntities,
-  getSpritesFromCharEntities,
   addAllToStage,
 } from '@kf/game-utils/dist/pixi/sprite';
 import engine from '@kf/game-engine';
-import charFactoryDict from 'scenes/level-one/charEntities/char-factory-dict';
+import { createChars, getSpritesFromChars } from '@kf/game-engine/dist/renderer/CharFactory';
+import charFactoryDict from 'scenes/level-one/char/char-factory-dict';
 import {
   path,
 } from 'ramda';
@@ -25,21 +24,21 @@ const spritePosOnChange = {
     sprite.visible = true;
     return sprite;
   },
-  [PLAYER_U]: () => renderStore.charEntities[PLAYER_U].sprite,
-  [PLAYER_2]: () => renderStore.charEntities[PLAYER_U].sprite,
+  [PLAYER_U]: () => renderStore.chars[PLAYER_U].sprite,
+  [PLAYER_2]: () => renderStore.chars[PLAYER_U].sprite,
 };
 
 const spriteCharStateOnChange = {
   [PLAYER_U]: byteData => encoder =>
-    runAnimOnSprite(renderStore.charEntities[PLAYER_U], encoder.decode(byteData[1])),
+    runAnimOnSprite(renderStore.chars[PLAYER_U], encoder.decode(byteData[1])),
 };
 
 const ORIENTATION_RIGHT = 2;
 const spriteOrientatonOnChange = {
   [PLAYER_U]: (byteData) => {
     const multiplier = (byteData[1] === ORIENTATION_RIGHT) ? -1 : 1;
-    renderStore.charEntities[PLAYER_U].sprite.scale.x = Math.abs(
-      renderStore.charEntities[PLAYER_U].sprite.scale.x,
+    renderStore.chars[PLAYER_U].sprite.scale.x = Math.abs(
+      renderStore.chars[PLAYER_U].sprite.scale.x,
     ) * multiplier;
   },
 };
@@ -71,20 +70,20 @@ export function tick(levelOneEncoder) {
 }
 
 export function initialRender(store, initialGameState, levelOneEncoder) {
-  const { keys, ...charConfig } = initialGameState.charEntities;
-  console.log(charConfig);
-  const charEntities = createCharEntities(
+  const { keys, ...charConfig } = initialGameState.chars;
+  const chars = createChars(
     charConfig,
     charFactoryDict(levelOneEncoder),
   );
+
 
   const moveTargetCircle = { sprite: drawTargetCircle(initialGameState.moveTargetCircle.pos) };
   const gameMap = path(['levelOne', 'gameMap'], store.getState());
 
   const tileMapSprites = createTiledMap(gameMap);
-  const charEntitySprites = getSpritesFromCharEntities(charEntities);
+  const charSprites = getSpritesFromChars(chars);
   const graphicSprites = [moveTargetCircle.sprite];
-  addAllToStage(engine, [tileMapSprites, charEntitySprites, graphicSprites]);
+  addAllToStage(engine, [tileMapSprites, charSprites, graphicSprites]);
 
-  renderStore = { charEntities, graphics: moveTargetCircle };
+  renderStore = { chars, graphics: moveTargetCircle };
 }

@@ -21,12 +21,12 @@ impl GameEnvAdapter {
         let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
         let game_map = GameMap::from_init_config(&init_config);
-        let jsEventEmitter = JsEventEmitter {
+        let js_event_emitter = JsEventEmitter {
             encoded_message_builder: EncodedMessageBuilder::new(encoder_keys_dict_clone)
         };
         GameEnvAdapter {
             game_env: Kf1GameEnv::new(
-                         jsEventEmitter,
+                         js_event_emitter,
                          game_map,
                          char_dicts::create_char_dict(&encoder_keys_dict, init_config)),
                          encoder_keys_dict,

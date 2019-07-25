@@ -17,7 +17,7 @@ export default function getSceneObj(store) {
     encoderKeys,
     initConfig: {
       map: getTileDims([getWHeight, getWWidth]),
-      charEntities: initialGameState.charEntities,
+      chars: initialGameState.chars,
     },
     loading: mainLoadingScene,
     uiRoute: '/level-one',
