@@ -15,7 +15,7 @@ pub fn create_char_dict(
     let mut entity_keys: Vec<String> = vec![];
     js_get_mult!(
         init_config,
-        Ok(js_entity_keys), str ["charEntities", "keys"].join("."),
+        Ok(js_entity_keys), str ["chars", "keys"].join("."),
         {
             let entity_key_array: js_sys::Array = js_sys::Array::from(&js_entity_keys);
             for (i, k_res) in entity_key_array.values().into_iter().enumerate() {
@@ -29,10 +29,10 @@ pub fn create_char_dict(
     for entity_k in entity_keys.into_iter() {
         js_get_mult!(
             init_config,
-            Ok(js_pos), str ["charEntities", &entity_k, "pos"].join("."),
+            Ok(js_pos), str ["chars", &entity_k, "pos"].join("."),
             {
                 char_dict.insert(
-                    "P1".to_string(), 
+                    entity_k.clone(), 
                     CharInitialConfig {
                         encodedK: encoder_keys_dict.encode(&entity_k),
                         speed: 10.0,
