@@ -21,7 +21,7 @@ spritesheets
 **/.nrepl-port
 **/dist
 
-/*.log
+*.log
 /target
 /*-init.clj
 /resources/public/js/compiled

@@ -1,4 +1,4 @@
-import { constants as storeConstants } from '@kf/game-engine/dist/store/ducks';
+import { constants as storeConstants } from '@kf/game-engine/es/store/ducks';
 import { ofType } from 'redux-observable';
 import { push } from 'react-router-redux';
 import { map } from 'rxjs/operators';

@@ -4,4 +4,4 @@
 nodemon --ext rs --exec "wasm-pack build --target nodejs
 rm ./pkg/battle_rust.d.ts
 rm ./pkg/battle_rust_bg.d.ts
-cp -rf ./pkg ../../tensorflow-kf-1/src/game/wasm"
+cp -rf ./pkg/* ../../tensorflow-kf-1/game-runner/src/game/wasm"

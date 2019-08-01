@@ -17,12 +17,13 @@ pub struct GameEnvAdapter {
 #[wasm_bindgen]
 impl GameEnvAdapter {
     #[wasm_bindgen(constructor)]
-    pub fn new(encoder_keys: &js_sys::Array, init_config: &wasm_bindgen::JsValue) -> GameEnvAdapter {
+    pub fn new(broadcast_unchanged: bool, encoder_keys: &js_sys::Array, init_config: &wasm_bindgen::JsValue) -> GameEnvAdapter {
         let encoder_keys_dict: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
         let encoder_keys_dict_clone: CoderKeyMapping = CoderKeyMapping::new(encoder_keys);
         let game_map = GameMap::from_init_config(&init_config);
         let js_event_emitter = JsEventEmitter {
-            encoded_message_builder: EncodedMessageBuilder::new(encoder_keys_dict_clone)
+            encoded_message_builder: EncodedMessageBuilder::new(encoder_keys_dict_clone),
+            broadcast_unchanged: broadcast_unchanged,
         };
         GameEnvAdapter {
             game_env: Kf1GameEnv::new(

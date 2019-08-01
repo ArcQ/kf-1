@@ -1,4 +1,4 @@
-import { getWHeight } from '@kf/game-utils/dist/render/global';
+import { getWHeight } from '@kf/game-utils/es/render/global';
 
 import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
