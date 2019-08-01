@@ -2,9 +2,9 @@ import {
   setPos,
   ANCHOR_BM,
   addAllToStage,
-} from '@kf/game-utils/dist/pixi/sprite';
+} from '@kf/game-utils/es/pixi/sprite';
 import engine from '@kf/game-engine';
-import { createChars, getSpritesFromChars } from '@kf/game-engine/dist/renderer/CharFactory';
+import { createChars, getSpritesFromChars } from '@kf/game-engine/es/renderer/CharFactory';
 import charFactoryDict from 'scenes/level-one/char/char-factory-dict';
 import {
   path,
