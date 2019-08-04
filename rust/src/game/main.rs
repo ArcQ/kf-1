@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use utils::char_dicts;
 use utils::game_env::GameEnv;
 use utils::js_event_emitter::JsEventEmitter;
-use super::input::{char_move, char_spot_attack, char_finish_spot_attack};
+use super::input::{char_stop, char_move, char_spot_attack, char_finish_spot_attack};
 
 use systems::{move_system, broadcast_updates_system};
 use components::basic::{
@@ -79,6 +79,9 @@ impl Kf1GameEnv {
     }
     pub fn char_spot_attack(&mut self) {
         char_spot_attack(&self.world, &self.entities);
+    }
+    pub fn stop(&mut self) {
+        char_stop(&self.world, &self.entities);
     }
     pub fn char_finish_spot_attack(&mut self) {
         char_finish_spot_attack(&self.world, &self.entities);

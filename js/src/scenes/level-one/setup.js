@@ -20,6 +20,7 @@ export default function(encoder) {
     'CHANGE_ORIENTATION',
     'MOVE',
     'IDLE',
+    'STOP',
     'SPOT_ATTACK',
     'FINISH_SPOT_ATTACK',
   ];

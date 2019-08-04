@@ -40,6 +40,16 @@ pub fn char_spot_attack(world: &World, entities: &HashMap<String, Entity>) {
         });
 }
 
+pub fn char_stop(world: &World, entities: &HashMap<String, Entity>) {
+    let mut move_storage = world.write_storage::<Move>();
+    unpack_storage!(
+        entities.get("P1"), 
+        [Some(entity_move_comp) = mut move_storage], 
+        {
+            entity_move_comp.stop();
+        });
+}
+
 pub fn char_finish_spot_attack(world: &World, entities: &HashMap<String, Entity>) {
     let mut char_state_storage = world.write_storage::<CharStateMachine>();
     unpack_storage!(

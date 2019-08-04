@@ -44,9 +44,6 @@ impl<'a> System<'a> for MoveSystem {
                 pos.x = nextpos_def.pt.x;
                 pos.y = nextpos_def.pt.y;
                 if nextpos_def.completed {
-                    // if let Some(char_state) = char_state_storage.get_mut(entity) {
-                    //     char_state.set_state(CharState::IDLE);
-                    // }
                     set_char_state_idle(entity);
                     clear.push(event);
                 }
