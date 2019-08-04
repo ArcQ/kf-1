@@ -19,6 +19,7 @@ pub fn create_entities(
     let mut entities: HashMap<String, Entity> = HashMap::new();
 
     for (entity_k, char_initial_config) in char_dict.iter() {
+
         entities.insert(entity_k.to_string(), world.create_entity()
                         .with(Key(char_initial_config.encodedK))
                         .with(char_initial_config.pos.clone())
