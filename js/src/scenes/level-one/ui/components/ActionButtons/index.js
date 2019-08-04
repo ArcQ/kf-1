@@ -8,5 +8,14 @@ export const AttackButton = styled.button`
   font-weight: bold;
   &:hover {
     color: white;
-  }
-`;
+  }`;
+
+export const StopButton = styled.button`
+  padding: 2rem;
+  background-color: blue;
+  font-size: 3rem;
+  color: black;
+  font-weight: bold;
+  &:hover {
+    color: white;
+  }`;

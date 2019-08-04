@@ -55,6 +55,9 @@ impl GameEnvAdapter {
                 let pos = Pt::new(input_def[2].clone() as f32, input_def[3].clone() as f32);
                 self.game_env.char_move(entity_k, pos);
             }
+            "STOP" => {
+                self.game_env.stop();
+            }
             "SPOT_ATTACK" => {
                 self.game_env.char_spot_attack();
             }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { wrapInPauseMenu } from 'utils/recompose';
-import { AttackButton } from './components/ActionButtons';
+import { AttackButton, StopButton } from './components/ActionButtons';
 
 function LevelOne(props) {
   return props.isPaused
@@ -10,7 +10,10 @@ function LevelOne(props) {
         Paused
       </h1>
     </div>
-    : <AttackButton id="attackOneBtn">attack</AttackButton>;
+    : <div>
+      <AttackButton id="attackOneBtn">attack</AttackButton>
+      <StopButton id="stopBtn">stop</StopButton>
+    </div>;
 }
 
 LevelOne.propTypes = {
