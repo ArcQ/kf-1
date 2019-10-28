@@ -1,10 +1,15 @@
-// the `wasm_bindgen` global is set to the exports of the Rust module
-// we'll defer our execution until the wasm is ready to go
-function run(mod) {
-  window.wasm = mod;
-  window.wasmLoaded = true;
-  const event = new Event('wasm_load');
-  document.dispatchEvent(event);
-}
+var Module = { // eslint-disable-line
+  // we'll defer our execution until the wasm is ready to go, called by emscripten js
+  onRuntimeInitialized() {
+    window.wasmLoaded = true;
+    window.wasmAdapter = Module;
+    // const event = new Event('wasm_load');
+    // document.dispatchEvent(event);
 
-window.wasm_bindgen('game-wasm/battle_rust_bg.wasm').then(run);
+    const c = new Module.Counter(22);
+    console.log(c.counter); // prints 22
+    c.increase();
+    console.log(c.counter); // prints 23
+    console.log(c.squareCounter()); // prints 529
+  },
+};
