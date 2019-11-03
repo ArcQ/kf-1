@@ -5,7 +5,7 @@
 using namespace std;
 
 class CoderKeyMapping {
-  public: string* keys;
+ public: string* keys;
 };
 
 #endif

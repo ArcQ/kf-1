@@ -14,6 +14,7 @@ import engine from '@kf/game-engine';
 import getLevelOne from 'scenes/level-one';
 import { path } from 'ramda';
 
+
 /**
  * React Game View
  * @returns {React.node}
@@ -46,7 +47,6 @@ function storeFn(store) {
     select: ks => path(ks, store),
   };
 }
-
 
 function initPixi(mainGameViewRef, store) {
   const sceneDict = { levelOne: getLevelOne(store) };
