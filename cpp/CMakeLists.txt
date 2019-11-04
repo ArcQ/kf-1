@@ -7,15 +7,24 @@ project(kf-1-game,
 
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
+set(CMAKE_INCLUDE_HEADERS_IN_COMPILE_COMMANDS on)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
-INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES(
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/src
+  )
 
-file(GLOB_RECURSE CORE_HDR src/*.h)
-file(GLOB_RECURSE CORE_SRC src/*.cpp)
+file(GLOB_RECURSE ALL_SRC
+  "${PROJECT_SOURCE_DIR}/include/*.h"
+  "${PROJECT_SOURCE_DIR}/include/*.hpp"
+  "${PROJECT_SOURCE_DIR}/src/*.cpp"
+  "${PROJECT_SOURCE_DIR}/src/*.c"
+  )
 
 add_definitions("-std=c++14")
-add_executable(game-wasm ${CORE_SRC} ${CORE_HDR})
+add_executable(game-wasm ${ALL_SRC})
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   set_target_properties(game-wasm PROPERTIES LINK_FLAGS "--bind --std=c++14 -O3 -s WASM=1 -o ./build/test-wasm.js")

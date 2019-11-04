@@ -20,4 +20,4 @@ EMSCRIPTEN_BINDINGS(my_module) {
       .function("increase", &Counter::increase)
       .function("squareCounter", &Counter::squareCounter)
       .property("counter", &Counter::counter);
-}
+};
