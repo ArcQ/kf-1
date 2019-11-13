@@ -4,7 +4,7 @@
 using namespace emscripten;
 
 class Counter {
-public:
+ public:
   int counter;
 
   explicit Counter(int init) : counter(init) {}
