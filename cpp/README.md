@@ -35,9 +35,43 @@ build_type=Release
 ```
 #emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
 CMAKE_TOOLCHAIN_FILE=${EMCMAKE_LOCATION}
+CMAKE_TOOLCHAIN_FILE=${CMAKE_LOCATION}
 mkdir build
 cd build
 emconfigure cmake ..
+
+conan install .. -o Kf1Conan:build_tests=True -b
+
 conan install .. --build
 make
+```
+
+4. dev
+
+After Editing Files
+-------------------
+cd build
+make
+
+After Adding/Removing Files
+---------------------------
+cd build
+emconfigure cmake ..
+make
+
+###If having trouble on mac
+
+```
+[settings]
+os=Macos
+os_build=Macos
+arch=x86_64
+arch_build=x86_64
+compiler=clang
+compiler.version=9
+compiler.libcxx=libc++
+build_type=Release
+[options]
+[build_requires]
+[env]
 ```

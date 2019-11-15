@@ -1,12 +1,12 @@
 from conans import ConanFile, CMake, tools
 
 
-class Kf1cppConan(ConanFile):
-    name = "KF1CPP"
+class Kf1Conan(ConanFile):
+    name = "KF1"
     version = "0.1"
     settings = "os", "compiler", "build_type", "arch"
     options = {"build_tests": [True, False]}
-    default_options = {"build_tests": False}
+    default_options = {"build_tests": True}
     generators = "cmake"
 
     def requirements(self):
