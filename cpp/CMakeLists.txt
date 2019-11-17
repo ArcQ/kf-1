@@ -17,7 +17,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 ################################
 
 include(${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(TARGETS)
 
 INCLUDE_DIRECTORIES(
   ${PROJECT_SOURCE_DIR}/include
@@ -39,7 +39,7 @@ file(GLOB_RECURSE ALL_SRC
 add_definitions("-std=c++17")
 
   add_library(game-wasm ${ALL_SRC})
-  target_link_libraries(game-wasm foo)
+
 # if (BUILD_TESTS)
 #   add_library(game-wasm ${ALL_SRC})
 #   target_link_libraries(game-wasm foo)
@@ -68,6 +68,12 @@ add_definitions("-std=c++17")
 #     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${build_file}
 #     ${REPO_ROOT}/js/public/test-wasm/${build_file})
 # endforeach(build_file)
+
+# add_custom_command(
+#   TARGET game-wasm POST_BUILD
+#   COMMAND ${CMAKE_COMMAND} -E copy
+#   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/compile_commands.json
+#   ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json)
 
 if(BUILD_TESTS)
   enable_testing()

@@ -59,6 +59,10 @@ cd build
 emconfigure cmake ..
 make
 
+To Run Tests
+---------------------------
+make check
+
 ###If having trouble on mac
 
 ```

@@ -10,8 +10,10 @@ class Kf1Conan(ConanFile):
     generators = "cmake"
 
     def requirements(self):
-        if self.options.build_tests:
-            self.requires("gtest/1.8.1@bincrafters/stable")
+        self.requires("gtest/1.8.1@bincrafters/stable")
+        self.options['gtest'].shared
+        # if self.options.build_tests:
+        #     self.requires("gtest/1.8.1@bincrafters/stable")
 
     def build(self):
         cmake = CMake(self)
