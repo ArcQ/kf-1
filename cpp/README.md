@@ -43,6 +43,7 @@ emconfigure cmake ..
 conan install .. -o Kf1Conan:build_tests=True -b
 
 conan install .. --build
+conan build ..
 make
 ```
 
@@ -61,6 +62,9 @@ make
 
 To Run Tests
 ---------------------------
+CMAKE_TOOLCHAIN_FILE=${CMAKE_LOCATION}
+conan install .. -o Kf1Conan:build_tests=True -b
+conan build ..
 make check
 
 ###If having trouble on mac
