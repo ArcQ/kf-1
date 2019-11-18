@@ -1,18 +1,13 @@
 cmake_minimum_required(VERSION 3.15.5)
 project(tests CXX)
 
-
 set(PROJECT_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
-
-# INCLUDE_DIRECTORIES(
-#   ${PROJECT_TEST_DIR})
 
 file(GLOB_RECURSE ALL_TESTS
   ${PROJECT_TEST_DIR} "*.cpp"
   )
 
 add_executable(unittest ${ALL_TESTS})
-# find_package(GTest REQUIRED)
 target_link_libraries(unittest game-wasm CONAN_PKG::gtest)
 add_test(NAME unittest
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin

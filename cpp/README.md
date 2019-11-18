@@ -63,7 +63,7 @@ make
 To Run Tests
 ---------------------------
 CMAKE_TOOLCHAIN_FILE=${CMAKE_LOCATION}
-conan install .. -o Kf1Conan:build_tests=True -b
+emconfigure conan install .. -o build_tests=True
 conan build ..
 make check
 
