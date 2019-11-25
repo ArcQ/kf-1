@@ -1,4 +1,7 @@
-#include <iostream> 
-using namespace std; 
+#include <iostream>
+using std::string;
+using std::vector;
 
-
+struct CoderKeyMapping {
+  vector<string> userString();
+};

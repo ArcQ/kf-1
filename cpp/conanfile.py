@@ -6,7 +6,7 @@ class Kf1Conan(ConanFile):
     version = "0.1"
     settings = "os", "compiler", "build_type", "arch"
     options = {"build_tests": [True, False]}
-    default_options = {"build_tests": True}
+    default_options = {"build_tests": False}
     generators = "cmake"
 
     def requirements(self):

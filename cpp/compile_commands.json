@@ -1,27 +1,25 @@
 [
 {
   "directory": "/Users/eddielaw/Development/personal/kf-1/cpp/build",
-  "command": "/usr/local/opt/llvm/bin/clang++   -I/Users/eddielaw/.conan/data/gtest/1.8.1/bincrafters/stable/package/307e2e669bb31e61c3817017259416ce65d66675/include -I/Users/eddielaw/Development/personal/kf-1/cpp/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src    -m64 -stdlib=libc++ -g  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=c++17 -o CMakeFiles/game-wasm.dir/src/Game.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/Game.cpp",
+  "command": "/Users/eddielaw/.conan/data/emsdk_installer/1.38.29/bincrafters/stable/package/16edc5c715408e005b54d61db41959d8f63a70c2/emscripten/1.38.29/em++   -I../include -I../src    -stdlib=libc++ -g   -std=c++17 -o CMakeFiles/game-wasm.dir/src/Game.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/Game.cpp",
   "file": "/Users/eddielaw/Development/personal/kf-1/cpp/src/Game.cpp"
 },
+
 {
   "directory": "/Users/eddielaw/Development/personal/kf-1/cpp/build",
-  "command": "/usr/local/opt/llvm/bin/clang++   -I/Users/eddielaw/.conan/data/gtest/1.8.1/bincrafters/stable/package/307e2e669bb31e61c3817017259416ce65d66675/include -I/Users/eddielaw/Development/personal/kf-1/cpp/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src    -m64 -stdlib=libc++ -g  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=c++17 -o CMakeFiles/game-wasm.dir/src/Game/GameEnvAdapter.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/Game/GameEnvAdapter.cpp",
+  "command": "/Users/eddielaw/.conan/data/emsdk_installer/1.38.29/bincrafters/stable/package/16edc5c715408e005b54d61db41959d8f63a70c2/emscripten/1.38.29/em++   -I../include -I../src    -stdlib=libc++ -g   -std=c++17 -o CMakeFiles/game-wasm.dir/src/Game/GameEnvAdapter.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/Game/GameEnvAdapter.cpp",
   "file": "/Users/eddielaw/Development/personal/kf-1/cpp/src/Game/GameEnvAdapter.cpp"
 },
+
 {
   "directory": "/Users/eddielaw/Development/personal/kf-1/cpp/build",
-  "command": "/usr/local/opt/llvm/bin/clang++   -I/Users/eddielaw/.conan/data/gtest/1.8.1/bincrafters/stable/package/307e2e669bb31e61c3817017259416ce65d66675/include -I/Users/eddielaw/Development/personal/kf-1/cpp/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src    -m64 -stdlib=libc++ -g  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=c++17 -o CMakeFiles/game-wasm.dir/src/common/models/Pt.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/common/models/Pt.cpp",
+  "command": "/Users/eddielaw/.conan/data/emsdk_installer/1.38.29/bincrafters/stable/package/16edc5c715408e005b54d61db41959d8f63a70c2/emscripten/1.38.29/em++   -I../include -I../src    -stdlib=libc++ -g   -std=c++17 -o CMakeFiles/game-wasm.dir/src/common/models/Pt.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/common/models/Pt.cpp",
   "file": "/Users/eddielaw/Development/personal/kf-1/cpp/src/common/models/Pt.cpp"
 },
+
 {
   "directory": "/Users/eddielaw/Development/personal/kf-1/cpp/build",
-  "command": "/usr/local/opt/llvm/bin/clang++   -I/Users/eddielaw/.conan/data/gtest/1.8.1/bincrafters/stable/package/307e2e669bb31e61c3817017259416ce65d66675/include -I/Users/eddielaw/Development/personal/kf-1/cpp/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src    -m64 -stdlib=libc++ -g  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=c++17 -o CMakeFiles/game-wasm.dir/src/utils/Encoder/CoderKeyMapping.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/utils/Encoder/CoderKeyMapping.cpp",
+  "command": "/Users/eddielaw/.conan/data/emsdk_installer/1.38.29/bincrafters/stable/package/16edc5c715408e005b54d61db41959d8f63a70c2/emscripten/1.38.29/em++   -I../include -I../src    -stdlib=libc++ -g   -std=c++17 -o CMakeFiles/game-wasm.dir/src/utils/Encoder/CoderKeyMapping.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/src/utils/Encoder/CoderKeyMapping.cpp",
   "file": "/Users/eddielaw/Development/personal/kf-1/cpp/src/utils/Encoder/CoderKeyMapping.cpp"
-},
-{
-  "directory": "/Users/eddielaw/Development/personal/kf-1/cpp/build/tests",
-  "command": "/usr/local/opt/llvm/bin/clang++   -I/Users/eddielaw/.conan/data/gtest/1.8.1/bincrafters/stable/package/307e2e669bb31e61c3817017259416ce65d66675/include -I/Users/eddielaw/Development/personal/kf-1/cpp/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src    -m64 -stdlib=libc++ -g  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   -std=c++17 -o CMakeFiles/unittest.dir/tests.cpp.o -c /Users/eddielaw/Development/personal/kf-1/cpp/tests/tests.cpp",
-  "file": "/Users/eddielaw/Development/personal/kf-1/cpp/tests/tests.cpp"
 }
 ]

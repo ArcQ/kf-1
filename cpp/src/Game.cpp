@@ -1,23 +1,23 @@
-// #include <emscripten/bind.h>
-// #include <iostream>
-//
-// using namespace emscripten;
-//
-// class Counter {
-//  public:
-//   int counter;
-//
-//   explicit Counter(int init) : counter(init) {}
-//
-//   void increase() { counter++; }
-//
-//   int squareCounter() { return counter * counter; }
-// };
-//
-// EMSCRIPTEN_BINDINGS(my_module) {
-//   class_<Counter>("Counter")
-//       .constructor<int>()
-//       .function("increase", &Counter::increase)
-//       .function("squareCounter", &Counter::squareCounter)
-//       .property("counter", &Counter::counter);
-// };
+#include "Game.h"
+#include <emscripten/bind.h>
+#include <stdio.h>
+#include <array>
+#include <iostream>
+
+using namespace emscripten;
+using ::GameEnvAdapter;
+
+GameEnvAdapter::GameEnvAdapter(bool broadcastUnchanged,
+                               std::array<int, 2> encoderKeys){};
+
+void GameEnvAdapter::tick(double dt) { printf("test\n"); }
+
+EMSCRIPTEN_BINDINGS(my_module) {
+  value_array<std::array<int, 2>>("array_int_2")
+      .element(index<0>())
+      .element(index<1>());
+
+  class_<GameEnvAdapter>("GameEnvAdapter")
+      .constructor<bool, std::array<int, 2>>()
+      .function("tick", &GameEnvAdapter::tick);
+};

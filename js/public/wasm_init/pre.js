@@ -6,10 +6,8 @@ var Module = { // eslint-disable-line
     // const event = new Event('wasm_load');
     // document.dispatchEvent(event);
 
-    const c = new Module.Counter(22);
-    console.log(c.counter); // prints 22
-    c.increase();
-    console.log(c.counter); // prints 23
-    console.log(c.squareCounter()); // prints 529
+    const rect = new Module.Shape({
+      x: 50, y: 60, width: 250, height: 10, color: 0xFF000000,
+    });
   },
 };

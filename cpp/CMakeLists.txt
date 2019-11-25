@@ -10,6 +10,11 @@ set(CONAN_DISABLE_CHECK_COMPILER on)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
 set(CMAKE_INCLUDE_HEADERS_IN_COMPILE_COMMANDS on)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+
+
+get_filename_component(REPO_ROOT ../ ABSOLUTE)
+set(WEB_BUILD_DIRECTORY ${REPO_ROOT}/js/public/test-wasm)
 
 ################################
 # Source
@@ -35,7 +40,7 @@ file(GLOB_RECURSE ALL_SRC
 ################################
 
 add_definitions("-std=c++17")
-set(WASM_BUILD_FLAGS  "--bind --std=c++17 -s WASM=1 -o game-wasm.js")
+set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 ")
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -51,14 +56,18 @@ if (BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 else()
+  message("Web build")
+  message( "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
   add_executable(game-wasm ${ALL_SRC})
+  # set_target_properties(game-wasm PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
+
+  # SET(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
   set_target_properties(game-wasm PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 
   ##################################
   # Copy Build Files Into Web Folder
   ##################################
 
-  get_filename_component(REPO_ROOT ../ ABSOLUTE)
   set(build_files game-wasm.js;game-wasm.wasm;game-wasm.wasm.map)
 
   foreach(build_file ${build_files})
@@ -66,12 +75,12 @@ else()
       TARGET game-wasm POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy
       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${build_file}
-      ${REPO_ROOT}/js/public/test-wasm/${build_file})
+      ${WEB_BUILD_DIRECTORY}/${build_file})
   endforeach(build_file)
 
   add_custom_command(
     TARGET game-wasm POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/compile_commands.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/build/compile_commands.json
     ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json)
 endif()

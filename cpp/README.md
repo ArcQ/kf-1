@@ -45,6 +45,9 @@ conan install .. -o Kf1Conan:build_tests=True -b
 conan install .. --build
 conan build ..
 make
+
+
+conan install .. -p ../emscripten.profile
 ```
 
 4. dev

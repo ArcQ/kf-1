@@ -2,10 +2,13 @@
 #define ENCODER_CODER_KEY_MAPPING_HPP
 
 #include <string>
+using std::string;
+using std::vector;
 
 class CoderKeyMapping {
-public:
-  std::string* keys;
+ public:
+  string* keys;
+  CoderKeyMapping(vector<string>);
 };
 
 #endif
