@@ -52,6 +52,8 @@ endif()
 
 if (BUILD_TESTS)
   message("Test build")
+  list(FILTER ALL_SRC EXCLUDE REGEX "Game.cpp")
+  list(REMOVE_ITEM ALL_SRC ${PROJECT_SOURCE_DIR}/src/Game.cpp)
   add_library(game-wasm ${ALL_SRC})
   enable_testing()
   add_subdirectory(tests)

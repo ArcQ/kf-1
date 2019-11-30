@@ -48,6 +48,8 @@ make
 
 
 conan install .. -p ../emscripten.profile
+clang-tidy game.cpp -- -isystem ~/Development/scripts/emsdk/upstream/emscripten/system/include/   
+
 ```
 
 4. dev

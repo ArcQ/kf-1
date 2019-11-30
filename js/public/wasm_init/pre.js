@@ -6,8 +6,13 @@ var Module = { // eslint-disable-line
     // const event = new Event('wasm_load');
     // document.dispatchEvent(event);
 
-    const rect = new Module.Shape({
-      x: 50, y: 60, width: 250, height: 10, color: 0xFF000000,
-    });
+    const arr = new Float32Array([1.0, 2.0, 0.5]);
+    const vec = new Module.CoderKeyMapping();
+    for (let i = 0; i < arr.length; i++) {
+      vec.push_back(arr[i]);
+    }
+    const obj = new Module.GameEnvAdapter(true, vec);
+    console.log(obj);
+    console.log(`obj.x is ${obj.x}`);
   },
 };

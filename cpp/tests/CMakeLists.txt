@@ -4,7 +4,7 @@ project(tests CXX)
 set(PROJECT_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
 
 file(GLOB_RECURSE ALL_TESTS
-  ${PROJECT_TEST_DIR} "*.cpp"
+    ${PROJECT_TEST_DIR} "*.cpp"
   )
 
 add_executable(unittest ${ALL_TESTS})
