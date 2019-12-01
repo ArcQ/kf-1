@@ -40,7 +40,7 @@ file(GLOB_RECURSE ALL_SRC
 ################################
 
 add_definitions("-std=c++17")
-set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 ")
+set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0")
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -57,6 +57,7 @@ if (BUILD_TESTS)
   add_library(game-wasm ${ALL_SRC})
   enable_testing()
   add_subdirectory(tests)
+  set_target_properties(game-wasm PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 else()
   message("Web build")
   message( "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")

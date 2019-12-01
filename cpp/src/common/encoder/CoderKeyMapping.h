@@ -3,19 +3,20 @@
 
 #include <string>
 #include <vector>
+
 using std::string;
 using std::vector;
 
-namespace utils::encoder {
+namespace common::encoder {
 class CoderKeyMapping {
  private:
-  const vector<string> keys;
+  vector<string> keys;
 
  public:
   CoderKeyMapping(vector<string> keys);
   int encode(string key);
   string decode(int num);
 };
-}  // namespace utils::encoder
+}  // namespace common::encoder
 
 #endif

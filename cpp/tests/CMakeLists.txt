@@ -9,6 +9,9 @@ file(GLOB_RECURSE ALL_TESTS
 
 add_executable(unittest ${ALL_TESTS})
 target_link_libraries(unittest game-wasm CONAN_PKG::gtest)
+
+set_target_properties(unittest PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
+
 add_test(NAME unittest
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
   COMMAND unittest)

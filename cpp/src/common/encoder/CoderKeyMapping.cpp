@@ -1,8 +1,8 @@
-#include "utils/encoder/CoderKeyMapping.h"
+#include "common/encoder/CoderKeyMapping.h"
 #include <iostream>
+using common::encoder::CoderKeyMapping;
 using std::string;
 using std::vector;
-using utils::encoder::CoderKeyMapping;
 
 CoderKeyMapping::CoderKeyMapping(vector<string> _keys) : keys(_keys) {}
 
@@ -19,7 +19,7 @@ string CoderKeyMapping::decode(int num) {
   try {
     return keys.at(num);
   } catch (const std::out_of_range& ex) {
-    std::cout << "invalid value supplied to coderkeymapping" << ex.what()
+    std::cerr << "invalid value supplied to coderkeymapping" << ex.what()
               << std::endl;
   }
   return "";

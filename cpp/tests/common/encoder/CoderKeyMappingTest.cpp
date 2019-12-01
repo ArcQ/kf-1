@@ -1,8 +1,8 @@
+#include "common/encoder/CoderKeyMapping.h"
 #include "gtest/gtest.h"
-#include "utils/encoder/CoderKeyMapping.h"
 
+using common::encoder::CoderKeyMapping;
 using std::invalid_argument;
-using utils::encoder::CoderKeyMapping;
 
 class CoderKeyMappingTest : public testing::Test {
  protected:

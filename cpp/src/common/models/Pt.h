@@ -1,5 +1,5 @@
-#ifndef MODELS_COMMON_PT
-#define MODELS_COMMON_PT
+#ifndef COMMON_MODELS_PT
+#define COMMON_MODELS_PT
 
 #include <string>
 
