@@ -1,18 +1,19 @@
 from conans import ConanFile, CMake, tools
 
-
 class Kf1Conan(ConanFile):
     build_requires = "emsdk_installer/1.38.29@bincrafters/stable", "ninja_installer/1.8.2@bincrafters/stable"
+    requires = "cmake_toolchain_generator/0.2@local/testing"
     name = "KF1"
     version = "0.1"
-    settings = {
-            "os": ["Emscripten"],
-            "arch": ["wasm"],
-            "compiler": {"clang": {"version": ["6.0"], "libcxx": "libc++"}},
-            }
+    # settings = {
+    #         "os": ["Emscripten"],
+    #         "arch": ["wasm"],
+    #         "compiler": {"clang": {"version": ["6.0"], "libcxx": "libc++"}},
+    #         }
     options = {"build_tests": [True, False]}
     default_options = {"build_tests": True}
-    generators = "cmake"
+    generators = "CmakeToolchain"
+    build_policy = "missing"
 
     def requirements(self):
         if self.options.build_tests:

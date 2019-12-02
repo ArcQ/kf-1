@@ -1,0 +1,8 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /Users/eddielaw/Development/personal/kf-1/cpp
+wasm
+Release build
+Web build
+-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0 -O3
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/eddielaw/Development/personal/kf-1/cpp/cmake-build-release

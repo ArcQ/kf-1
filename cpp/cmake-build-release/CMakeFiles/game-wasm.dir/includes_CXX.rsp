@@ -1,0 +1,1 @@
+-I/emscripten -I/Users/eddielaw/Development/scripts/emsdk/emscripten/incoming/system/include -I/Users/eddielaw/Development/personal/kf-1/cpp/src -I/Users/eddielaw/Development/personal/kf-1/cpp/public 

@@ -1,5 +1,23 @@
-cmake_minimum_required(VERSION 3.15.5)
+cmake_minimum_required(VERSION 3.15.3)
 project(tests CXX)
+
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        release-1.8.0
+)
+
+FetchContent_MakeAvailable(googletest)
+
+# FetchContent_GetProperties(googletest)
+#
+# if(NOT googletest_POPULATED)
+#   FetchContent_Populate(googletest)
+#   set(gtest_disable_pthreads ON CACHE BOOL "" FORCE)
+#   add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+# endif()
 
 set(PROJECT_TEST_DIR ${PROJECT_SOURCE_DIR}/tests)
 
@@ -7,15 +25,18 @@ file(GLOB_RECURSE ALL_TESTS
     ${PROJECT_TEST_DIR} "*.cpp"
   )
 
-add_executable(unittest ${ALL_TESTS})
-target_link_libraries(unittest game-wasm CONAN_PKG::gtest)
+enable_testing()
 
-set_target_properties(unittest PROPERTIES LINK_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
+add_executable(test ${ALL_TESTS})
+# target_link_libraries(unittests game-wasm-lib gtest gtest_main gmock gmock_main)
+target_link_libraries(test gtest_main game-wasm-lib)
 
-add_test(NAME unittest
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-  COMMAND unittest)
+add_test(NAME test COMMAND test)
 
-add_custom_target(check
-  COMMAND env CTEST_OUTPUT_ON_FAILURE=2 GTEST_COLOR=1 ${CMAKE_CTEST_COMMAND}
-  DEPENDS unittest)
+set_tests_properties(test
+  PROPERTIES
+  ENVIRONMENT CTEST_OUTPUT_ON_FAILURE=2
+  ENVIRONMENT GTEST_COLOR=1)
+
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
+  DEPENDS test)

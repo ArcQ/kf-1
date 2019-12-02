@@ -1,0 +1,1 @@
+/Users/eddielaw/Development/scripts/emsdk/upstream/emscripten/emar rc libgame-wasm-lib.a  @CMakeFiles/game-wasm-lib.dir/objects1.rsp

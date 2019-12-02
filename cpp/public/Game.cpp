@@ -12,8 +12,7 @@ GameEnvAdapter::GameEnvAdapter(bool broadcastUnchanged,
   std::cout << encoderKeys.at(0) << std::endl;
 };
 
-void GameEnvAdapter::tick(double /*dt*/) { 
-}
+void GameEnvAdapter::tick(double /*dt*/) {}
 
 EMSCRIPTEN_BINDINGS(my_module) {
   emscripten::register_vector<std::string>("CoderKeyMapping");
