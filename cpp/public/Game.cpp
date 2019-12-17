@@ -6,22 +6,21 @@
 
 using namespace emscripten;
 using ::GameEnvAdapter;
+using game::GameEnv;
 
 GameEnvAdapter::GameEnvAdapter(bool broadcastUnchanged,
-                               std::vector<std::string> encoderKeys) {
-  std::cout << encoderKeys.at(0) << std::endl;
+                               std::vector<double> encoderKeys) {
+  gameEnv = GameEnv();
+  gameEnv.tick(0.1);
+  std::cout << std::to_string(encoderKeys.at(0)) << std::endl;
 };
 
 void GameEnvAdapter::tick(double /*dt*/) {}
 
 EMSCRIPTEN_BINDINGS(my_module) {
-  emscripten::register_vector<std::string>("CoderKeyMapping");
-
-  value_array<std::array<int, 2>>("array_int_2")
-      .element(emscripten::index<0>())
-      .element(emscripten::index<1>());
+  emscripten::register_vector<double>("CoderKeyMapping");
 
   class_<GameEnvAdapter>("GameEnvAdapter")
-      .constructor<bool, std::vector<std::string>>()
+      .constructor<bool, std::vector<double>>()
       .function("tick", &GameEnvAdapter::tick);
 };

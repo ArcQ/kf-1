@@ -10,6 +10,7 @@ build/
 build-debug/
 build-test/
 build-release/
+compile_commands.json
 toolchain.cmake
 
 # misc
