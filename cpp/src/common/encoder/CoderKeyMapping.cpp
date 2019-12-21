@@ -1,18 +1,21 @@
-#include "./CoderKeyMapping.h"
+#include "./CoderKeyMapping.hpp"
+
 #include <iostream>
 using common::encoder::CoderKeyMapping;
 using std::string;
 using std::vector;
 
-CoderKeyMapping::CoderKeyMapping(vector<string> _keys) : keys(_keys) {}
+CoderKeyMapping::CoderKeyMapping(vector<string> _keys)
+    : keys(std::move(_keys)) {}
 
 int CoderKeyMapping::encode(string key) {
   int code = find(keys.begin(), keys.end(), key) - keys.begin();
   if (code >= keys.size()) {
-    std::cout << "invalid key supplied to coderkeymapping" << std::endl;
+    std::cout << std::string("invalid key supplied to coderkeymapping")
+              << std::endl;
     return -1;
   }
-  return 1;
+  return code;
 }
 
 string CoderKeyMapping::decode(int num) {

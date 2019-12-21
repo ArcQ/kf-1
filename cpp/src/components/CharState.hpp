@@ -1,8 +1,8 @@
 #include <string>
 
+namespace components {
+namespace CharState {
 using std::string;
-
-namespace components::CharState {
 enum CharState {
   IDLE,
   MOVE,
@@ -10,4 +10,5 @@ enum CharState {
 };
 
 string getCharStateAsString();
-}  // namespace components::CharState
+}  // namespace CharState
+}  // namespace components

@@ -1,7 +1,7 @@
-#include "CharState.h"
+#include "CharState.hpp"
 
-using std::string;
-using namespace components::CharState;
+/* using std::string; */
+/* using namespace components::CharState; */
 
 // TODO use a macro to automate this
 /* string getCharStateAsString(CharState charState) { */

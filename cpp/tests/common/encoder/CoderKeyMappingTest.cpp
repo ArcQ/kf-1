@@ -1,15 +1,14 @@
-#include "common/encoder/CoderKeyMapping.h"
+#include <common/encoder/CoderKeyMapping.hpp>
+
 #include "gtest/gtest.h"
 
 using common::encoder::CoderKeyMapping;
-using std::invalid_argument;
 
 class CoderKeyMappingTest : public testing::Test {
- protected:
-  CoderKeyMapping coderKeyMapping;
-  CoderKeyMappingTest()
-      : coderKeyMapping(
-            CoderKeyMapping({"MOVE", "RUN", "JUMP", "ATTACK", "STOP"})) {}
+ public:
+  CoderKeyMapping coderKeyMapping =
+      CoderKeyMapping({"MOVE", "RUN", "JUMP", "ATTACK", "STOP"});
+  CoderKeyMappingTest() = default;
 };
 
 TEST_F(CoderKeyMappingTest, decode) {
@@ -17,7 +16,8 @@ TEST_F(CoderKeyMappingTest, decode) {
 }
 
 TEST_F(CoderKeyMappingTest, encode) {
-   EXPECT_EQ(coderKeyMapping.encode("RUN"), 1);
+  EXPECT_EQ(coderKeyMapping.encode("RUN"), 1);
+  EXPECT_EQ(coderKeyMapping.encode("ATTACK"), 3);
 }
 
 TEST_F(CoderKeyMappingTest, notFound) {

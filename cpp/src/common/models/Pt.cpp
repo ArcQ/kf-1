@@ -14,10 +14,11 @@ Pt Pt::clone(Pt pt) { return Pt(pt.x, pt.y); }
  *
  * @return
  */
-double Pt::getByK(char k) const {
+double Pt::getByK(char k) {
   if (k == Pt::KEY_X) {
     return x;
-  } else if (k == Pt::KEY_Y) {
+  }
+  if (k == Pt::KEY_Y) {
     return y;
   }
   throw std::invalid_argument(
@@ -56,8 +57,8 @@ Pt Pt::zipWith(Pt pt1, Pt pt2, double handler(double one, double two, char k)) {
  * @return
  */
 Pt Pt::add(Pt pt1, Pt pt2) {
-  return Pt::zipWith(pt1, pt2,
-                     [](double one, double two, char k) { return one + two; });
+  return Pt::zipWith(
+      pt1, pt2, [](double one, double two, char /*k*/) { return one + two; });
 }
 
 /**
@@ -69,7 +70,7 @@ Pt Pt::add(Pt pt1, Pt pt2) {
  * @return
  */
 Pt Pt::subtract(Pt pt1, Pt pt2) {
-  return Pt::zipWith(pt1, pt2, [](double one, double two, char k) -> double {
-    return one - two;
-  });
+  return Pt::zipWith(
+      pt1, pt2,
+      [](double one, double two, char /*k*/) -> double { return one - two; });
 }

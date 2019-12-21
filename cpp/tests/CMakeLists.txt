@@ -27,7 +27,7 @@ file(GLOB_RECURSE ALL_TESTS
 
 add_executable(test-main ${ALL_TESTS})
 # target_link_libraries(unittests game-wasm-lib gtest gtest_main gmock gmock_main)
-target_link_libraries(test-main gtest_main game-wasm-lib)
+target_link_libraries(test-main gtest_main gmock_main game-wasm-lib)
 
 add_test(NAME all_tests COMMAND test-main)
 

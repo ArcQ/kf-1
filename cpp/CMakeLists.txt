@@ -75,9 +75,9 @@ else()
       ${WEB_BUILD_DIRECTORY}/${build_file})
   endforeach(build_file)
 
-  add_custom_command(
-    TARGET game-wasm POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/build/compile_commands.json
-    ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json)
+  # add_custom_command(
+  #   TARGET game-wasm POST_BUILD
+  #   COMMAND ${CMAKE_COMMAND} -E copy
+  #   ${CMAKE_CURRENT_SOURCE_DIR}/build/compile_commands.json
+  #   ${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json)
 endif()

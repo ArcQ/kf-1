@@ -1,5 +1,5 @@
-#ifndef GAMEENVADAPTER_HPP
-#define GAMEENVADAPTER_HPP
+#ifndef GAMEENV_HPP
+#define GAMEENV_HPP
 
 #include <iostream>  // header in standard library
 /* #include "../common/encoder/CoderKeyMapping.h"  // header in local directory

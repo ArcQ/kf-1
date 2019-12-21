@@ -4,19 +4,21 @@
 #include <string>
 #include <vector>
 
+namespace common {
+namespace encoder {
 using std::string;
 using std::vector;
 
-namespace common::encoder {
 class CoderKeyMapping {
  private:
   vector<string> keys;
 
  public:
-  CoderKeyMapping(vector<string> keys);
+  explicit CoderKeyMapping(vector<string> keys);
   int encode(string key);
   string decode(int num);
 };
-}  // namespace common::encoder
+}  // namespace encoder
+}  // namespace common
 
 #endif

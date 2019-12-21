@@ -3,7 +3,8 @@
 
 #include <string>
 
-namespace common { namespace models {
+namespace common {
+namespace models {
 
 struct Pt {
  public:
@@ -13,7 +14,7 @@ struct Pt {
   static const char KEY_Y = 'Y';
 
   Pt(double _x, double _y);
-  double getByK(char k) const;
+  double getByK(char k);
 
   static Pt clone(Pt pt);
   static Pt createOrigin();
@@ -24,6 +25,7 @@ struct Pt {
   static Pt subtract(Pt one, Pt two);
 };
 
-} };  // namespace common::models
+}  // namespace models
+};  // namespace common
 
 #endif

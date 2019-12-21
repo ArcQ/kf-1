@@ -6,10 +6,13 @@
 # testing
 /coverage
 
+.idea
+
 build/
 build-debug/
 build-test/
 build-release/
+cmake-build-release/
 compile_commands.json
 toolchain.cmake
 

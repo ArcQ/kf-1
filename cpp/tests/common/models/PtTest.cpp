@@ -1,4 +1,4 @@
-#include <common/models/Pt.h>
+#include <common/models/Pt.hpp>
 #include "gtest/gtest.h"
 
 using common::models::Pt;

@@ -3,22 +3,23 @@
 
 #include <string>
 #include <vector>
-#include "./CoderKeyMapping.h"
-#include "common/models/Pt.h"
 
+#include "./CoderKeyMapping.hpp"
+#include "common/models/Pt.hpp"
+
+namespace common::encoder {
 using common::encoder::CoderKeyMapping;
 using common::models::Pt;
 using std::string;
 using std::vector;
 
-namespace common::encoder {
 class EncodedMessageBuilder {
- public:
   CoderKeyMapping coderKeyMapping;
   vector<double> stateVec;
   vector<double> subStateVec;
 
-  EncodedMessageBuilder(vector<string> keys);
+ public:
+  explicit EncodedMessageBuilder(vector<string> keys);
   void reset();
   void push(string s);
   void push(int num);

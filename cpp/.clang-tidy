@@ -1,5 +1,5 @@
---- 
-Checks:          'clang-diagnostic-*,clang-analyzer-*,*,-llvm-header-guard,-misc-non-private-member-variables-in-classes,-modernize-concat-nested-namespaces'
+---
+Checks:          'clang-diagnostic-*,clang-analyzer-*,*,-llvm-include-order,-llvm-header-guard,-misc-non-private-member-variables-in-classes,-modernize-concat-nested-namespaces, -modernize-use-trailing-return-type, -fuchsia-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
@@ -388,4 +388,3 @@ CheckOptions:
     value:           ''
 
 ...
-
