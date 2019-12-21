@@ -25,18 +25,22 @@ file(GLOB_RECURSE ALL_TESTS
     ${PROJECT_TEST_DIR} "*.cpp"
   )
 
-enable_testing()
-
-add_executable(test ${ALL_TESTS})
+add_executable(test-main ${ALL_TESTS})
 # target_link_libraries(unittests game-wasm-lib gtest gtest_main gmock gmock_main)
-target_link_libraries(test gtest_main game-wasm-lib)
+target_link_libraries(test-main gtest_main game-wasm-lib)
 
-add_test(NAME test COMMAND test)
+add_test(NAME all_tests COMMAND test-main)
 
-set_tests_properties(test
+set_tests_properties(all_tests
   PROPERTIES
   ENVIRONMENT CTEST_OUTPUT_ON_FAILURE=2
   ENVIRONMENT GTEST_COLOR=1)
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
-  DEPENDS test)
+  DEPENDS all_tests)
+
+add_custom_command(
+  TARGET test-main POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${PROJECT_SOURCE_DIR}/../build/compile_commands.json
+  ${PROJECT_SOURCE_DIR}/../compile_commands.json)

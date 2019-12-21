@@ -51,7 +51,9 @@ endif()
 
 if (BUILD_TESTS)
   message("Test build")
+  enable_testing()
   add_subdirectory(tests)
+
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")

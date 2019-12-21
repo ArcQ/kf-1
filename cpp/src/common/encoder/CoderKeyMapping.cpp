@@ -1,4 +1,4 @@
-#include "common/encoder/CoderKeyMapping.h"
+#include "./CoderKeyMapping.h"
 #include <iostream>
 using common::encoder::CoderKeyMapping;
 using std::string;

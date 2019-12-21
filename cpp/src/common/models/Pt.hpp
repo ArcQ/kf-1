@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace common::models {
+namespace common { namespace models {
 
 struct Pt {
  public:
@@ -24,6 +24,6 @@ struct Pt {
   static Pt subtract(Pt one, Pt two);
 };
 
-};  // namespace common::models
+} };  // namespace common::models
 
 #endif

@@ -17,7 +17,7 @@ TEST_F(CoderKeyMappingTest, decode) {
 }
 
 TEST_F(CoderKeyMappingTest, encode) {
-  EXPECT_EQ(coderKeyMapping.encode("RUN"), 1);
+   EXPECT_EQ(coderKeyMapping.encode("RUN"), 1);
 }
 
 TEST_F(CoderKeyMappingTest, notFound) {

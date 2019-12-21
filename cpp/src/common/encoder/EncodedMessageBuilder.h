@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "CoderKeyMapping.h"
+#include "./CoderKeyMapping.h"
 #include "common/models/Pt.h"
 
 using common::encoder::CoderKeyMapping;

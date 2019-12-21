@@ -19,12 +19,3 @@ void EncodedMessageBuilder::push(string s) {
   subStateVec.push_back(encoded);
 }
 
-// string CoderKeyMapping::decode(int num) {
-//   try {
-//     return keys.at(num);
-//   } catch (const std::out_of_range& ex) {
-//     std::cout << "invalid value supplied to coderkeymapping" << ex.what()
-//               << std::endl;
-//   }
-//   return "";
-// }
