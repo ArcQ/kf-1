@@ -3,7 +3,6 @@
 
 #include <string>
 
-namespace common {
 namespace models {
 
 struct Pt {
@@ -14,9 +13,9 @@ struct Pt {
   static const char KEY_Y = 'Y';
 
   Pt(double _x, double _y);
+  Pt(Pt const &pt);
   double getByK(char k);
 
-  static Pt clone(Pt pt);
   static Pt createOrigin();
   static Pt mapWith(Pt pt1, double handler(double one, char k));
   static Pt zipWith(Pt pt1, Pt pt2,
@@ -26,6 +25,5 @@ struct Pt {
 };
 
 }  // namespace models
-};  // namespace common
 
 #endif

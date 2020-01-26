@@ -1,7 +1,8 @@
-#include <common/models/Pt.hpp>
+#include <models/Pt.hpp>
+
 #include "gtest/gtest.h"
 
-using common::models::Pt;
+using models::Pt;
 
 TEST(PtTest, Ctor) {
   Pt testPt(1.1, 2.2);
@@ -21,9 +22,9 @@ TEST(PtTest, GetKeyString) {
   EXPECT_EQ(testPt.getByK(Pt::KEY_Y), 2.2);
 }
 
-TEST(PtTest, clone) {
+TEST(PtTest, CopyConstructor) {
   Pt testPt(1.1, 2.2);
-  Pt testPtClone = Pt::clone(testPt);
+  Pt testPtClone = Pt(testPt);
   testPt.x = 3;
   EXPECT_EQ(testPt.x, 3);
   EXPECT_EQ(testPtClone.x, 1.1);

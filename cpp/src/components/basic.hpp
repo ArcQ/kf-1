@@ -1,5 +1,5 @@
-#include "common/models/Pt.h"
-using common::models::Pt;
+#include "models/Pt.h"
+using models::Pt;
 
 namespace components::basic {
 using Orientation = double;

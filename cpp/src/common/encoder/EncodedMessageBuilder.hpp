@@ -5,11 +5,11 @@
 #include <vector>
 
 #include "./CoderKeyMapping.hpp"
-#include "common/models/Pt.hpp"
+#include "models/Pt.hpp"
 
 namespace common::encoder {
 using common::encoder::CoderKeyMapping;
-using common::models::Pt;
+using models::Pt;
 using std::string;
 using std::vector;
 

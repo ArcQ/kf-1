@@ -1,5 +1,5 @@
-use types::{GameMap};
 use utils::encoder::CoderKeyMapping;
+use types::{GameMap};
 use wasm_bindgen::prelude::*;
 use super::main::Kf1GameEnv;
 use utils::encoder::EncodedMessageBuilder;

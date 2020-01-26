@@ -5,4 +5,5 @@
 using game::GameEnv;
 
 GameEnv::GameEnv(){};
+
 void GameEnv::tick(double /*dt*/) { std::cout << "hi" << std::endl; };

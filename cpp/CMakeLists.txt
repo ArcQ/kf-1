@@ -39,7 +39,13 @@ file(GLOB_RECURSE EMSCRIPTEN_API
 
 add_definitions("-std=c++17")
 set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0")
-add_library(game-wasm-lib ${ALL_SRC})
+add_library(game-wasm-lib
+        src/GameEnv.hpp src/GameEnv.cpp
+        src/models/Pt.hpp src/models/Pt.cpp
+        src/common/encoder/CoderKeyMapping.hpp
+        src/common/encoder/CoderKeyMapping.cpp
+        src/common/encoder/EncodedMessageBuilder.hpp
+        src/common/encoder/EncodedMessageBuilder.cpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -57,7 +63,7 @@ if (BUILD_TESTS)
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
-  add_executable(game-wasm ${EMSCRIPTEN_API})
+  add_executable(game-wasm ${EMSCRIPTEN_API} src/components/Action.cpp src/components/Action.h)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 

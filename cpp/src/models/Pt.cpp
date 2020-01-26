@@ -1,11 +1,10 @@
 #include "Pt.hpp"
 
-using common::models::Pt;
+using models::Pt;
 
-Pt::Pt(double _x, double _y) : x(_x), y(_y){};
+Pt::Pt(double x, double y) : x(x), y(y){};
 
 Pt Pt::createOrigin() { return Pt(0, 0); }
-Pt Pt::clone(Pt pt) { return Pt(pt.x, pt.y); }
 
 /**
  * @brief get x or y based on a string key of x or y

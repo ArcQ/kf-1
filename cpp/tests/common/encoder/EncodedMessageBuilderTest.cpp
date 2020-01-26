@@ -20,7 +20,7 @@ TEST_F(EncodedMessageBuilderTest, build) {
 }
 
 TEST_F(EncodedMessageBuilderTest, pushPt) {
-  encodedMessageBuilder.push(common::models::Pt(1,2.1));
+  encodedMessageBuilder.push(models::Pt(1,2.1));
   encodedMessageBuilder.buildSubState();
   ASSERT_THAT(encodedMessageBuilder.build(), testing::ElementsAre(4,3,1,2.1));
 }
@@ -33,7 +33,7 @@ TEST_F(EncodedMessageBuilderTest, pushStr) {
 }
 
 TEST_F(EncodedMessageBuilderTest, reset) {
-  encodedMessageBuilder.push(common::models::Pt(1,2.1));
+  encodedMessageBuilder.push(models::Pt(1,2.1));
   encodedMessageBuilder.buildSubState();
   encodedMessageBuilder.reset();
   ASSERT_THAT(encodedMessageBuilder.build().size(), 0);
