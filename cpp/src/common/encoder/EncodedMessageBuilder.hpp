@@ -25,7 +25,7 @@ class EncodedMessageBuilder {
   void push(int num);
   void push(double num);
   void push(Pt pt);
-  void buildSubState();
+  void build_sub_state();
   vector<double> build();
 };
 }  // namespace common::encoder

@@ -13,7 +13,7 @@ Pt Pt::createOrigin() { return Pt(0, 0); }
  *
  * @return
  */
-double Pt::getByK(char k) {
+double Pt::get_by_k(char k) {
   if (k == Pt::KEY_X) {
     return x;
   }
@@ -31,7 +31,7 @@ double Pt::getByK(char k) {
  * @param pt1
  * @param double one
  */
-Pt Pt::mapWith(Pt pt1, double handler(double one, char k)) {
+Pt Pt::map_with(Pt pt1, double handler(double one, char k)) {
   return Pt(handler(pt1.x, Pt::KEY_X), handler(pt1.y, Pt::KEY_Y));
 }
 
@@ -43,7 +43,7 @@ Pt Pt::mapWith(Pt pt1, double handler(double one, char k)) {
  * @param pt2
  * @param double one, double two, std::string k
  */
-Pt Pt::zipWith(Pt pt1, Pt pt2, double handler(double one, double two, char k)) {
+Pt Pt::zip_with(Pt pt1, Pt pt2, double handler(double one, double two, char k)) {
   return Pt(handler(pt1.x, pt2.x, Pt::KEY_X), handler(pt1.y, pt2.y, Pt::KEY_Y));
 }
 
@@ -56,7 +56,7 @@ Pt Pt::zipWith(Pt pt1, Pt pt2, double handler(double one, double two, char k)) {
  * @return
  */
 Pt Pt::add(Pt pt1, Pt pt2) {
-  return Pt::zipWith(
+  return Pt::zip_with(
       pt1, pt2, [](double one, double two, char /*k*/) { return one + two; });
 }
 
@@ -69,7 +69,7 @@ Pt Pt::add(Pt pt1, Pt pt2) {
  * @return
  */
 Pt Pt::subtract(Pt pt1, Pt pt2) {
-  return Pt::zipWith(
+  return Pt::zip_with(
       pt1, pt2,
       [](double one, double two, char /*k*/) -> double { return one - two; });
 }

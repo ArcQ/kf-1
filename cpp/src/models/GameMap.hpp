@@ -21,7 +21,7 @@ struct GameMap {
  public:
   explicit GameMap(int width, int height, vector<vector<int>> map);
 
-  TerrainType getTerrainByPt(const models::Pt &point);
-  TerrainType getTerrainByMapCoord(int x, int y);
+  TerrainType get_terrain_by_pt(const models::Pt &point);
+  TerrainType get_terrain_by_coord(int x, int y);
 };
 }  // namespace models

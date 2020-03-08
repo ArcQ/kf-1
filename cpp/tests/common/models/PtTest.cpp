@@ -5,9 +5,9 @@
 using models::Pt;
 
 TEST(PtTest, Ctor) {
-  Pt testPt(1.1, 2.2);
-  EXPECT_EQ(testPt.x, 1.1);
-  EXPECT_EQ(testPt.y, 2.2);
+  Pt test_pt(1.1, 2.2);
+  EXPECT_EQ(test_pt.x, 1.1);
+  EXPECT_EQ(test_pt.y, 2.2);
 }
 
 TEST(PtTest, Origin) {
@@ -17,22 +17,22 @@ TEST(PtTest, Origin) {
 }
 
 TEST(PtTest, GetKeyString) {
-  Pt testPt(1.1, 2.2);
-  EXPECT_EQ(testPt.getByK(Pt::KEY_X), 1.1);
-  EXPECT_EQ(testPt.getByK(Pt::KEY_Y), 2.2);
+  Pt test_pt(1.1, 2.2);
+  EXPECT_EQ(test_pt.get_by_k(Pt::KEY_X), 1.1);
+  EXPECT_EQ(test_pt.get_by_k(Pt::KEY_Y), 2.2);
 }
 
 TEST(PtTest, CopyConstructor) {
-  Pt testPt(1.1, 2.2);
-  Pt testPtClone = Pt(testPt);
-  testPt.x = 3;
-  EXPECT_EQ(testPt.x, 3);
-  EXPECT_EQ(testPtClone.x, 1.1);
+  Pt test_pt(1.1, 2.2);
+  Pt test_ptClone = Pt(test_pt);
+  test_pt.x = 3;
+  EXPECT_EQ(test_pt.x, 3);
+  EXPECT_EQ(test_ptClone.x, 1.1);
 }
 
-TEST(PtTest, mapWith) {
-  Pt testPt(1.1, 2.2);
-  const Pt mapped = Pt::mapWith(testPt, [](double one, char k) {
+TEST(PtTest, map_with) {
+  Pt test_pt(1.1, 2.2);
+  const Pt mapped = Pt::map_with(test_pt, [](double one, char k) {
     if (k == Pt::KEY_X) {
       return one * 2;
     }
@@ -41,11 +41,11 @@ TEST(PtTest, mapWith) {
   EXPECT_EQ(mapped.x, mapped.y);
 }
 
-TEST(PtTest, zipWith) {
-  Pt testPt(1.1, 3.3);
-  Pt testPtTwo(3, 2);
+TEST(PtTest, zip_with) {
+  Pt test_pt(1.1, 3.3);
+  Pt test_pt_two(3, 2);
   const Pt zipped =
-      Pt::zipWith(testPt, testPtTwo, [](double one, double two, char k) {
+      Pt::zip_with(test_pt, test_pt_two, [](double one, double two, char k) {
         if (k == Pt::KEY_X) {
           return one * two;
         }
@@ -55,17 +55,17 @@ TEST(PtTest, zipWith) {
 }
 
 TEST(PtTest, add) {
-  Pt testPt(1.1, 2.2);
-  Pt testPtTwo(2.2, 3.3);
-  const Pt added = Pt::add(testPt, testPtTwo);
+  Pt test_pt(1.1, 2.2);
+  Pt test_pt_two(2.2, 3.3);
+  const Pt added = Pt::add(test_pt, test_pt_two);
   EXPECT_DOUBLE_EQ(added.x, 3.3);
   EXPECT_DOUBLE_EQ(added.y, 5.5);
 }
 //
 TEST(PtTest, subtract) {
-  Pt testPt(3.2, 3.3);
-  Pt testPtTwo(1.1, 2.1);
-  const Pt subtracted = Pt::subtract(testPt, testPtTwo);
+  Pt test_pt(3.2, 3.3);
+  Pt test_pt_two(1.1, 2.1);
+  const Pt subtracted = Pt::subtract(test_pt, test_pt_two);
   EXPECT_DOUBLE_EQ(subtracted.x, 2.1);
   EXPECT_DOUBLE_EQ(subtracted.y, 1.2);
 }

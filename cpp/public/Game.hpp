@@ -9,8 +9,8 @@ using namespace game;
 
 class GameEnvAdapter {
  public:
-  GameEnvAdapter(bool broadcastUnchanged, std::vector<double> encoderKeys);
-  GameEnv gameEnv;
+  GameEnvAdapter(bool broadcast_unchanged, std::vector<double> encoder_keys);
+  GameEnv game_env;
 
   static void tick(double dt);
 };

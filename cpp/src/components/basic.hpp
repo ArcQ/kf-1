@@ -1,5 +1,4 @@
-#include "models/Pt.h"
-using models::Pt;
+#include <models/Pt.hpp>
 
 namespace components::basic {
 using Orientation = double;
@@ -8,7 +7,7 @@ using Key = int;
 using Key = int;
 
 struct NextPosDef {
-  Pt pt;
+  models::Pt pt;
   bool completed;
 };
 }  // namespace components::basic

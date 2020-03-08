@@ -5,10 +5,10 @@ models::GameMap::GameMap(int width, int height, vector<vector<int>> _map)
   map = std::move(_map);
 }
 
-models::TerrainType models::GameMap::getTerrainByMapCoord(int x, int y) {
+models::TerrainType models::GameMap::get_terrain_by_coord(int x, int y) {
   return models::TerrainType(map.at(y).at(x));
 }
 
-models::TerrainType models::GameMap::getTerrainByPt(const models::Pt &point) {
+models::TerrainType models::GameMap::get_terrain_by_pt(const models::Pt &point) {
   return models::TerrainType(map.at(point.y).at(point.x));
 }

@@ -3,12 +3,12 @@
 namespace components {
 namespace CharState {
 using std::string;
-enum CharState {
+enum CharacterState {
   IDLE,
   MOVE,
   SPOT_ATTACK,
 };
 
 string getCharStateAsString();
-}  // namespace CharState
+}  // namespace CharacterState
 }  // namespace components

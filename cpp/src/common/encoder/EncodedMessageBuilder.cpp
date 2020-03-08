@@ -30,7 +30,7 @@ void EncodedMessageBuilder::push(Pt pt) {
   subStateVec.push_back(pt.y);
 }
 
-void EncodedMessageBuilder::buildSubState() {
+void EncodedMessageBuilder::build_sub_state() {
   int subStateVecLen = subStateVec.size();
   if (subStateVecLen > 0) {
     subStateVec.insert(subStateVec.begin(), subStateVecLen + 1);

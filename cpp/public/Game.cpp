@@ -8,11 +8,11 @@ using namespace emscripten;
 using ::GameEnvAdapter;
 using game::GameEnv;
 
-GameEnvAdapter::GameEnvAdapter(bool broadcastUnchanged,
-                               std::vector<double> encoderKeys) {
-  gameEnv = GameEnv();
-  gameEnv.tick(0.1);
-  std::cout << std::to_string(encoderKeys.at(0)) << std::endl;
+GameEnvAdapter::GameEnvAdapter(bool broadcast_unchanged,
+                               std::vector<double> encoder_keys) {
+  game_env = GameEnv();
+  game_env.tick(0.1);
+  std::cout << std::to_string(encoder_keys.at(0)) << std::endl;
 };
 
 void GameEnvAdapter::tick(double /*dt*/) {}
