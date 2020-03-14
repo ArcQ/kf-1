@@ -5,26 +5,24 @@
 #ifndef KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
 #define KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
 
+#include <pt.hpp>
+#include <game_map.hpp>
+#include "c_orientation.hpp"
 namespace components {
-#include "models/Pt.hpp"
 
 struct CMove {
-  struct Properties {
-    models::Pt diff;
-    models::Pt normalized;
-    models::Pt multipliers;
-    models::Pt destination;
-    &models::GameMap game_map,
-  };
+  CMove() = default;
 
   models::Pt pt;
-  Properties properties;
-  bool is_stopped,
+  models::Pt destination;
+  models::Pt diff;
+  models::Pt multipliers;
+  bool is_stopped;
   bool completed;
-
-  void calc_new_destination( &
-  mut self, _speed: f32, pos: &Pt, destination: Pt
-  );
+  void calc_new_destination(double speed, models::Pt &pos, models::Pt destination) &;
+  components::COrientation get_x_direction();
+  void stop();
+  bool check_if_past(models::Pt &next_pt);
 };
 }
 

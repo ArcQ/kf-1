@@ -5,7 +5,7 @@
 #ifndef KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_
 #define KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_
 
-#include <entt/entity/registry.hpp>
+#include <entt/entt.hpp>
 
 namespace systems
 {

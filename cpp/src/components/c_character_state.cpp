@@ -14,7 +14,7 @@ using namespace components;
    }
  };
 
-CCharacterState getCharStateFromString(string charStateString) {
+CCharacterState getCharStateFromString(const string charStateString) {
   switch (charStateString) {
     case string("IDLE"):
       return CCharacterState::IDLE;

@@ -1,7 +1,6 @@
 #include "game_map.hpp"
 
-models::GameMap::GameMap(int width, int height, vector<vector<int>> _map)
-    : width(width), height(height) {
+models::GameMap::GameMap(vector<vector<int>> _map) {
   m_map = std::move(_map);
   height = m_map.size();
   width = m_map.at(0).size();

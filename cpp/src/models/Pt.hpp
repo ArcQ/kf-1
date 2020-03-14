@@ -13,16 +13,20 @@ struct Pt {
 
   Pt(double x, double y) : x(x), y(y){};
   Pt(Pt const &pt)  : x(pt.x), y(pt.y){};;
+  Pt() : x(0), y(0){};
 
-  double get_by_k(char k);
+  [[nodiscard]] double get_by_k(char k) const;
 
-  static Pt createOrigin() { return Pt(0, 0); }
+  static Pt createOrigin() { return Pt(0, 0); } ;
 
-  static Pt map_with(Pt pt1, double handler(double one, char k));
-  static Pt zip_with(Pt pt1, Pt pt2,
-                     double handler(double one, double two, char k));
+  template<typename Func>
+  static Pt map_with(Pt &pt1, Func handler);
+
+  template<typename Func>
+  static Pt zip_with(Pt &pt1, Pt &pt2, Func handler);
+
   static Pt add(Pt one, Pt two);
-  static Pt subtract(Pt one, Pt two);
+  static Pt subtract(Pt &one, Pt &two);
 };
 
 }  // namespace models

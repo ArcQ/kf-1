@@ -5,8 +5,8 @@
 #ifndef KF_1_GAME_SRC_SYSTEMS_MOVE_SYSTEM_HPP_
 #define KF_1_GAME_SRC_SYSTEMS_MOVE_SYSTEM_HPP_
 
-#include "System.h"
-#include "components.h"
+#include <entt/entt.hpp>
+#include "system.hpp"
 
 namespace systems
 {

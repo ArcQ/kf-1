@@ -9,7 +9,7 @@ using models::Pt;
  *
  * @return
  */
-double Pt::get_by_k(char k) {
+double Pt::get_by_k(char k) const {
   if (k == Pt::KEY_X) {
     return x;
   }
@@ -27,7 +27,8 @@ double Pt::get_by_k(char k) {
  * @param pt1
  * @param double one
  */
-Pt Pt::map_with(Pt pt1, double handler(double one, char k)) {
+template<typename Func>
+Pt Pt::map_with(Pt &pt1, Func handler) {
   return Pt(handler(pt1.x, Pt::KEY_X), handler(pt1.y, Pt::KEY_Y));
 }
 
@@ -39,7 +40,8 @@ Pt Pt::map_with(Pt pt1, double handler(double one, char k)) {
  * @param pt2
  * @param double one, double two, std::string k
  */
-Pt Pt::zip_with(Pt pt1, Pt pt2, double handler(double one, double two, char k)) {
+template<typename Func>
+Pt Pt::zip_with(Pt &pt1, Pt &pt2, Func handler) {
   return Pt(handler(pt1.x, pt2.x, Pt::KEY_X), handler(pt1.y, pt2.y, Pt::KEY_Y));
 }
 
@@ -64,7 +66,7 @@ Pt Pt::add(Pt pt1, Pt pt2) {
  *
  * @return
  */
-Pt Pt::subtract(Pt pt1, Pt pt2) {
+Pt Pt::subtract(Pt &pt1, Pt &pt2) {
   return Pt::zip_with(
       pt1, pt2,
       [](double one, double two, char /*k*/) -> double { return one - two; });

@@ -15,6 +15,9 @@ extern entt::dispatcher global_event_queue;
 
 void MovementSystem::update(double dt)
 {
+
+    entt::observer observer{registry_, entt::collector.replace<CMove>()};
+
     auto movement_group = registry_.group<CPosition, CMovement>(entt::get<CSpeed>);
     movement_group.each([dt, this](entt::entity entity, CPosition& pos, CMovement& mov, const CSpeed& speed) {
         if (mov.desired_direction != mov.current_direction && !m_level.will_collide(pos.position, mov.desired_direction) &&

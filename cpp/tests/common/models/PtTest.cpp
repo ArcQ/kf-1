@@ -1,8 +1,15 @@
 #include <models/Pt.hpp>
+#include <pt.hpp>
 
 #include "gtest/gtest.h"
 
 using models::Pt;
+
+TEST(PtTest, DefaultCtor) {
+  Pt test_pt = Pt();
+  EXPECT_EQ(test_pt.x, 0);
+  EXPECT_EQ(test_pt.y, 0);
+}
 
 TEST(PtTest, Ctor) {
   Pt test_pt(1.1, 2.2);

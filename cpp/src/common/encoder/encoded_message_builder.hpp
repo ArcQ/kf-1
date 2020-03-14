@@ -3,9 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <pt.hpp>
 
 #include "coder_key_mapping.hpp"
-#include "models/Pt.hpp"
 
 namespace common::encoder {
 using common::encoder::CoderKeyMapping;
