@@ -1,10 +1,10 @@
 #ifndef GAMEENV_HPP
 #define GAMEENV_HPP
 
-#include <common/encoder/CoderKeyMapping.hpp>
+#include "common/encoder/CoderKeyMapping.hpp"
+#include "models/GameMap.hpp"
 #include <entt/entt.hpp>
 #include <iostream>  // header in standard library
-#include <models/GameMap.hpp>
 
 #include "JsEventEmitter.hpp"
 #include <map>
@@ -17,28 +17,28 @@ using std::map;
 
 /* using common::encoder::CoderKeyMapping; */
 
-namespace game {
+namespace kf1 {
 
-struct CharInitialConfig {
+struct CharacterInitialConfig {
   std::string k;
   int encoded_k;
-  int speed;
+  double orientation;
+  double speed;
   models::Pt pos;
 };
 
 class GameEnv {
  public:
-  GameEnv(JsEventEmitter js_event_emitter, models::GameMap game_map,
-          std::vector<CharInitialConfig> char_list);
-  /* CoderKeyMapping encoderKeysDict; */
-  common::encoder::CoderKeyMapping encoder_keys_dict;
+  GameEnv(JsEventEmitter jsEventEmitter,
+          models::GameMap gameMap,
+          map<std::string, CharacterInitialConfig> characterDict);
+/* CoderKeyMapping encoderKeysDict; */
   entt::registry registry;
   void tick(double dt);
   void reset();
 
  private:
-  std::map<std::string, entity> create_entities(models::GameMap map,
-                                     std::vector<CharInitialConfig> charDict);
+  void assign_entities(models::GameMap map, std::map<std::string, CharacterInitialConfig> char_dict);
 };
 }  // namespace game
 

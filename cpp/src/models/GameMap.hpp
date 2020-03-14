@@ -14,11 +14,11 @@ enum TerrainType {
 
 struct GameMap {
  private:
-  int width;
-  int height;
-  vector<vector<int>> map;
+  vector<vector<int>> m_map;
 
  public:
+  int width;
+  int height;
   explicit GameMap(int width, int height, vector<vector<int>> map);
 
   TerrainType get_terrain_by_pt(const models::Pt &point);

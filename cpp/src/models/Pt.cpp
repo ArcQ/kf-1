@@ -2,10 +2,6 @@
 
 using models::Pt;
 
-Pt::Pt(double x, double y) : x(x), y(y){};
-
-Pt Pt::createOrigin() { return Pt(0, 0); }
-
 /**
  * @brief get x or y based on a string key of x or y
  *

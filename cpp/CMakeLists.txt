@@ -23,15 +23,15 @@ include_directories(
   )
 include_directories(
   ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/models
   ${PROJECT_SOURCE_DIR}/public
   )
 
-file(GLOB_RECURSE ALL_SRC
-  "${PROJECT_SOURCE_DIR}/src/*.cpp")
-
-file(GLOB_RECURSE EMSCRIPTEN_API
-  "${PROJECT_SOURCE_DIR}/public/*.cpp")
+#file(GLOB_RECURSE ALL_SRC
+#  "${PROJECT_SOURCE_DIR}/src/*.cpp")
+#
+#file(GLOB_RECURSE EMSCRIPTEN_API
+#  "${PROJECT_SOURCE_DIR}/public/*.cpp")
 
 
 ################################
@@ -47,7 +47,7 @@ add_library(game-wasm-lib
         src/common/encoder/CoderKeyMapping.hpp
         src/common/encoder/CoderKeyMapping.cpp
         src/common/encoder/EncodedMessageBuilder.hpp
-        src/common/encoder/EncodedMessageBuilder.cpp src/JsEventEmitter.cpp src/JsEventEmitter.hpp)
+        src/common/encoder/EncodedMessageBuilder.cpp src/JsEventEmitter.cpp src/JsEventEmitter.hpp src/systems/MoveSystem.cpp src/systems/MoveSystem.hpp src/systems/System.hpp src/components/CMove.cpp src/components/CMove.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -65,8 +65,8 @@ if (BUILD_TESTS)
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
-  add_executable(game-wasm ${EMSCRIPTEN_API})
-  target_link_libraries(entt game-wasm game-wasm-lib)
+  add_executable(game-wasm ${EMSCRIPTEN_API} public/Game.hpp public/Game.cpp)
+  target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 
   ##################################

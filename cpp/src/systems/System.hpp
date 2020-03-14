@@ -1,0 +1,29 @@
+//
+// Created by Eddie Law on 2020-03-13.
+//
+
+#ifndef KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_
+#define KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_
+
+#include <entt/entity/registry.hpp>
+
+namespace systems
+{
+class System
+{
+ protected:
+  entt::registry& registry_;
+
+ public:
+  System(entt::registry& reg) : registry_(reg){};
+  System(const System&) = default;
+  System(System&&) = default;
+  System& operator=(System&&) = delete;
+  System& operator=(const System&) = delete;
+
+  virtual ~System() noexcept = default;
+  virtual void update(float dt) = 0;
+};
+
+}
+#endif //KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_

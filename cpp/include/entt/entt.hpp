@@ -5327,7 +5327,7 @@ class basic_continuous_loader {
     template<typename Container>
     auto update(int, Container &container)
     -> decltype(typename Container::mapped_type{}, void()) {
-        // map like container
+        // m_map like container
         Container other;
 
         for(auto &&pair: container) {
@@ -6573,7 +6573,7 @@ public:
 
     /**
      * @brief Returns the identifier that occupies the given position.
-     * @param pos Position of the element to return.
+     * @param pos CPosition of the element to return.
      * @return The identifier that occupies the given position.
      */
     entity_type operator[](const size_type pos) const {
@@ -7009,7 +7009,7 @@ public:
 
     /**
      * @brief Returns the identifier that occupies the given position.
-     * @param pos Position of the element to return.
+     * @param pos CPosition of the element to return.
      * @return The identifier that occupies the given position.
      */
     entity_type operator[](const size_type pos) const {
@@ -7911,7 +7911,7 @@ public:
 
     /**
      * @brief Returns the identifier that occupies the given position.
-     * @param pos Position of the element to return.
+     * @param pos CPosition of the element to return.
      * @return The identifier that occupies the given position.
      */
     entity_type operator[](const size_type pos) const {
@@ -12998,7 +12998,7 @@ struct meta_data {
      *
      * @tparam Type Type of value to assign.
      * @param instance An opaque instance of the underlying type.
-     * @param index Position of the underlying element to set.
+     * @param index CPosition of the underlying element to set.
      * @param value Parameter to use to set the underlying element.
      * @return True in case of success, false otherwise.
      */
@@ -13028,7 +13028,7 @@ struct meta_data {
      * data. Otherwise, invoking the getter results in an undefined behavior.
      *
      * @param instance An opaque instance of the underlying type.
-     * @param index Position of the underlying element to get.
+     * @param index CPosition of the underlying element to get.
      * @return A meta any containing the value of the underlying element.
      */
     meta_any get(meta_handle instance, std::size_t index) const {
