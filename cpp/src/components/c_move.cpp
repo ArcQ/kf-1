@@ -2,7 +2,7 @@
 // Created by Eddie Law on 2020-03-13.
 //
 
-#include "CMove.hpp"
+#include "c_move.hpp"
 
 void CMove::calc_new_destination() &{
   this.is_stopped = false;

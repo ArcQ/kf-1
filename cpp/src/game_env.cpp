@@ -1,8 +1,8 @@
-#include "GameEnv.hpp"  // header in local directory
+#include "game_env.hpp"  // header in local directory
 
 #include <iostream>  // header in standard library
-#include <components/CBasic.hpp>
-#include <components/CCharacterState.hpp>
+#include "components/c_basic.hpp"
+#include "components/c_character_state.hpp"
 #include <utility>
 
 kf1::GameEnv::GameEnv(JsEventEmitter jsEventEmitter,

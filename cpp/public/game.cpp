@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "game.hpp"
 #include <emscripten/bind.h>
 #include <stdio.h>
 #include <array>

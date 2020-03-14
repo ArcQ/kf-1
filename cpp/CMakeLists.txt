@@ -41,13 +41,13 @@ include_directories(
 add_definitions("-std=c++17")
 set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEMANGLE_SUPPORT=1 -s DISABLE_EXCEPTION_CATCHING=0")
 add_library(game-wasm-lib
-        src/GameEnv.hpp src/GameEnv.cpp
-        src/models/Pt.hpp src/models/Pt.cpp
-        src/models/GameMap.hpp src/models/GameMap.cpp
-        src/common/encoder/CoderKeyMapping.hpp
-        src/common/encoder/CoderKeyMapping.cpp
-        src/common/encoder/EncodedMessageBuilder.hpp
-        src/common/encoder/EncodedMessageBuilder.cpp src/JsEventEmitter.cpp src/JsEventEmitter.hpp src/systems/MoveSystem.cpp src/systems/MoveSystem.hpp src/systems/System.hpp src/components/CMove.cpp src/components/CMove.hpp)
+        src/game_env.hpp src/game_env.cpp
+        src/models/pt.hpp src/models/pt.cpp
+        src/models/game_map.hpp src/models/game_map.cpp
+        src/common/encoder/coder_key_mapping.hpp
+        src/common/encoder/coder_key_mapping.cpp
+        src/common/encoder/encoded_message_builder.hpp
+        src/common/encoder/encoded_message_builder.cpp src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move_system.cpp src/systems/move_system.hpp src/systems/System.hpp src/components/c_move.cpp src/components/c_move.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -65,7 +65,7 @@ if (BUILD_TESTS)
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
-  add_executable(game-wasm ${EMSCRIPTEN_API} public/Game.hpp public/Game.cpp)
+  add_executable(game-wasm ${EMSCRIPTEN_API} public/game.hpp public/game.cpp)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 

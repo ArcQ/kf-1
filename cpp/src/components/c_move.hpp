@@ -2,8 +2,8 @@
 // Created by Eddie Law on 2020-03-13.
 //
 
-#ifndef KF_1_GAME_SRC_COMPONENTS_CMOVE_HPP_
-#define KF_1_GAME_SRC_COMPONENTS_CMOVE_HPP_
+#ifndef KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
+#define KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
 
 namespace components {
 #include "models/Pt.hpp"
@@ -28,4 +28,4 @@ struct CMove {
 };
 }
 
-#endif //KF_1_GAME_SRC_COMPONENTS_CMOVE_HPP_
+#endif //KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_

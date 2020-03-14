@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "./CoderKeyMapping.hpp"
+#include "coder_key_mapping.hpp"
 #include "models/Pt.hpp"
 
 namespace common::encoder {

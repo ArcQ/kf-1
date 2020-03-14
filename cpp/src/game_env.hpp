@@ -1,12 +1,12 @@
 #ifndef GAMEENV_HPP
 #define GAMEENV_HPP
 
-#include "common/encoder/CoderKeyMapping.hpp"
-#include "models/GameMap.hpp"
+#include "common/encoder/coder_key_mapping.hpp"
+#include "game_map.hpp"
 #include <entt/entt.hpp>
 #include <iostream>  // header in standard library
 
-#include "JsEventEmitter.hpp"
+#include "js_event_emitter.hpp"
 #include <map>
 
 using std::string;

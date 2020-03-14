@@ -2,8 +2,8 @@
 // Created by Eddie Law on 2020-03-13.
 //
 
-#ifndef KF_1_GAME_SRC_SYSTEMS_MOVESYSTEM_HPP_
-#define KF_1_GAME_SRC_SYSTEMS_MOVESYSTEM_HPP_
+#ifndef KF_1_GAME_SRC_SYSTEMS_MOVE_SYSTEM_HPP_
+#define KF_1_GAME_SRC_SYSTEMS_MOVE_SYSTEM_HPP_
 
 #include "System.h"
 #include "components.h"
@@ -22,4 +22,4 @@ class MovementSystem : public System
 };
 }  // namespace systems
 
-#endif //KF_1_GAME_SRC_SYSTEMS_MOVESYSTEM_HPP_
+#endif //KF_1_GAME_SRC_SYSTEMS_MOVE_SYSTEM_HPP_

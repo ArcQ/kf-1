@@ -1,4 +1,4 @@
-#include "CCharacterState.hpp"
+#include "c_character_state.hpp"
 
 using std::string;
 using namespace components;

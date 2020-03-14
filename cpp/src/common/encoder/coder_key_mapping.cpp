@@ -1,4 +1,4 @@
-#include "./CoderKeyMapping.hpp"
+#include "coder_key_mapping.hpp"
 
 #include <iostream>
 using common::encoder::CoderKeyMapping;

@@ -1,4 +1,4 @@
-#include "EncodedMessageBuilder.hpp"
+#include "encoded_message_builder.hpp"
 
 #include <iostream>
 using common::encoder::EncodedMessageBuilder;

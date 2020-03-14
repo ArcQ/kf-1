@@ -1,4 +1,4 @@
-#include "./GameMap.hpp"
+#include "game_map.hpp"
 
 models::GameMap::GameMap(int width, int height, vector<vector<int>> _map)
     : width(width), height(height) {

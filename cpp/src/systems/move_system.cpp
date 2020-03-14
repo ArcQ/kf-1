@@ -2,7 +2,7 @@
 // Created by Eddie Law on 2020-03-13.
 //
 
-#include "MoveSystem.hpp"
+#include "move_system.hpp"
 #include "components.h"
 #include "events.h"
 #include "level.h"

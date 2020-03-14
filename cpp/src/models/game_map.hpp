@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include "./Pt.hpp"
+#include "pt.hpp"
 
 namespace models {
 using std::string;
