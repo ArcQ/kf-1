@@ -2,6 +2,7 @@
 #define COMMON_MODELS_PT
 
 #include <string>
+#include <functional>
 
 namespace models {
 
@@ -19,14 +20,22 @@ struct Pt {
 
   static Pt createOrigin() { return Pt(0, 0); } ;
 
-  template<typename Func>
-  static Pt map_with(Pt &pt1, Func handler);
+  static bool is_equal(Pt &one, Pt &two) {
+    return one.x == two.x && one.y == two.y;
+  }
 
-  template<typename Func>
-  static Pt zip_with(Pt &pt1, Pt &pt2, Func handler);
+  static Pt map_with(
+      Pt &pt1,
+      const std::function<double(double, double)>& handler);
+
+  static Pt zip_with(
+      Pt &pt1,
+      Pt &pt2,
+      const std::function<double(double, double, char)>& handler);
 
   static Pt add(Pt one, Pt two);
   static Pt subtract(Pt &one, Pt &two);
+
 };
 
 }  // namespace models

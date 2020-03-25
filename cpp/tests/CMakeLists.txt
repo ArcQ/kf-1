@@ -25,7 +25,7 @@ file(GLOB_RECURSE ALL_TESTS
     ${PROJECT_TEST_DIR} "*.cpp"
   )
 
-add_executable(test-main ${ALL_TESTS})
+add_executable(test-main ${ALL_TESTS} common/components/c_move_test.cpp)
 # target_link_libraries(unittests game-wasm-lib gtest gtest_main gmock gmock_main)
 target_link_libraries(test-main gtest_main gmock_main game-wasm-lib)
 

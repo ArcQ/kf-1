@@ -14,8 +14,28 @@ enum CCharacterState {
   MOVE,
   SPOT_ATTACK,
 };
-CCharacterState get_char_state_from_string(string char_state_string);
-string get_string_from_char_state(CCharacterState character_state);
+
+struct CCharacterStateMapper {
+ public:
+  static const inline std::map<std::string, CCharacterState>
+      string_map =
+      {{"IDLE", CCharacterState::IDLE},
+       {"MOVE", CCharacterState::MOVE},
+       {"SPOT_ATTACK", CCharacterState::SPOT_ATTACK}};
+
+  static CCharacterState from_string(const std::string charStateString) {
+    return string_map.at(charStateString);
+  }
+
+  static std::string to_string(CCharacterState charState) {
+    switch (charState) {
+      case CCharacterState::IDLE:return string("IDLE");
+      case CCharacterState::MOVE:return string("MOVE");
+      case CCharacterState::SPOT_ATTACK:return string("SPOT_ATTACK");
+    }
+  };
+};
+
 }  // namespace components
 
 #endif //KF_1_GAME_SRC_COMPONENTS_C_CHARACTER_STATE_HPP_

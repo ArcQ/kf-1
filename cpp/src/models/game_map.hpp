@@ -21,9 +21,18 @@ struct GameMap {
   int height = 0;
   GameMap() = default;
 
-  explicit GameMap(vector<vector<int>> map);
+  explicit GameMap(vector<vector<int>> _map) {
+    m_map = std::move(_map);
+    height = m_map.size();
+    width = m_map.at(0).size();
+  }
 
-  TerrainType get_terrain_by_pt(const models::Pt &point);
-  TerrainType get_terrain_by_coord(int x, int y);
+  models::TerrainType get_terrain_by_coord(int x, int y) {
+    return models::TerrainType(m_map.at(y).at(x));
+  }
+
+  models::TerrainType get_terrain_by_pt(const models::Pt &point) {
+    return models::TerrainType(m_map.at(point.y).at(point.x));
+  }
 };
 }  // namespace models

@@ -1,7 +1,6 @@
-#include <common/encoder/EncodedMessageBuilder.hpp>
-
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
+#include "../../../src/common/encoder/encoded_message_builder.hpp"
 
 using common::encoder::EncodedMessageBuilder;
 

@@ -16,9 +16,9 @@ namespace systems
 class MovementSystem : public System
 {
  public:
-  MovementSystem(entt::registry& reg) : System(reg);
+  MovementSystem(entt::registry& reg) : System(reg) {};
 
-  void update(double dt) override;
+  void update(double dt);
 };
 }  // namespace systems
 

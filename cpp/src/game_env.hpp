@@ -7,6 +7,7 @@
 #include <iostream>  // header in standard library
 
 #include "js_event_emitter.hpp"
+#include "components/c_orientation.hpp"
 #include <map>
 
 using std::string;
@@ -21,8 +22,7 @@ namespace kf1 {
 
 struct CharacterInitialConfig {
   std::string k;
-  int encoded_k;
-  double orientation;
+  components::COrientation orientation;
   double speed;
   models::Pt pos;
 };

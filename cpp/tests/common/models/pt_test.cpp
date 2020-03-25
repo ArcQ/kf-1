@@ -1,4 +1,3 @@
-#include <models/Pt.hpp>
 #include <pt.hpp>
 
 #include "gtest/gtest.h"
@@ -75,4 +74,12 @@ TEST(PtTest, subtract) {
   const Pt subtracted = Pt::subtract(test_pt, test_pt_two);
   EXPECT_DOUBLE_EQ(subtracted.x, 2.1);
   EXPECT_DOUBLE_EQ(subtracted.y, 1.2);
+}
+
+TEST(PtTest, is_equal) {
+  Pt test_pt(1.1, 2.1);
+  Pt test_pt_two(1.1, 2.1);
+  Pt test_pt_three(2.1, 2.1);
+  EXPECT_TRUE(Pt::is_equal(test_pt, test_pt_two));
+  EXPECT_FALSE(Pt::is_equal(test_pt, test_pt_three));
 }

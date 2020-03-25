@@ -3,6 +3,7 @@
 #include <iostream>  // header in standard library
 #include "components/c_basic.hpp"
 #include "components/c_character_state.hpp"
+#include "components/c_orientation.hpp"
 #include <utility>
 
 kf1::GameEnv::GameEnv(JsEventEmitter jsEventEmitter,
@@ -31,7 +32,7 @@ void kf1::GameEnv::assign_entities(models::GameMap map,
     registry.assign<models::Pt>(entity, char_initial_config.pos);
     registry.assign<components::basic::CSpeed>(entity,
                                                char_initial_config.speed);
-    registry.assign<components::basic::COrientation>(entity, char_initial_config.orientation);
+    registry.assign<components::COrientation>(entity, char_initial_config.orientation);
     registry.assign<components::CCharacterState>(entity,
                                                  components::CCharacterState::IDLE);
 

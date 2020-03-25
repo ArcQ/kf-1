@@ -19,7 +19,11 @@ struct CMove {
   models::Pt multipliers;
   bool is_stopped;
   bool completed;
-  void calc_new_destination(double speed, models::Pt &pos, models::Pt destination) &;
+  void set_new_destination(
+      double speed,
+      models::Pt &pos,
+      models::Pt destination);
+
   components::COrientation get_x_direction();
   void stop();
   bool check_if_past(models::Pt &next_pt);

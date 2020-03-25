@@ -43,11 +43,11 @@ set(WASM_BUILD_FLAGS  "-Wall --std=c++17 --bind -s WASM=1 -o game-wasm.js -s DEM
 add_library(game-wasm-lib
         src/game_env.hpp src/game_env.cpp
         src/models/pt.hpp src/models/pt.cpp
-        src/models/game_map.hpp src/models/game_map.cpp
+        src/models/game_map.hpp
         src/common/encoder/coder_key_mapping.hpp
         src/common/encoder/coder_key_mapping.cpp
         src/common/encoder/encoded_message_builder.hpp
-        src/common/encoder/encoded_message_builder.cpp src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move_system.cpp src/systems/move_system.hpp src/systems/System.hpp src/components/c_move.cpp src/components/c_move.hpp src/components/c_orientation.cpp src/components/c_orientation.hpp)
+        src/common/encoder/encoded_message_builder.cpp src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move_system.cpp src/systems/move_system.hpp src/systems/System.hpp src/components/c_move.cpp src/components/c_move.hpp src/components/c_orientation.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
