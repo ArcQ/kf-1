@@ -25,12 +25,12 @@ struct Pt {
   }
 
   static Pt map_with(
-      Pt &pt1,
+      const Pt &pt1,
       const std::function<double(double, double)>& handler);
 
   static Pt zip_with(
-      Pt &pt1,
-      Pt &pt2,
+      const Pt &pt1,
+      const Pt &pt2,
       const std::function<double(double, double, char)>& handler);
 
   static Pt add(Pt one, Pt two);

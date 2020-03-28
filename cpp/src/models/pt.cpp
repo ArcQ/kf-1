@@ -27,7 +27,7 @@ double Pt::get_by_k(char k) const {
  * @param pt1
  * @param double one
  */
-Pt models::Pt::map_with(Pt &pt1,
+Pt models::Pt::map_with(const Pt &pt1,
                         const std::function<double(double, double)> &handler) {
   return Pt(handler(pt1.x, Pt::KEY_X), handler(pt1.y, Pt::KEY_Y));
 }
@@ -40,8 +40,8 @@ Pt models::Pt::map_with(Pt &pt1,
  * @param pt2
  * @param double one, double two, std::string k
  */
-Pt models::Pt::zip_with(Pt &pt1,
-                        Pt &pt2,
+Pt models::Pt::zip_with(const Pt &pt1,
+                        const Pt &pt2,
                         const std::function<double(double, double, char)> &handler) {
   return Pt(handler(pt1.x, pt2.x, Pt::KEY_X), handler(pt1.y, pt2.y, Pt::KEY_Y));
 }

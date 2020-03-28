@@ -1,6 +1,6 @@
+use utils::encoder::CoderKeyMapping;
 use types::{Pt};
 use std::collections::HashMap;
-use utils::encoder::CoderKeyMapping;
 
 pub struct CharInitialConfig {
     pub encodedK: i32,

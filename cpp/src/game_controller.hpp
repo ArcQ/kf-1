@@ -27,17 +27,17 @@ struct CharacterInitialConfig {
   models::Pt pos;
 };
 
-class GameEnv {
+class GameController {
  public:
-  GameEnv(JsEventEmitter jsEventEmitter,
-          models::GameMap gameMap,
-          map<std::string, CharacterInitialConfig> characterDict);
+  GameController(JsEventEmitter jsEventEmitter,
+                 models::GameMap gameMap,
+                 map<std::string, CharacterInitialConfig> characterDict);
 /* CoderKeyMapping encoderKeysDict; */
-  entt::registry registry;
   void tick(double dt);
   void reset();
 
  private:
+  entt::registry registry;
   void assign_entities(models::GameMap map, std::map<std::string, CharacterInitialConfig> char_dict);
 };
 }  // namespace game

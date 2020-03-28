@@ -1,5 +1,7 @@
+#include "../models/pt.hpp"
+
 namespace components::basic {
-using CSpeed = double;
-using CKey = int;
-using CPosition = models::Pt;
+typedef double CSpeed ;
+typedef int CKey ;
+typedef models::Pt CPosition ;
 }  // namespace components::basic

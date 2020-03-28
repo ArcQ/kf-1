@@ -1,5 +1,5 @@
-use utils::js_imports;
 use utils::encoder::EncodedMessageBuilder;
+use utils::js_imports;
 
 pub struct JsEventEmitter {
     pub encoded_message_builder: EncodedMessageBuilder,

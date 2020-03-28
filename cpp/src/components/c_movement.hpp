@@ -2,20 +2,20 @@
 // Created by Eddie Law on 2020-03-13.
 //
 
-#ifndef KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
-#define KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
+#ifndef KF_1_GAME_SRC_COMPONENTS_C_MOVEMENT_HPP_
+#define KF_1_GAME_SRC_COMPONENTS_C_MOVEMENT_HPP_
 
 #include <pt.hpp>
 #include <game_map.hpp>
 #include "c_orientation.hpp"
 namespace components {
 
-struct CMove {
-  CMove() = default;
+struct CMovement {
+  CMovement() = default;
 
-  models::Pt pt;
   models::Pt destination;
   models::Pt diff;
+  models::Pt normalized;
   models::Pt multipliers;
   bool is_stopped;
   bool completed;
@@ -30,4 +30,4 @@ struct CMove {
 };
 }
 
-#endif //KF_1_GAME_SRC_COMPONENTS_C_MOVE_HPP_
+#endif //KF_1_GAME_SRC_COMPONENTS_C_MOVEMENT_HPP_

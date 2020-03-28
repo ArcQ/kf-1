@@ -1,4 +1,4 @@
-#include "game_env.hpp"  // header in local directory
+#include "game_controller.hpp"  // header in local directory
 
 #include <iostream>  // header in standard library
 #include "components/c_basic.hpp"
@@ -6,24 +6,24 @@
 #include "components/c_orientation.hpp"
 #include <utility>
 
-kf1::GameEnv::GameEnv(JsEventEmitter jsEventEmitter,
-                      models::GameMap gameMap,
-                      std::map<std::string,
+kf1::GameController::GameController(JsEventEmitter jsEventEmitter,
+                                    models::GameMap gameMap,
+                                    std::map<std::string,
                                CharacterInitialConfig> characterDict) {
   assign_entities(gameMap, characterDict);
 }
 
-void kf1::GameEnv::tick(double dt) {
+void kf1::GameController::tick(double dt) {
 //  registry.view<components::basic::CPosition, components::>().each([dt](auto &pos, auto &vel) {
 //    pos.x += vel.dx * dt;
 //    pos.y += vel.dy * dt;
 //  });
 }
 
-void kf1::GameEnv::reset() {}
+void kf1::GameController::reset() {}
 
-void kf1::GameEnv::assign_entities(models::GameMap map,
-                                   std::map<std::string,
+void kf1::GameController::assign_entities(models::GameMap map,
+                                          std::map<std::string,
                                             CharacterInitialConfig> characterDict) {
   for (std::pair<std::string, CharacterInitialConfig> kv: characterDict) {
     auto entity = registry.create();
@@ -38,7 +38,6 @@ void kf1::GameEnv::assign_entities(models::GameMap map,
 
 //        .with(Move::new(game_map.clone()))
   }
-//  registry.on_
 
 }
 

@@ -18,8 +18,8 @@ enum COrientation {
 struct OrientationMapper {
  public:
   static inline const std::map<std::string, COrientation> string_map =
-      {{"IDLE", COrientation::RIGHT},
-       {"MOVE", COrientation::LEFT}};
+      {{"RIGHT", COrientation::RIGHT},
+       {"LEFT", COrientation::LEFT}};
 
   static COrientation from_string(string char_state_string) {
     return string_map.at(char_state_string);

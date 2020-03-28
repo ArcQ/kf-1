@@ -1,18 +1,18 @@
 #include <gtest/gtest.h>
-#include "../../../src/components/c_move.hpp"
-using components::CMove;
+#include "../../../src/components/c_movement.hpp"
+using components::CMovement;
 
-class CMoveTest: public testing::Test {
+class CoderKeyMappingTest: public testing::Test {
  public:
-  CMoveTest() = default;
+  CoderKeyMappingTest() = default;
 };
 
-TEST_F(CMoveTest, set_new_destination) {
+TEST_F(CoderKeyMappingTest, set_new_destination) {
   auto start = models::Pt::createOrigin();
   auto destination = models::Pt(11,
       20);
 
-  CMove c_move = CMove();
+  CMovement c_move = CMovement();
   c_move.set_new_destination(5, start, destination);
 
   EXPECT_EQ(c_move.destination.x, destination.x);
@@ -24,11 +24,11 @@ TEST_F(CMoveTest, set_new_destination) {
   EXPECT_DOUBLE_EQ(c_move.multipliers.y, 0.876215908676647);
 }
 
-TEST_F(CMoveTest, check_if_past) {
+TEST_F(CoderKeyMappingTest, check_if_past) {
   auto start = models::Pt::createOrigin();
   auto destination = models::Pt(11, 20);
 
-  CMove c_move = CMove();
+  CMovement c_move = CMovement();
   c_move.set_new_destination(5, start, destination);
 
   auto next = models::Pt(11, 21);
@@ -38,11 +38,11 @@ TEST_F(CMoveTest, check_if_past) {
   EXPECT_FALSE(c_move.check_if_past(next2));
 }
 
-TEST_F(CMoveTest, get_x_direction) {
+TEST_F(CoderKeyMappingTest, get_x_direction) {
   auto start = models::Pt::createOrigin();
   auto destination = models::Pt(11, 20);
 
-  CMove c_move = CMove();
+  CMovement c_move = CMovement();
   c_move.set_new_destination(5, start, destination);
 
   EXPECT_EQ(c_move.get_x_direction(), components::COrientation::RIGHT);
@@ -52,11 +52,11 @@ TEST_F(CMoveTest, get_x_direction) {
   EXPECT_EQ(c_move.get_x_direction(), components::COrientation::LEFT);
 }
 
-TEST_F(CMoveTest, stop) {
+TEST_F(CoderKeyMappingTest, stop) {
   auto start = models::Pt::createOrigin();
   auto destination = models::Pt(11, 20);
 
-  CMove c_move = CMove();
+  CMovement c_move = CMovement();
   c_move.set_new_destination(5, start, destination);
 
   c_move.stop();

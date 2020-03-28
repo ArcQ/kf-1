@@ -12,17 +12,17 @@ namespace systems
 class System
 {
  protected:
-  entt::registry& registry_;
+  entt::registry& registry;
 
  public:
-  System(entt::registry& reg) : registry_(reg){};
+  System(entt::registry& reg) : registry(reg){};
   System(const System&) = default;
   System(System&&) = default;
   System& operator=(System&&) = delete;
   System& operator=(const System&) = delete;
 
   virtual ~System() noexcept = default;
-  virtual void update(float dt) = 0;
+  virtual void update(double dt) = 0;
 };
 
 }
