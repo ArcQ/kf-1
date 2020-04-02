@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <math.h>
 
 #include "pt.hpp"
 
@@ -14,25 +15,25 @@ enum TerrainType {
 
 struct GameMap {
  private:
-  vector<vector<int>> m_map;
+  vector<vector<int>> map;
+  double tile_width = 0;
+  double tile_height = 0;
 
  public:
-  int width = 0;
-  int height = 0;
   GameMap() = default;
 
-  explicit GameMap(vector<vector<int>> _map) {
-    m_map = std::move(_map);
-    height = m_map.size();
-    width = m_map.at(0).size();
+  explicit GameMap(vector<vector<int>> _map, double _tile_width, double _tile_height) {
+    map = std::move(_map);
+    tile_width = _tile_width;
+    tile_height = _tile_height;
   }
 
-  models::TerrainType get_terrain_by_coord(int x, int y) {
-    return models::TerrainType(m_map.at(y).at(x));
+  [[nodiscard]] models::TerrainType get_terrain_by_coord(int x, int y) const {
+    return models::TerrainType(map.at(y).at(x));
   }
 
-  models::TerrainType get_terrain_by_pt(const models::Pt &point) {
-    return models::TerrainType(m_map.at(point.y).at(point.x));
+  [[nodiscard]] models::TerrainType get_terrain_by_pt(const models::Pt &point) const {
+    return get_terrain_by_coord(floor(point.x / tile_width), floor(point.y / tile_height));
   }
 };
 }  // namespace models

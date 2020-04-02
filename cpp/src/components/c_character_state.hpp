@@ -6,6 +6,7 @@
 #define KF_1_GAME_SRC_COMPONENTS_C_CHARACTER_STATE_HPP_
 
 #include <string>
+#include <map>
 
 namespace components {
 using std::string;
@@ -17,8 +18,7 @@ enum CCharacterState {
 
 struct CCharacterStateMapper {
  public:
-  static const inline std::map<std::string, CCharacterState>
-      string_map =
+  static const inline std::map<std::string, CCharacterState> string_map =
       {{"IDLE", CCharacterState::IDLE},
        {"MOVE", CCharacterState::MOVE},
        {"SPOT_ATTACK", CCharacterState::SPOT_ATTACK}};

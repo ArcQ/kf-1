@@ -47,7 +47,8 @@ add_library(game-wasm-lib
         src/common/encoder/coder_key_mapping.hpp
         src/common/encoder/coder_key_mapping.cpp
         src/common/encoder/encoded_message_builder.hpp
-        src/common/encoder/encoded_message_builder.cpp src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move_system.cpp src/systems/move_system.hpp src/systems/System.hpp src/components/c_movement.cpp src/components/c_movement.hpp src/components/c_orientation.hpp src/systems_controller.cpp src/systems_controller.hpp)
+        src/common/encoder/encoded_message_builder.cpp
+        src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move/move_handler.hpp src/systems/move/move_handler.cpp src/systems/move/move_system.cpp src/systems/move/move_system.hpp src/systems/System.hpp src/components/c_movement.hpp src/components/c_orientation.hpp src/systems_controller.cpp src/systems_controller.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")

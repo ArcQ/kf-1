@@ -8,10 +8,10 @@
 #include <pt.hpp>
 #include <game_map.hpp>
 #include "c_orientation.hpp"
+
 namespace components {
 
 struct CMovement {
-  CMovement() = default;
 
   models::Pt destination;
   models::Pt diff;
@@ -19,14 +19,15 @@ struct CMovement {
   models::Pt multipliers;
   bool is_stopped;
   bool completed;
-  void set_new_destination(
-      double speed,
-      models::Pt &pos,
-      models::Pt destination);
 
-  components::COrientation get_x_direction();
-  void stop();
-  bool check_if_past(models::Pt &next_pt);
+  components::COrientation get_x_direction() const{
+    return diff.x > 0 ? components::COrientation::RIGHT
+                      : components::COrientation::LEFT;
+  }
+
+  void stop() {
+    is_stopped = true;
+  }
 };
 }
 

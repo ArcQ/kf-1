@@ -1,6 +1,6 @@
 #include "../models/pt.hpp"
 
-namespace components::basic {
+namespace components{
 typedef double CSpeed ;
 typedef int CKey ;
 typedef models::Pt CPosition ;

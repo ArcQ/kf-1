@@ -28,12 +28,12 @@ void kf1::GameController::assign_entities(models::GameMap map,
   for (std::pair<std::string, CharacterInitialConfig> kv: characterDict) {
     auto entity = registry.create();
     auto char_initial_config = kv.second;
-    registry.assign<components::basic::CKey>(entity, char_initial_config.speed);
-    registry.assign<models::Pt>(entity, char_initial_config.pos);
-    registry.assign<components::basic::CSpeed>(entity,
+    registry.emplace<components::CKey>(entity, char_initial_config.speed);
+    registry.emplace<models::Pt>(entity, char_initial_config.pos);
+    registry.emplace<components::CSpeed>(entity,
                                                char_initial_config.speed);
-    registry.assign<components::COrientation>(entity, char_initial_config.orientation);
-    registry.assign<components::CCharacterState>(entity,
+    registry.emplace<components::COrientation>(entity, char_initial_config.orientation);
+    registry.emplace<components::CCharacterState>(entity,
                                                  components::CCharacterState::IDLE);
 
 //        .with(Move::new(game_map.clone()))
