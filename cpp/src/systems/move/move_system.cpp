@@ -9,27 +9,27 @@
 using components::CPosition;
 using components::CSpeed;
 
-void systems::MoveSystem::update(double dt) {
+namespace systems {
+
+extern entt::dispatcher global_event_queue;
+
+void MoveSystem::update(double dt) {
 
 //    entt::observer observer{registry, entt::collector.replace<CMovement>()};
-  auto movement_group = registry.group<CPosition,
-                                       components::CMovement,
-                                       components::CCharacterState>(entt::get<CSpeed>);
-  movement_group.each([dt, this](entt::entity entity,
-                                 CPosition &c_position,
-                                 components::CMovement &c_movement,
-                                 components::CCharacterState &c_character_state,
-                                 const CSpeed &speed) {
+  registry.group<CPosition,
+                   components::CMovement,
+                   components::CCharacterState>(entt::get<CSpeed>).each(
+      [dt, this](entt::entity entity,
+                 CPosition &c_position,
+                 components::CMovement &c_movement,
+                 components::CCharacterState &c_character_state,
+                 const CSpeed &speed) {
+        auto is_complete = systems::MoveHandler::move(dt, speed, c_position, game_map, c_movement);
 
-    auto is_complete = systems::MoveHandler::move(dt, speed, c_position, game_map, c_movement);
-
-    if (is_complete) {
-      c_character_state = components::CCharacterState::IDLE;
-    }
-
-//        global_event_queue.enqueue(EvEntityMoved{entity,
-//                                                 c_movement.current_direction,
-//                                                 c_position.position});
-  });
+        if (is_complete) {
+          c_character_state = components::CCharacterState::IDLE;
+        }
+      });
 }
 
+}

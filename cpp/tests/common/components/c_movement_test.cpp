@@ -1,8 +1,9 @@
-#include <gtest/gtest.h>
 #include "../../../src/components/c_movement.hpp"
+
+#include <gtest/gtest.h>
 using components::CMovement;
 
-class CMovementTest: public testing::Test {
+class CMovementTest : public testing::Test {
  public:
   CMovementTest() = default;
 };
@@ -12,11 +13,11 @@ TEST_F(CMovementTest, get_x_direction) {
   auto destination = models::Pt(11, 20);
 
   CMovement c_move = CMovement();
-  c_move.diff = models::Pt(5,5);
+  c_move.diff = models::Pt(5, 5);
 
   EXPECT_EQ(c_move.get_x_direction(), components::COrientation::RIGHT);
 
-  c_move.diff = models::Pt(-5,5);
+  c_move.diff = models::Pt(-5, 5);
 
   EXPECT_EQ(c_move.get_x_direction(), components::COrientation::LEFT);
 }

@@ -1,0 +1,3 @@
+BUILD_TESTS=true cmake build-test/
+./build-test/tests/test-main
+cp build-test/compile_commands.json ./

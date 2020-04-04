@@ -50,13 +50,12 @@ TEST(PtTest, map_with) {
 TEST(PtTest, zip_with) {
   Pt test_pt(1.1, 3.3);
   Pt test_pt_two(3, 2);
-  const Pt zipped =
-      Pt::zip_with(test_pt, test_pt_two, [](double one, double two, char k) {
-        if (k == Pt::KEY_X) {
-          return one * two;
-        }
-        return one;
-      });
+  const Pt zipped = Pt::zip_with(test_pt, test_pt_two, [](double one, double two, char k) {
+    if (k == Pt::KEY_X) {
+      return one * two;
+    }
+    return one;
+  });
   EXPECT_DOUBLE_EQ(zipped.x, zipped.y);
 }
 

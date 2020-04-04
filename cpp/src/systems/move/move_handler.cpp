@@ -22,19 +22,16 @@ components::CMovement systems::MoveHandler::create_movement_component(models::Pt
 bool systems::MoveHandler::check_if_past(const components::CMovement &c_movement,
                                          const models::Pt &next_pt) {
   auto changedSigns = [c_movement, next_pt](char k) {
-    return (signbit(c_movement.destination.get_by_k(k) - next_pt.get_by_k(k))
-        != (signbit(c_movement.diff.get_by_k(k))));
+    return (signbit(c_movement.destination.get_by_k(k) - next_pt.get_by_k(k)) !=
+            (signbit(c_movement.diff.get_by_k(k))));
   };
 
   return changedSigns(models::Pt::KEY_X) || changedSigns(models::Pt::KEY_Y);
 }
 // returns whether move is complete
-bool systems::MoveHandler::move(double dt,
-                                double speed,
-                                models::Pt &cur_pos,
+bool systems::MoveHandler::move(double dt, double speed, models::Pt &cur_pos,
                                 const models::GameMap &game_map,
                                 const components::CMovement &c_move) {
-
   if (c_move.is_stopped) {
     return true;
   }
@@ -57,4 +54,3 @@ bool systems::MoveHandler::move(double dt,
     return false;
   };
 }
-

@@ -13,9 +13,6 @@
 
 namespace systems {
 
-
-//extern entt::dispatcher global_event_queue;
-
 /*!
  * \brief The MoveSystem takes care of handling movement updates for all entities that desire to move
  */

@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.15.3)
 include( "${CMAKE_CURRENT_SOURCE_DIR}/toolchain.cmake" )
 
 project(kf-1-game,
-  DESCRIPTION "Game Logic of kf-1"
-  LANGUAGES CXX)
+        DESCRIPTION "Game Logic of kf-1"
+        LANGUAGES CXX)
 
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_EXPORT_COMPILE_COMMANDS on)
@@ -18,14 +18,16 @@ set(WEB_BUILD_DIRECTORY ${REPO_ROOT}/js/public/test-wasm)
 ################################
 
 include_directories(
-  /emscripten/
-  /Users/eddielaw/Development/scripts/emsdk/emscripten/incoming/system/include
-  )
+        SYSTEM
+        /emscripten/
+        /Users/eddielaw/Development/scripts/emsdk/emscripten/incoming/system/include
+        ${PROJECT_SOURCE_DIR}/include
+)
+
 include_directories(
-  ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/src/models
-  ${PROJECT_SOURCE_DIR}/public
-  )
+        ${PROJECT_SOURCE_DIR}/src/models
+        ${PROJECT_SOURCE_DIR}/public
+)
 
 #file(GLOB_RECURSE ALL_SRC
 #  "${PROJECT_SOURCE_DIR}/src/*.cpp")
@@ -48,6 +50,8 @@ add_library(game-wasm-lib
         src/common/encoder/coder_key_mapping.cpp
         src/common/encoder/encoded_message_builder.hpp
         src/common/encoder/encoded_message_builder.cpp
+        src/factories/character_entity_factory.hpp
+        src/factories/character_entity_factory.cpp
         src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move/move_handler.hpp src/systems/move/move_handler.cpp src/systems/move/move_system.cpp src/systems/move/move_system.hpp src/systems/System.hpp src/components/c_movement.hpp src/components/c_orientation.hpp src/systems_controller.cpp src/systems_controller.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
@@ -66,7 +70,7 @@ if (BUILD_TESTS)
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
-  add_executable(game-wasm ${EMSCRIPTEN_API} public/game.hpp public/game.cpp)
+  add_executable(game-wasm ${EMSCRIPTEN_API} public/game.hpp public/game.cpp src/systems/broadcast_updates_system.cpp src/systems/broadcast_updates_system.hpp)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 
@@ -78,10 +82,10 @@ else()
 
   foreach(build_file ${build_files})
     add_custom_command(
-      TARGET game-wasm POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy
-      ${CMAKE_BINARY_DIR}/${build_file}
-      ${WEB_BUILD_DIRECTORY}/${build_file})
+            TARGET game-wasm POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_BINARY_DIR}/${build_file}
+            ${WEB_BUILD_DIRECTORY}/${build_file})
   endforeach(build_file)
 
   # add_custom_command(

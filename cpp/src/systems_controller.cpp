@@ -3,8 +3,9 @@
 //
 
 #include "systems_controller.hpp"
+
 void SystemsController::update(float dt) {
-  for(systems::System& system : basic_systems) {
+  for (systems::System& system : basic_systems) {
     system.update(dt);
   }
 }
