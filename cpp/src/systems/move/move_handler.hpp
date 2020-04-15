@@ -7,20 +7,25 @@
 
 #include <entt/entt.hpp>
 #include <game_map.hpp>
-#include <pt.hpp>
 
-#include "../../components/c_movement.hpp"
+#include "c_movement.hpp"
 
 namespace systems {
 
 struct MoveHandler {
  public:
-  static components::CMovement create_movement_component(models::Pt &pos, models::Pt _destination);
+  static components::CMovement create_movement_component(
+      models::Pt &pos,
+      const models::Pt &_destination);
 
   static bool check_if_past(const components::CMovement &c_movement, const models::Pt &next_pt);
 
-  static bool move(double dt, double speed, models::Pt &cur_pos, const models::GameMap &game_map,
-                   const components::CMovement &c_move);
+  static bool move(
+      double dt,
+      double speed,
+      models::Pt &cur_pos,
+      const models::GameMap &game_map,
+      const components::CMovement &c_move);
 };
 }  // namespace systems
 

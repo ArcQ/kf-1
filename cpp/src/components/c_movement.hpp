@@ -6,7 +6,7 @@
 #define KF_1_GAME_SRC_COMPONENTS_C_MOVEMENT_HPP_
 
 #include "c_orientation.hpp"
-#include "../models/pt.hpp"
+#include "pt.hpp"
 
 namespace components {
 
@@ -19,8 +19,7 @@ struct CMovement {
   bool completed;
 
   [[nodiscard]] components::COrientation get_x_direction() const {
-    return diff.x > 0 ? components::COrientation::RIGHT
-                      : components::COrientation::LEFT;
+    return diff.x > 0 ? components::COrientation::RIGHT : components::COrientation::LEFT;
   }
 
   void stop() { is_stopped = true; }

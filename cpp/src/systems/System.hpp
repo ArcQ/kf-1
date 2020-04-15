@@ -7,15 +7,13 @@
 
 #include <entt/entt.hpp>
 
-namespace systems
-{
-class System
-{
+namespace systems {
+class System {
  protected:
   entt::registry& registry;
 
  public:
-  System(entt::registry& reg) : registry(reg){};
+  explicit System(entt::registry& reg) : registry(reg){};
   System(const System&) = default;
   System(System&&) = default;
   System& operator=(System&&) = delete;
@@ -25,5 +23,5 @@ class System
   virtual void update(double dt) = 0;
 };
 
-}
-#endif //KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_
+}  // namespace systems
+#endif  // KF_1_GAME_SRC_SYSTEMS_SYSTEM_HPP_

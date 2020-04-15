@@ -1,22 +1,16 @@
-#ifndef GAMEENV_HPP
-#define GAMEENV_HPP
+#ifndef GAMECONTROLLER_HPP
+#define GAMECONTROLLER_HPP
 
-#include "common/encoder/coder_key_mapping.hpp"
-#include "game_map.hpp"
 #include <entt/entt.hpp>
 #include <iostream>  // header in standard library
-
-#include "js_event_emitter.hpp"
-#include "components/c_orientation.hpp"
 #include <map>
 
-using std::string;
+#include "common/encoder/coder_key_mapping.hpp"
+#include "components/c_orientation.hpp"
+#include "systems_controller.hpp"
+
 using std::map;
-
-/* #include "../common/encoder/CoderKeyMapping.h"  // header in local directory
- */
-
-/* using common::encoder::CoderKeyMapping; */
+using std::string;
 
 namespace kf1 {
 
@@ -29,17 +23,21 @@ struct CharacterInitialConfig {
 
 class GameController {
  public:
-  GameController(JsEventEmitter jsEventEmitter,
-                 models::GameMap gameMap,
-                 map<std::string, CharacterInitialConfig> characterDict);
-/* CoderKeyMapping encoderKeysDict; */
+  GameController(
+      std::function<void(std::vector<double>)>&& _broadcast_to_js,
+      models::GameMap&& _game_map,
+      const std::map<std::string, CharacterInitialConfig>& characterDict);
   void tick(double dt);
   void reset();
 
  private:
+  models::GameMap game_map;
+  kf1::SystemsController systems_controller;
   entt::registry registry;
-  void assign_entities(models::GameMap map, std::map<std::string, CharacterInitialConfig> char_dict);
+  void assign_entities(
+      const models::GameMap& game_map,
+      const std::map<std::string, CharacterInitialConfig>& character_dict);
 };
-}  // namespace game
+}  // namespace kf1
 
 #endif

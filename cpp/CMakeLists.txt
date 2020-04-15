@@ -26,6 +26,11 @@ include_directories(
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/src/models
+        ${PROJECT_SOURCE_DIR}/src/common
+        ${PROJECT_SOURCE_DIR}/src/components
+        ${PROJECT_SOURCE_DIR}/src/factories
+        ${PROJECT_SOURCE_DIR}/src/systems
+        ${PROJECT_SOURCE_DIR}/src/systems/move
         ${PROJECT_SOURCE_DIR}/public
 )
 
@@ -46,13 +51,13 @@ add_library(game-wasm-lib
         src/game_controller.hpp src/game_controller.cpp
         src/models/pt.hpp src/models/pt.cpp
         src/models/game_map.hpp
-        src/common/encoder/coder_key_mapping.hpp
-        src/common/encoder/coder_key_mapping.cpp
-        src/common/encoder/encoded_message_builder.hpp
-        src/common/encoder/encoded_message_builder.cpp
+        src/public/encoder/coder_key_mapping.hpp
+        src/public/encoder/coder_key_mapping.cpp
+        src/public/encoder/encoded_message_builder.hpp
+        src/public/encoder/encoded_message_builder.cpp
         src/factories/character_entity_factory.hpp
         src/factories/character_entity_factory.cpp
-        src/js_event_emitter.cpp src/js_event_emitter.hpp src/systems/move/move_handler.hpp src/systems/move/move_handler.cpp src/systems/move/move_system.cpp src/systems/move/move_system.hpp src/systems/System.hpp src/components/c_movement.hpp src/components/c_orientation.hpp src/systems_controller.cpp src/systems_controller.hpp)
+        src/systems/broadcast_system.hpp src/systems/broadcast_system.cpp src/systems/move/move_handler.hpp src/systems/move/move_handler.cpp src/systems/move/move_system.cpp src/systems/move/move_system.hpp src/systems/System.hpp src/components/c_movement.hpp src/components/c_orientation.hpp src/systems_controller.cpp src/systems_controller.hpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Release)
   message("Release build")
@@ -70,7 +75,7 @@ if (BUILD_TESTS)
 else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
-  add_executable(game-wasm ${EMSCRIPTEN_API} public/game.hpp public/game.cpp src/systems/broadcast_updates_system.cpp src/systems/broadcast_updates_system.hpp)
+  add_executable(game-wasm ${EMSCRIPTEN_API} public/game.hpp public/game.cpp)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 

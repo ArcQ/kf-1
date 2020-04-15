@@ -2,4 +2,9 @@
 Language:        Cpp
 BasedOnStyle:  Google
 ColumnLimit:     100
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: AlwaysBreak
+IndentCaseLabels: true
+AllowAllParametersOfDeclarationOnNextLine: false
 ...

@@ -15,7 +15,7 @@ class CoderKeyMapping {
 
  public:
   explicit CoderKeyMapping(vector<string> keys);
-  int encode(string key);
+  int encode(string& key);
   string decode(int num);
 };
 }  // namespace encoder

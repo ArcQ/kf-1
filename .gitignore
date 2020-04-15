@@ -36,3 +36,7 @@ spritesheets
 out
 **/*.wasm
 rust/pkg
+cpp/CMakeCache.txt
+cpp/.clangd/
+cpp/build
+cpp/build-wasm/

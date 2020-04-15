@@ -274,33 +274,6 @@ src/game_controller.cpp.s:
 	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/game_controller.cpp.s
 .PHONY : src/game_controller.cpp.s
 
-src/js_event_emitter.o: src/js_event_emitter.cpp.o
-
-.PHONY : src/js_event_emitter.o
-
-# target to build an object file
-src/js_event_emitter.cpp.o:
-	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/js_event_emitter.cpp.o
-.PHONY : src/js_event_emitter.cpp.o
-
-src/js_event_emitter.i: src/js_event_emitter.cpp.i
-
-.PHONY : src/js_event_emitter.i
-
-# target to preprocess a source file
-src/js_event_emitter.cpp.i:
-	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/js_event_emitter.cpp.i
-.PHONY : src/js_event_emitter.cpp.i
-
-src/js_event_emitter.s: src/js_event_emitter.cpp.s
-
-.PHONY : src/js_event_emitter.s
-
-# target to generate assembly for a file
-src/js_event_emitter.cpp.s:
-	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/js_event_emitter.cpp.s
-.PHONY : src/js_event_emitter.cpp.s
-
 src/models/pt.o: src/models/pt.cpp.o
 
 .PHONY : src/models/pt.o
@@ -328,32 +301,32 @@ src/models/pt.cpp.s:
 	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/models/pt.cpp.s
 .PHONY : src/models/pt.cpp.s
 
-src/systems/broadcast_updates_system.o: src/systems/broadcast_updates_system.cpp.o
+src/systems/broadcast_system.o: src/systems/broadcast_system.cpp.o
 
-.PHONY : src/systems/broadcast_updates_system.o
+.PHONY : src/systems/broadcast_system.o
 
 # target to build an object file
-src/systems/broadcast_updates_system.cpp.o:
-	$(MAKE) -f CMakeFiles/game-wasm.dir/build.make CMakeFiles/game-wasm.dir/src/systems/broadcast_updates_system.cpp.o
-.PHONY : src/systems/broadcast_updates_system.cpp.o
+src/systems/broadcast_system.cpp.o:
+	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/systems/broadcast_system.cpp.o
+.PHONY : src/systems/broadcast_system.cpp.o
 
-src/systems/broadcast_updates_system.i: src/systems/broadcast_updates_system.cpp.i
+src/systems/broadcast_system.i: src/systems/broadcast_system.cpp.i
 
-.PHONY : src/systems/broadcast_updates_system.i
+.PHONY : src/systems/broadcast_system.i
 
 # target to preprocess a source file
-src/systems/broadcast_updates_system.cpp.i:
-	$(MAKE) -f CMakeFiles/game-wasm.dir/build.make CMakeFiles/game-wasm.dir/src/systems/broadcast_updates_system.cpp.i
-.PHONY : src/systems/broadcast_updates_system.cpp.i
+src/systems/broadcast_system.cpp.i:
+	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/systems/broadcast_system.cpp.i
+.PHONY : src/systems/broadcast_system.cpp.i
 
-src/systems/broadcast_updates_system.s: src/systems/broadcast_updates_system.cpp.s
+src/systems/broadcast_system.s: src/systems/broadcast_system.cpp.s
 
-.PHONY : src/systems/broadcast_updates_system.s
+.PHONY : src/systems/broadcast_system.s
 
 # target to generate assembly for a file
-src/systems/broadcast_updates_system.cpp.s:
-	$(MAKE) -f CMakeFiles/game-wasm.dir/build.make CMakeFiles/game-wasm.dir/src/systems/broadcast_updates_system.cpp.s
-.PHONY : src/systems/broadcast_updates_system.cpp.s
+src/systems/broadcast_system.cpp.s:
+	$(MAKE) -f CMakeFiles/game-wasm-lib.dir/build.make CMakeFiles/game-wasm-lib.dir/src/systems/broadcast_system.cpp.s
+.PHONY : src/systems/broadcast_system.cpp.s
 
 src/systems/move/move_handler.o: src/systems/move/move_handler.cpp.o
 
@@ -461,15 +434,12 @@ help:
 	@echo "... src/game_controller.o"
 	@echo "... src/game_controller.i"
 	@echo "... src/game_controller.s"
-	@echo "... src/js_event_emitter.o"
-	@echo "... src/js_event_emitter.i"
-	@echo "... src/js_event_emitter.s"
 	@echo "... src/models/pt.o"
 	@echo "... src/models/pt.i"
 	@echo "... src/models/pt.s"
-	@echo "... src/systems/broadcast_updates_system.o"
-	@echo "... src/systems/broadcast_updates_system.i"
-	@echo "... src/systems/broadcast_updates_system.s"
+	@echo "... src/systems/broadcast_system.o"
+	@echo "... src/systems/broadcast_system.i"
+	@echo "... src/systems/broadcast_system.s"
 	@echo "... src/systems/move/move_handler.o"
 	@echo "... src/systems/move/move_handler.i"
 	@echo "... src/systems/move/move_handler.s"

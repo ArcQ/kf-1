@@ -9,28 +9,27 @@
 #include "factories/character_entity_factory.hpp"
 
 kf1::GameController::GameController(
-    JsEventEmitter jsEventEmitter, models::GameMap gameMap,
-    std::map<std::string, CharacterInitialConfig> characterDict) {
-  assign_entities(gameMap, characterDict);
+    std::function<void(std::vector<double>)>&& _broadcast_to_js,
+    models::GameMap&& _game_map,
+    const std::map<std::string, CharacterInitialConfig>& characterDict)
+    : game_map(_game_map),
+      systems_controller(kf1::SystemsController(registry, std::move(_broadcast_to_js), game_map)) {
+  assign_entities(game_map, characterDict);
 }
 
-void kf1::GameController::tick(double dt) {
-  //  registry.view<components::basic::CPosition, components::>().each([dt](auto
-  //  &pos, auto &vel) {
-  //    pos.x += vel.dx * dt;
-  //    pos.y += vel.dy * dt;
-  //  });
-}
+void kf1::GameController::tick(double dt) { systems_controller.update(dt); }
 
 void kf1::GameController::reset() {}
 
 void kf1::GameController::assign_entities(
-    models::GameMap map,
-    std::map<std::string, CharacterInitialConfig> characterDict) {
-  for (std::pair<std::string, CharacterInitialConfig> kv : characterDict) {
+    const models::GameMap& game_map,
+    const std::map<std::string, CharacterInitialConfig>& character_dict) {
+  for (const auto& kv : character_dict) {
     auto char_initial_config = kv.second;
-    auto entity = factories::CharacterEntityFactory::createBasic(
-        registry, char_initial_config.orientation, char_initial_config.speed,
+    factories::CharacterEntityFactory::createBasic(
+        registry,
+        char_initial_config.orientation,
+        char_initial_config.speed,
         char_initial_config.pos);
   }
 }

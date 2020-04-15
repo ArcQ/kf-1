@@ -16,16 +16,15 @@ void EncodedMessageBuilder::reset() {
 }
 
 void EncodedMessageBuilder::push(string s) {
-  const int encoded = coderKeyMapping.encode(std::move(s));
+  const int encoded = coderKeyMapping.encode(s);
   subStateVec.push_back(encoded);
 }
 
-void EncodedMessageBuilder::push(int i) {
-  subStateVec.push_back((double)i); }
+void EncodedMessageBuilder::push(int i) { subStateVec.push_back((double)i); }
 
 void EncodedMessageBuilder::push(double d) { subStateVec.push_back(d); }
 
-void EncodedMessageBuilder::push(Pt pt) {
+void EncodedMessageBuilder::push(const Pt& pt) {
   subStateVec.push_back(pt.x);
   subStateVec.push_back(pt.y);
 }
