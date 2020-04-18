@@ -1,10 +1,8 @@
 #include "coder_key_mapping.hpp"
 
 #include <iostream>
-using common::encoder::CoderKeyMapping;
-using std::string;
-using std::vector;
 
+namespace encoder {
 CoderKeyMapping::CoderKeyMapping(vector<string> _keys) : keys(std::move(_keys)) {}
 
 int CoderKeyMapping::encode(string& key) {
@@ -24,3 +22,4 @@ string CoderKeyMapping::decode(int num) {
   }
   return "";
 }
+}  // namespace encoder

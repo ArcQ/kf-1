@@ -5,7 +5,6 @@
 #include <iostream>  // header in standard library
 #include <map>
 
-#include "common/encoder/coder_key_mapping.hpp"
 #include "components/c_orientation.hpp"
 #include "systems_controller.hpp"
 
@@ -24,7 +23,7 @@ struct CharacterInitialConfig {
 class GameController {
  public:
   GameController(
-      std::function<void(std::vector<double>)>&& _broadcast_to_js,
+      kf1::EventEmitter event_emitter,
       models::GameMap&& _game_map,
       const std::map<std::string, CharacterInitialConfig>& characterDict);
   void tick(double dt);

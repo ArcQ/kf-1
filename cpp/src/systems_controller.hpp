@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "encoder/encoded_message_builder.hpp"
+#include "event_emitter.hpp"
 #include "move_system.hpp"
 #include "systems/system.hpp"
 
@@ -16,14 +17,23 @@ namespace kf1 {
 class SystemsController {
  private:
   // systems that just need to be updated...in order
-  std::vector<systems::System> basic_systems = {};
+  std::vector<std::unique_ptr<systems::System>> basic_systems = {};
+  kf1::EventEmitter event_emitter;
+  entt::registry& registry;
+  entt::observer position_obs;
+  entt::observer character_state_obs;
+  entt::observer orientation_obs;
+
+  void broadcast_changes(double dt);
 
  public:
   SystemsController(
       entt::registry& registry,
-      std::function<void(std::vector<double>)>&& broadcast_to_js,
-      common::encoder::EncodedMessageBuilder& encoded_message_builder,
+      kf1::EventEmitter&& event_emitter,
       models::GameMap& game_map);
+
+  static void createSystems();
+  void update(double dt);
 };
 }  // namespace kf1
 

@@ -2,13 +2,14 @@
 // Created by Eddie Law on 2020-03-28.
 //
 
-#include "../../../../src/systems/move/move_handler.hpp"
+#include "../../../src/systems/move/move_handler.hpp"
 
 #include <gtest/gtest.h>
 
 #include <pt.hpp>
 
-#include "../../../../src/components/c_movement.hpp"
+#include "../../../src/components/c_movement.hpp"
+#include "c_movement.hpp"
 using components::CMovement;
 
 class MoveHandlerTest : public testing::Test {

@@ -9,11 +9,11 @@
 #include "factories/character_entity_factory.hpp"
 
 kf1::GameController::GameController(
-    std::function<void(std::vector<double>)>&& _broadcast_to_js,
+    kf1::EventEmitter event_emitter,
     models::GameMap&& _game_map,
     const std::map<std::string, CharacterInitialConfig>& characterDict)
     : game_map(_game_map),
-      systems_controller(kf1::SystemsController(registry, std::move(_broadcast_to_js), game_map)) {
+      systems_controller(kf1::SystemsController(registry, std::move(event_emitter), game_map)) {
   assign_entities(game_map, characterDict);
 }
 

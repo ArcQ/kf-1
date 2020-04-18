@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "../common/encoder/coder_key_mapping.hpp"
 #include "../game_controller.hpp"
 
 struct GameConfig {
@@ -28,7 +27,6 @@ class GameEnvAdapter {
 
  private:
   void broadcast_to_js(std::vector<double> message);
-  common::encoder::CoderKeyMapping coder_key_mapping;
 };
 
 #endif

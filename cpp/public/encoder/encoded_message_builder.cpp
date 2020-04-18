@@ -1,11 +1,8 @@
 #include "encoded_message_builder.hpp"
 
-#include <iostream>
-using common::encoder::EncodedMessageBuilder;
-using std::string;
-using std::vector;
+namespace encoder {
 
-EncodedMessageBuilder::EncodedMessageBuilder(vector<string> keys)
+EncodedMessageBuilder::EncodedMessageBuilder(vector<std::string> keys)
     : coderKeyMapping(CoderKeyMapping(std::move(keys))) {
   reset();
 }
@@ -15,7 +12,7 @@ void EncodedMessageBuilder::reset() {
   subStateVec.clear();
 }
 
-void EncodedMessageBuilder::push(string s) {
+void EncodedMessageBuilder::push(std::string s) {
   const int encoded = coderKeyMapping.encode(s);
   subStateVec.push_back(encoded);
 }
@@ -24,7 +21,7 @@ void EncodedMessageBuilder::push(int i) { subStateVec.push_back((double)i); }
 
 void EncodedMessageBuilder::push(double d) { subStateVec.push_back(d); }
 
-void EncodedMessageBuilder::push(const Pt& pt) {
+void EncodedMessageBuilder::push(const models::Pt& pt) {
   subStateVec.push_back(pt.x);
   subStateVec.push_back(pt.y);
 }
@@ -38,13 +35,14 @@ void EncodedMessageBuilder::build_sub_state() {
   }
 }
 
-vector<double> EncodedMessageBuilder::build() {
+std::vector<double> EncodedMessageBuilder::build() {
   int stateVecLen = stateVec.size();
   if (stateVecLen > 0) {
     stateVec.insert(stateVec.begin(), stateVecLen + 1);
-    auto ret = vector<double>();
+    auto ret = std::vector<double>();
     std::swap(stateVec, ret);
     return ret;
   }
-  return vector<double>();
+  return std::vector<double>();
 }
+}  // namespace encoder

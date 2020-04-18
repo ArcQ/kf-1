@@ -1,4 +1,4 @@
-BUILD_TESTS=true cmake build-test/
+BUILD_TESTS=true cmake -S ./ -B build-test/
 
 (($? != 0)) && {
   echo "Build Failed";

@@ -7,27 +7,22 @@
 
 #include "coder_key_mapping.hpp"
 
-namespace common::encoder {
-using common::encoder::CoderKeyMapping;
-using models::Pt;
-using std::string;
-using std::vector;
-
+namespace encoder {
 class EncodedMessageBuilder {
   CoderKeyMapping coderKeyMapping;
   vector<double> stateVec;
   vector<double> subStateVec;
 
  public:
-  explicit EncodedMessageBuilder(vector<string> keys);
+  explicit EncodedMessageBuilder(std::vector<string> keys);
   void reset();
   void push(string s);
   void push(int i);
   void push(double d);
-  void push(const Pt& pt);
+  void push(const models::Pt& pt);
   void build_sub_state();
   vector<double> build();
 };
-}  // namespace common::encoder
+}  // namespace encoder
 
 #endif

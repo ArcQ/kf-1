@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-namespace common {
 namespace encoder {
 using std::string;
 using std::vector;
@@ -19,6 +18,5 @@ class CoderKeyMapping {
   string decode(int num);
 };
 }  // namespace encoder
-}  // namespace common
 
 #endif

@@ -2,18 +2,17 @@
 // Created by Eddie Law on 2020-03-28.
 //
 
-#include "../../../../src/systems/move/move_system.hpp"
+#include "../../../src/systems/move/move_system.hpp"
 
 #include <gtest/gtest.h>
 
 #include <entt/entt.hpp>
 #include <pt.hpp>
 
-#include "../../../../src/components/c_basic.hpp"
-#include "../../../../src/components/c_character_state.hpp"
-#include "../../../../src/components/c_movement.hpp"
-#include "../../../../src/models/game_map.hpp"
-#include "../../../../src/systems/move/move_handler.hpp"
+#include "../../../src/components/c_basic.hpp"
+#include "../../../src/components/c_character_state.hpp"
+#include "../../../src/components/c_movement.hpp"
+#include "../../../src/systems/move/move_handler.hpp"
 
 using components::CMovement;
 
