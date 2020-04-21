@@ -9,7 +9,7 @@
 #include "factories/character_entity_factory.hpp"
 
 kf1::GameController::GameController(
-    kf1::EventEmitter event_emitter,
+    std::unique_ptr<kf1::EventEmitter>&& event_emitter,
     models::GameMap&& _game_map,
     const std::map<std::string, CharacterInitialConfig>& characterDict)
     : game_map(_game_map),

@@ -21,21 +21,21 @@ struct CharacterInitialConfig {
 };
 
 class GameController {
+ private:
+  entt::registry registry;
+  models::GameMap game_map;
+  kf1::SystemsController systems_controller;
+  void assign_entities(
+      const models::GameMap& game_map,
+      const std::map<std::string, CharacterInitialConfig>& character_dict);
+
  public:
   GameController(
-      kf1::EventEmitter event_emitter,
+      std::unique_ptr<kf1::EventEmitter>&& event_emitter,
       models::GameMap&& _game_map,
       const std::map<std::string, CharacterInitialConfig>& characterDict);
   void tick(double dt);
   void reset();
-
- private:
-  models::GameMap game_map;
-  kf1::SystemsController systems_controller;
-  entt::registry registry;
-  void assign_entities(
-      const models::GameMap& game_map,
-      const std::map<std::string, CharacterInitialConfig>& character_dict);
 };
 }  // namespace kf1
 

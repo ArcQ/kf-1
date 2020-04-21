@@ -18,7 +18,7 @@ class SystemsController {
  private:
   // systems that just need to be updated...in order
   std::vector<std::unique_ptr<systems::System>> basic_systems = {};
-  kf1::EventEmitter event_emitter;
+  std::unique_ptr<kf1::EventEmitter>&& event_emitter;
   entt::registry& registry;
   entt::observer position_obs;
   entt::observer character_state_obs;
@@ -29,7 +29,7 @@ class SystemsController {
  public:
   SystemsController(
       entt::registry& registry,
-      kf1::EventEmitter&& event_emitter,
+      std::unique_ptr<kf1::EventEmitter>&& _event_emitter,
       models::GameMap& game_map);
 
   static void createSystems();

@@ -77,11 +77,15 @@ else()
   message("Web build")
   message("${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
   add_executable(game-wasm ${EMSCRIPTEN_API}
+    public/js_config.hpp
     public/encoder/coder_key_mapping.hpp
     public/encoder/coder_key_mapping.cpp
     public/encoder/encoded_message_builder.hpp
     public/encoder/encoded_message_builder.cpp
-    public/game.hpp public/game.cpp)
+    public/js_event_emitter.hpp
+    public/js_event_emitter.cpp
+    public/game.hpp
+    public/game.cpp)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 

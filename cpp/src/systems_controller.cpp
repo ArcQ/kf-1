@@ -9,9 +9,10 @@
 
 kf1::SystemsController::SystemsController(
     entt::registry& _registry,
-    kf1::EventEmitter&& event_emitter,
+    std::unique_ptr<kf1::EventEmitter>&& _event_emitter,
     models::GameMap& game_map)
     : registry(_registry),
+      event_emitter(std::move(_event_emitter)),
       position_obs{_registry, entt::collector.replace<components::CPosition>()},
       character_state_obs{_registry, entt::collector.replace<components::CCharacterState>()},
       orientation_obs{_registry, entt::collector.replace<components::COrientation>()} {
@@ -30,7 +31,7 @@ void kf1::SystemsController::broadcast_changes(double dt) {
     const auto [c_key, c_position] =
         registry.template get<components::CKey, components::CPosition>(entity);
 
-    event_emitter.updatePosition(c_key, c_position);
+    event_emitter->updatePosition(c_key, c_position);
   });
 
   position_obs.clear();
@@ -39,7 +40,7 @@ void kf1::SystemsController::broadcast_changes(double dt) {
     const auto& [c_key, character_state] =
         registry.template get<components::CKey, components::CCharacterState>(entity);
 
-    event_emitter.updateCharacterState(
+    event_emitter->updateCharacterState(
         c_key, components::CCharacterStateMapper::to_string(character_state));
   });
 
@@ -49,10 +50,10 @@ void kf1::SystemsController::broadcast_changes(double dt) {
     const auto& [c_key, orientation] =
         registry.get<components::CKey, components::COrientation>(entity);
 
-    event_emitter.updateOrientation(c_key, components::OrientationMapper::to_string(orientation));
+    event_emitter->updateOrientation(c_key, components::OrientationMapper::to_string(orientation));
   });
 
   orientation_obs.clear();
 
-  event_emitter.emit();
+  event_emitter->emit();
 }

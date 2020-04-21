@@ -5,28 +5,22 @@
 #include <vector>
 
 #include "../game_controller.hpp"
-
-struct GameConfig {
- public:
-  bool broadcast_unchanged;
-  double tile_width;
-  double tile_height;
-};
+#include "./js_config.hpp"
 
 class GameEnvAdapter {
+ private:
+  std::unique_ptr<kf1::EventEmitter> event_emitter;
+  encoder::EncodedMessageBuilder encoded_message_builder;
+  static void broadcast_to_js(std::vector<double> message);
+
  public:
   GameEnvAdapter(
+      bool broadcast_unchanged,
       std::vector<string> encoder_keys,
-      std::vector<std::vector<int>> game_map,
-      std::map<std::string, kf1::CharacterInitialConfig> character_dict,
-      std::function<void(std::vector<double>)> broadcast_to_js,
-      GameConfig game_config);
+      JsConfig::Game game_config);
   kf1::GameController game_controller;
 
   static void tick(double dt);
-
- private:
-  void broadcast_to_js(std::vector<double> message);
 };
 
 #endif
