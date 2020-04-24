@@ -1,0 +1,10 @@
+cmake -S ./ -B build-wasm/
+
+(($? != 0)) && {
+  echo "Build Failed";
+}
+
+cd build-wasm
+make
+cp build-wasm/compile_commands.json ../
+cd ../
