@@ -1,7 +1,6 @@
 #ifndef EVENTEMITTER_HPP
 #define EVENTEMITTER_HPP
 
-#include "./system.hpp"
 #include "pt.hpp"
 
 namespace kf1 {

@@ -19,8 +19,8 @@ set(WEB_BUILD_DIRECTORY ${REPO_ROOT}/js/public/test-wasm)
 
 include_directories(
         SYSTEM
-        /emscripten/
-        /Users/eddielaw/Development/scripts/emsdk/emscripten/incoming/system/include
+#        /emscripten/
+        ~/Development/scripts/emsdk/emscripten/incoming/system/include
         ${PROJECT_SOURCE_DIR}/include
 )
 
@@ -84,8 +84,8 @@ else()
     public/encoder/encoded_message_builder.cpp
     public/js_event_emitter.hpp
     public/js_event_emitter.cpp
-    public/game.hpp
-    public/game.cpp)
+          public/main.hpp
+          public/main.cpp)
   target_link_libraries(game-wasm game-wasm-lib)
   set(CMAKE_CXX_FLAGS "${WASM_BUILD_FLAGS}${OPT_BUILD_FLAGS}")
 

@@ -48,7 +48,7 @@ make
 
 
 conan install .. -p ../emscripten.profile
-clang-tidy game.cpp -- -isystem ~/Development/scripts/emsdk/upstream/emscripten/system/include/   
+clang-tidy game.cpp -- -isystem ~/Development/scripts/emsdk/upstream/emscripten/system/include/
 
 ```
 
@@ -87,4 +87,7 @@ build_type=Release
 [options]
 [build_requires]
 [env]
+```
+```
+export EMSDK_ROOT=~/Development/scripts/emsdk
 ```

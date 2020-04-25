@@ -1,5 +1,3 @@
-#include "game.hpp"
-
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
@@ -8,6 +6,7 @@
 #include <iostream>
 
 #include "./js_event_emitter.hpp"
+#include "main.hpp"
 
 using namespace emscripten;
 using ::GameEnvAdapter;
