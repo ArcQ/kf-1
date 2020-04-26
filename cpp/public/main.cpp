@@ -1,3 +1,5 @@
+#include "main.hpp"
+
 #include <emscripten.h>
 #include <emscripten/bind.h>
 
@@ -6,7 +8,6 @@
 #include <iostream>
 
 #include "./js_event_emitter.hpp"
-#include "main.hpp"
 
 using namespace emscripten;
 using ::GameEnvAdapter;
@@ -23,7 +24,7 @@ GameEnvAdapter::GameEnvAdapter(
       game_controller(kf1::GameController(
           std::make_unique<kf1::JsEventEmitter>(broadcast_to_js, encoded_message_builder),
           models::GameMap(
-              std::move(game_config.map.gameM),
+              std::move(game_config.map.matrix),
               game_config.map.tileW,
               game_config.map.tileH),
           game_config.character_dict

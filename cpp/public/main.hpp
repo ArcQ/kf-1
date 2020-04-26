@@ -16,7 +16,7 @@ class GameEnvAdapter {
  public:
   GameEnvAdapter(
       bool broadcast_unchanged,
-      std::vector<string> encoder_keys,
+      std::vector<std::string> encoder_keys,
       JsConfig::Game game_config);
   kf1::GameController game_controller;
 

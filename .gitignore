@@ -39,3 +39,4 @@ cpp/CMakeCache.txt
 cpp/.clangd/
 cpp/build
 cpp/build-wasm/
+cpp/test-wasm
