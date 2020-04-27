@@ -13,7 +13,7 @@ class CoderKeyMappingTest : public testing::Test {
 TEST_F(CoderKeyMappingTest, decode) { EXPECT_EQ(coder_key_mapping.decode(0), "MOVE"); }
 
 TEST_F(CoderKeyMappingTest, encode) {
-  EXPECT_EQ(coder_key_mapping.encode("RUN"), 1);
+  EXPECT_EQ(coder_key_mapping.encode("RUN"), 1)
   EXPECT_EQ(coder_key_mapping.encode("ATTACK"), 3);
 }
 

@@ -42,5 +42,4 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
 add_custom_command(
   TARGET test-main POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
-  ${PROJECT_SOURCE_DIR}/../build/compile_commands.json
   ${PROJECT_SOURCE_DIR}/../compile_commands.json)

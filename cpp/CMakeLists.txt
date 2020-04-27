@@ -19,7 +19,7 @@ set(WEB_BUILD_DIRECTORY ${REPO_ROOT}/js/public/test-wasm)
 
 include_directories(
         SYSTEM
-#        /emscripten/
+        /emscripten/
         ~/Development/scripts/emsdk/emscripten/incoming/system/include
         ${PROJECT_SOURCE_DIR}/include
 )
@@ -56,7 +56,7 @@ add_library(game-wasm-lib
         src/event_emitter.hpp
         src/systems/move/move_handler.hpp src/systems/move/move_handler.cpp
         src/systems/move/move_system.cpp src/systems/move/move_system.hpp
-        src/systems/System.hpp src/components/c_movement.hpp
+        src/systems/system.hpp src/components/c_movement.hpp
         src/components/c_orientation.hpp
         src/systems_controller.cpp src/systems_controller.hpp)
 
