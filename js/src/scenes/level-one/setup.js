@@ -29,14 +29,18 @@ export default function(encoder) {
 
   const charProps = {
     P1: createCharConfig({
-      charK: 'assasin',
+      k: 'assasin',
+      speed: 5,
+      orientation: 'RIGHT',
     }, {
-      pos: [100, 100],
+      pos: { x: 100, y: 100 },
     }),
     P2: createCharConfig({
-      charK: 'knight',
+      k: 'knight',
+      speed: 5,
+      orientation: 'LEFT',
     }, {
-      pos: [200, 200],
+      pos: { x: 200, y: 200 },
     }),
   };
 

@@ -10,11 +10,11 @@ namespace JsConfig {
 struct Map {
   double tileW;
   double tileH;
-  std::vector<std::vector<int>> gameM;
+  std::vector<std::vector<int>> matrix;
 
  public:
-  Map(double _tileW, double _tileH, std::vector<std::vector<int>> _gameM)
-      : tileW(_tileW), tileH(_tileH), gameM(_gameM){};
+  Map(double _tileW, double _tileH, std::vector<std::vector<int>> _matrix)
+      : tileW(_tileW), tileH(_tileH), matrix(_matrix){};
 };
 
 struct Game {

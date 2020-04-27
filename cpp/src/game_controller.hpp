@@ -15,7 +15,8 @@ namespace kf1 {
 
 struct CharacterInitialConfig {
   std::string k;
-  components::COrientation orientation;
+  std::string orientation;
+  /* components::COrientation orientation; */
   double speed;
   models::Pt pos;
 };

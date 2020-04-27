@@ -10,11 +10,11 @@
 #include "../../../src/components/c_basic.hpp"
 #include "gtest/gtest.h"
 
-class CharEntityFactoryTest : public testing::Test {
+class CharacterEntityFactoryTest : public testing::Test {
  public:
-  CharEntityFactoryTest() = default;
+  CharacterEntityFactoryTest() = default;
 };
 
-TEST_F(CharEntityFactoryTest, decode) {
+TEST_F(CharacterEntityFactoryTest, decode) {
   //  entt::entity basic_entity = factories::CharacterEntityFactory::createBasic();
 }

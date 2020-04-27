@@ -1,6 +1,8 @@
 #include "game_controller.hpp"  // header in local directory
 
 #include <iostream>  // header in standard library
+#include <map>
+#include <string>
 #include <utility>
 
 #include "components/c_basic.hpp"
