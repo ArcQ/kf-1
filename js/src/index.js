@@ -7,7 +7,7 @@ import 'sanitize.css/sanitize.css';
 import App from 'app';
 
 import configureStore from 'store/store';
-import './index.css';
+import './index.scss';
 import registerServiceWorker from './registerServiceWorker';
 
 const history = createBrowserHistory();
