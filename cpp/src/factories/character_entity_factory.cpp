@@ -9,9 +9,11 @@
 #include "../components/c_basic.hpp"
 #include "../components/c_character_state.hpp"
 
-entt::entity factories::CharacterEntityFactory::createBasic(entt::registry &registry,
-                                                            components::COrientation orientation,
-                                                            double speed, const models::Pt &pos) {
+entt::entity factories::CharacterEntityFactory::createBasic(
+    entt::registry &registry,
+    components::COrientation orientation,
+    double speed,
+    const models::Pt &pos) {
   auto entity = registry.create();
   registry.emplace<components::CKey>(entity, speed);
   registry.emplace<models::Pt>(entity, pos);
@@ -22,8 +24,9 @@ entt::entity factories::CharacterEntityFactory::createBasic(entt::registry &regi
 }
 
 // default creator, mostly for testing purposes
-entt::entity factories::CharacterEntityFactory::createBasic(entt::registry &registry,
-                                                            double speed) {
-  return factories::CharacterEntityFactory::createBasic(registry, components::COrientation::RIGHT,
-                                                        speed, models::Pt::createOrigin());
+entt::entity factories::CharacterEntityFactory::createBasic(
+    entt::registry &registry,
+    double speed) {
+  return factories::CharacterEntityFactory::createBasic(
+      registry, components::COrientation::RIGHT, speed, models::Pt::createOrigin());
 }

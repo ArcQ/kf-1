@@ -30,7 +30,7 @@ void kf1::GameController::assign_entities(
     auto char_initial_config = kv.second;
     factories::CharacterEntityFactory::createBasic(
         registry,
-        char_initial_config.orientation,
+        components::OrientationMapper::from_string(char_initial_config.orientation),
         char_initial_config.speed,
         char_initial_config.pos);
   }
