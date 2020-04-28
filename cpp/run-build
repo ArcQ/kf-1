@@ -8,3 +8,6 @@ cd build-wasm
 make
 cp compile_commands.json ../
 cd ../
+cp build-wasm/game-wasm.js ../js/public/test-wasm/game-wasm.js
+cp build-wasm/game-wasm.wasm ../js/public/test-wasm/game-wasm.wasm
+cp build-wasm/game-wasm.wasm.map ../js/public/test-wasm/game-wasm.wasm.map

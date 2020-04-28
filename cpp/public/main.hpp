@@ -17,7 +17,7 @@ class GameEnvAdapter {
   GameEnvAdapter(
       bool broadcast_unchanged,
       std::vector<std::string> encoder_keys,
-      JsConfig::Game game_config);
+      JsConfig::GameConfig game_config);
   kf1::GameController game_controller;
 
   static void tick(double dt);
