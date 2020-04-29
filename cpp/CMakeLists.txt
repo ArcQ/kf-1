@@ -65,7 +65,7 @@ if (CMAKE_BUILD_TYPE MATCHES Release)
   set(OPT_BUILD_FLAGS  " -O3")
 else (CMAKE_BUILD_TYPE MATCHES Debug)
   message("Development build")
-  set(OPT_BUILD_FLAGS  " --source-map-base localhost:3000 -O0 -g4")
+  set(OPT_BUILD_FLAGS  " --source-map-base localhost:3000 -O0")
 endif()
 
 if (BUILD_TESTS)
